@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       bottomNavigationBar: CustomBottomNavigationBar(
         iconList: [
-          Icons.home_outlined,
+          Icons.home_rounded,
           Icons.shopping_bag_outlined,
           Icons.mail_outline,
           Icons.perm_identity
@@ -56,6 +56,14 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
           defaultSelectedIndex: 0),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+
+        },
+        backgroundColor: Colors.white,
+        child: ImageIcon(AssetImage("assets/images/scan_qr.png",), color: Colors.brown,),
+      ),
       body: pages[_selectedItem],
     );
   }
@@ -117,17 +125,18 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         decoration: index == _selectedIndexItem
             ? BoxDecoration(
                 border:
-                    Border(bottom: BorderSide(width: 4, color: Colors.yellow[600])),
+                    Border(bottom: BorderSide(width: 4, color: Colors.yellow[700])),
                 gradient: LinearGradient(colors: [
-                  Colors.yellow[600].withOpacity(0.3),
-                  Colors.yellow[600].withOpacity(0.15),
-                ], begin: Alignment.bottomCenter, end: Alignment.topCenter)
+                  Colors.yellow[700].withOpacity(0.3),
+                  Colors.yellow[700].withOpacity(0.18),
+                  Colors.yellow[700].withOpacity(0.50),
+                ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
                 // color: index == _selectedIndexItem ? Colors.yellow : Colors.white
                 )
             : BoxDecoration(),
         child: Icon(
           iconData,
-          color: index == _selectedIndexItem ? Colors.black : Colors.grey,
+          color: index == _selectedIndexItem ? Colors.brown[700] : Colors.grey,
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:belah_duren/list_store.dart';
 import 'package:flutter/material.dart';
 
 class Order extends StatefulWidget {
@@ -59,105 +60,113 @@ class _OrderState extends State<Order> {
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: 5,
                 itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    padding: EdgeInsets.only(bottom: 24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          offset: Offset(0.0, 1.0), //(x,y)
-                          blurRadius: 6.0,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            padding: EdgeInsets.only(top: 8, bottom: 8),
-                            decoration: BoxDecoration(
-                                color: Colors.brown[300],
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10))),
-                            width: double.infinity,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                "Delivery - Dalam Perjalanan",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.brown[800]),
-                              ),
-                            )),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Nomor Pesanan : BD001901221",
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                  return GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ListStore()),
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 16),
+                      padding: EdgeInsets.only(bottom: 24),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0.0, 1.0), //(x,y)
+                            blurRadius: 6.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              padding: EdgeInsets.only(top: 8, bottom: 8),
+                              decoration: BoxDecoration(
+                                  color: Colors.brown[300],
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10))),
+                              width: double.infinity,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Delivery - Dalam Perjalanan",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.brown[800]),
                                 ),
-                                SizedBox(
-                                  height: 12,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.brown,
+                              )),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Nomor Pesanan : BD001901221",
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.brown,
+                                        ),
+                                        height: 50,
+                                        width: 50,
                                       ),
-                                      height: 50,
-                                      width: 50,
-                                    ),
-                                    SizedBox(
-                                      width: 16,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "01 Feb 2021",
-                                          style: TextStyle(
-                                              color: Colors.brown[500]),
-                                        ),
-                                        SizedBox(
-                                          height: 4,
-                                        ),
-                                        Text(
-                                          "Durian Brownies, Pancake Durian",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.brown[500]),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            Text(
-                              "150.000",
-                              style: TextStyle(
-                                color: Colors.brown[800],
-                                fontWeight: FontWeight.bold,
+                                      SizedBox(
+                                        width: 16,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "01 Feb 2021",
+                                            style: TextStyle(
+                                                color: Colors.brown[500]),
+                                          ),
+                                          SizedBox(
+                                            height: 4,
+                                          ),
+                                          Text(
+                                            "Durian Brownies, Pancake Durian",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.brown[500]),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                            )
-                          ],
-                        )
-                      ],
+                              Text(
+                                "150.000",
+                                style: TextStyle(
+                                  color: Colors.brown[800],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },
