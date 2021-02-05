@@ -1,3 +1,6 @@
+import 'package:belah_duren/api/login.dart';
+import 'package:belah_duren/global/session.dart';
+import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/lupa_password.dart';
 import 'package:belah_duren/main.dart';
 import 'package:belah_duren/registrasi.dart';
@@ -9,6 +12,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final emailEditTextController = TextEditingController();
+  final passwordEditTextController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +53,7 @@ class _LoginState extends State<Login> {
                         height: 32.0,
                       ),
                       TextFormField(
+                        controller: emailEditTextController,
                         autofocus: false,
                         decoration: new InputDecoration(
                           labelText: "Enter Email",
@@ -74,6 +80,8 @@ class _LoginState extends State<Login> {
                         height: 16,
                       ),
                       TextFormField(
+                        obscureText: true,
+                        controller: passwordEditTextController,
                         decoration: new InputDecoration(
                           labelText: "Enter Password",
                           fillColor: Colors.grey,
@@ -106,10 +114,17 @@ class _LoginState extends State<Login> {
                               borderRadius: BorderRadius.circular(10.0),
                               side: BorderSide(color: Colors.yellow[600])),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MyApp()),
-                            );
+                            showCircular(context);
+                            futureApiLogin(emailEditTextController.text, passwordEditTextController.text).then((value) {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              if(value.isSuccess()){
+                                currentUser = value.user;
+                                storeSession();
+                                startNewPage(context, MyHomePage(title: 'Flutter Demo Home Page'));
+                              } else {
+                                alertDialog(context, "Sign In Gagal", value.message);
+                              }
+                            });
                           },
                           color: Colors.yellow[600],
                           textColor: Colors.black,
@@ -122,18 +137,12 @@ class _LoginState extends State<Login> {
                         children: [
                           GestureDetector(
                             onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Registrasi()),
-                              );
+                              nextPage(context, Registrasi());
                             },child: Text("Belum punya akun?",style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
                           ),
                           GestureDetector(
                             onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => LupaPassword()),
-                              );
+                              nextPage(context, LupaPassword());
                             },
                             child: Text("Lupa password?", style: TextStyle(color: Colors.brown[200], fontWeight: FontWeight.bold)),
                           ),

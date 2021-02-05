@@ -1,4 +1,7 @@
-import 'package:belah_duren/aktifasi.dart';
+import 'package:belah_duren/api/reset_password.dart';
+import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/lupa_password_berhasil.dart';
+import 'package:belah_duren/model/user.dart';
 import 'package:flutter/material.dart';
 
 class LupaPassword extends StatefulWidget {
@@ -7,6 +10,9 @@ class LupaPassword extends StatefulWidget {
 }
 
 class _LupaPasswordState extends State<LupaPassword> {
+
+  final emailEditTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,6 +46,7 @@ class _LupaPasswordState extends State<LupaPassword> {
                         height: 32.0,
                       ),
                       TextFormField(
+                        controller: emailEditTextController,
                         decoration: new InputDecoration(
                           labelText: "Enter Email",
                           fillColor: Colors.grey,
@@ -79,14 +86,20 @@ class _LupaPasswordState extends State<LupaPassword> {
                               borderRadius: BorderRadius.circular(10.0),
                               side: BorderSide(color: Colors.yellow[600])),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Aktifasi()),
-                            );
+                            showCircular(context);
+                            futureApiResetPassword(emailEditTextController.text).then((value){
+                              Navigator.of(context, rootNavigator: true).pop();
+                              if(value.isSuccess()){
+                                currentUser = new User(null, emailEditTextController.text, null, null);
+                                nextPage(context, LupaPasswordBerhasil());
+                              } else {
+                                alertDialog(context, "Reset Password Gagal", value.message);
+                              }
+                            });
                           },
                           color: Colors.yellow[600],
                           textColor: Colors.black,
-                          child: Text("Kirim Aktifasi",
+                          child: Text("Reset Password",
                               style: TextStyle(fontSize: 16)),
                         ),),SizedBox(
                         height: 16,

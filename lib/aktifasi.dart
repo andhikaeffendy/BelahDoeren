@@ -1,4 +1,6 @@
 import 'package:belah_duren/aktifasi_berhasil.dart';
+import 'package:belah_duren/api/activation.dart';
+import 'package:belah_duren/global/variable.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
@@ -9,6 +11,8 @@ class Aktifasi extends StatefulWidget {
 }
 
 class _AktifasiState extends State<Aktifasi> {
+  String inputPin="";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,14 +59,25 @@ class _AktifasiState extends State<Aktifasi> {
                         height: 32.0,
                       ),
                       OTPTextField(
-                        length: 4,
+                        length: 6,
                         width: MediaQuery.of(context).size.width,
                         textFieldAlignment: MainAxisAlignment.spaceAround,
+                        keyboardType: TextInputType.text,
                         fieldWidth: 50,
                         fieldStyle: FieldStyle.underline,
                         style: TextStyle(fontSize: 16),
                         onCompleted: (pin) {
-                          print("Completed: " + pin);
+                          inputPin = pin;
+                          showCircular(context);
+                          futureApiActivation(currentUser.email, inputPin)
+                              .then((value){
+                            Navigator.of(context, rootNavigator: true).pop();
+                            if(value.isSuccess()) {
+                              nextPage(context, AktifasiBerhasil());
+                            } else {
+                              alertDialog(context, "Aktivasi Gagal", value.message);
+                            }
+                          });
                         },
                       ),
                       SizedBox(
@@ -76,10 +91,21 @@ class _AktifasiState extends State<Aktifasi> {
                               borderRadius: BorderRadius.circular(10.0),
                               side: BorderSide(color: Colors.yellow[600])),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => AktifasiBerhasil()),
-                            );
+                            if(inputPin != "") {
+                              showCircular(context);
+                              futureApiActivation(currentUser.email, inputPin)
+                                  .then((value) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                if (value.isSuccess()) {
+                                  nextPage(context, AktifasiBerhasil());
+                                } else {
+                                  alertDialog(
+                                      context, "Aktivasi Gagal", value.message);
+                                }
+                              });
+                            } else alertDialog(
+                                context, "Pin error", "Pin tidak sesuai");
                           },
                           color: Colors.yellow[600],
                           textColor: Colors.black,

@@ -1,3 +1,7 @@
+import 'package:belah_duren/aktifasi.dart';
+import 'package:belah_duren/api/register.dart';
+import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/model/user.dart';
 import 'package:flutter/material.dart';
 
 class Registrasi extends StatefulWidget {
@@ -6,6 +10,11 @@ class Registrasi extends StatefulWidget {
 }
 
 class _RegistrasiState extends State<Registrasi> {
+  final emailEditTextController = TextEditingController();
+  final passwordEditTextController = TextEditingController();
+  final passwordConfirmationEditTextController = TextEditingController();
+  final nameEditTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +56,7 @@ class _RegistrasiState extends State<Registrasi> {
                         height: 16.0,
                       ),
                       TextFormField(
+                        controller: nameEditTextController,
                         decoration: new InputDecoration(
                           labelText: "Masukkan Nama",
                           fillColor: Colors.grey,
@@ -72,6 +82,7 @@ class _RegistrasiState extends State<Registrasi> {
                         height: 16,
                       ),
                       TextFormField(
+                        controller: emailEditTextController,
                         decoration: new InputDecoration(
                           labelText: "Masukkan Email",
                           fillColor: Colors.grey,
@@ -96,6 +107,8 @@ class _RegistrasiState extends State<Registrasi> {
                       SizedBox(
                         height: 16,
                       ),TextFormField(
+                        obscureText: true,
+                        controller: passwordEditTextController,
                         decoration: new InputDecoration(
                           labelText: "Enter Password",
                           fillColor: Colors.grey,
@@ -121,6 +134,8 @@ class _RegistrasiState extends State<Registrasi> {
                         height: 16,
                       ),
                       TextFormField(
+                        obscureText: true,
+                        controller: passwordConfirmationEditTextController,
                         decoration: new InputDecoration(
                           labelText: "konfirmasi Password",
                           fillColor: Colors.grey,
@@ -132,7 +147,9 @@ class _RegistrasiState extends State<Registrasi> {
                         ),
                         validator: (val) {
                           if (val.length == 0) {
-                            return "password cannot be empty";
+                            return "konfirmasi password tidak sama";
+                          } else if (val != passwordEditTextController.text) {
+                            return "password dan konfirmasi password tidak sama";
                           } else {
                             return null;
                           }
@@ -152,7 +169,20 @@ class _RegistrasiState extends State<Registrasi> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               side: BorderSide(color: Colors.yellow[600])),
-                          onPressed: () {},
+                          onPressed: () {
+                            showCircular(context);
+                            currentUser = User(null, emailEditTextController.text, nameEditTextController.text, null);
+                            futureApiRegister(emailEditTextController.text, nameEditTextController.text,
+                                passwordEditTextController.text, passwordConfirmationEditTextController.text)
+                                .then((value) {
+                              Navigator.of(context, rootNavigator: true).pop();
+                              if(value.isSuccess()){
+                                nextPage(context, Aktifasi());
+                              } else {
+                                alertDialog(context, "Register Gagal", value.message);
+                              }
+                            });
+                          },
                           color: Colors.yellow[600],
                           textColor: Colors.black,
                           child: Text("Daftar".toUpperCase(),

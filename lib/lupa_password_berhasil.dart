@@ -2,12 +2,12 @@ import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/login.dart';
 import 'package:flutter/material.dart';
 
-class AktifasiBerhasil extends StatefulWidget {
+class LupaPasswordBerhasil extends StatefulWidget {
   @override
-  _AktifasiBerhasilState createState() => _AktifasiBerhasilState();
+  _LupaPasswordBerhasilState createState() => _LupaPasswordBerhasilState();
 }
 
-class _AktifasiBerhasilState extends State<AktifasiBerhasil> {
+class _LupaPasswordBerhasilState extends State<LupaPasswordBerhasil> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +45,7 @@ class _AktifasiBerhasilState extends State<AktifasiBerhasil> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Anda telah berhasil registrasi, silahkan Login",
+                          "Reset Password telah berhasil, silahkan cek email anda",
                           style: TextStyle(color: Colors.brown[700], fontSize: 16, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),

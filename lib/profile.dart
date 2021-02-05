@@ -1,4 +1,8 @@
 import 'package:belah_duren/about.dart';
+import 'package:belah_duren/api/logout.dart';
+import 'package:belah_duren/global/session.dart';
+import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/login.dart';
 import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
@@ -249,18 +253,29 @@ class _ProfileState extends State<Profile> {
               height: 12,
             ),Container(
               margin: EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.exit_to_app,
-                    color: Colors.brown,
-                  ),
-                  SizedBox(width: 16),
-                  Text(
-                    "Logout",
-                    style: TextStyle(color: Colors.brown, fontSize: 16),
-                  )
-                ],
+              child: GestureDetector(
+                onTap: () {
+                  showCircular(context);
+                  futureApiLogout(currentUser.token).then((value){
+                    Navigator.of(context, rootNavigator: true).pop();
+                    currentUser = null;
+                    destroySession();
+                    startNewPage(context, Login());
+                  });
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.exit_to_app,
+                      color: Colors.brown,
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Logout",
+                      style: TextStyle(color: Colors.brown, fontSize: 16),
+                    )
+                  ],
+                ),
               ),
             ),
             SizedBox(

@@ -200,10 +200,6 @@ class _HomeState extends State<Home> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Login()),
-                              );
                             },
                             child: Container(
                               decoration: BoxDecoration(

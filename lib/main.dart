@@ -1,10 +1,15 @@
+import 'package:belah_duren/global/session.dart';
+import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/home.dart';
+import 'package:belah_duren/login.dart';
 import 'package:belah_duren/order.dart';
 import 'package:belah_duren/list_menu.dart';
 import 'package:belah_duren/profile.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await loadSession();
   runApp(MyApp());
 }
 
@@ -17,8 +22,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: _getStartupScreen(),
     );
+  }
+
+  Widget _getStartupScreen() {
+    return currentUser != null ? MyHomePage(title: 'Flutter Demo Home Page') : Login();
   }
 }
 
