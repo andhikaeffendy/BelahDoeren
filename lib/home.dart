@@ -1,7 +1,10 @@
 import 'package:belah_duren/about.dart';
+import 'package:belah_duren/api/slider.dart';
 import 'package:belah_duren/detail_slider.dart';
+import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/list_store.dart';
 import 'package:belah_duren/login.dart';
+import 'package:belah_duren/model/slider.dart';
 import 'package:belah_duren/status_point.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List<SliderMenu> listSlider = List<SliderMenu>.empty();
+  List imageSlider = [];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,32 +45,47 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   //margin: EdgeInsets.only(top: 30.0),
                   height: 200.0,
-                  child: GestureDetector(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => DetailSlider()),
-                      );
+                  child: FutureBuilder(
+                    future: futureApiSliders(currentUser.token),
+                    builder: (context, snapshot){
+                      if(snapshot.connectionState == ConnectionState.waiting){
+                        return Center(
+                          child: new CircularProgressIndicator(),
+                        );
+                      } else if(snapshot.connectionState == ConnectionState.done){
+                        print(snapshot.data);
+                        ApiSlider apiSlider = snapshot.data;
+                        if(apiSlider.isSuccess()){
+                          listSlider = apiSlider.data;
+                          imageSlider = [];
+                          listSlider.forEach((slider) {
+                            imageSlider.add(Image.network(
+                                slider.imageUrl));
+                          });
+                          return GestureDetector(
+                            child: Carousel(
+                              images: imageSlider,
+                              autoplay: true,
+                              animationCurve: Curves.fastOutSlowIn,
+                              animationDuration: Duration(milliseconds: 800),
+                              dotSize: 6.0,
+                              dotColor: Colors.grey[700],
+                              boxFit: BoxFit.cover,
+                              dotPosition: DotPosition.bottomLeft,
+                              dotBgColor: Colors.transparent,
+                              dotIncreasedColor: Colors.white,
+                              onImageTap: (index){
+                                nextPage(context, DetailSlider(sliderMenu: listSlider[index]));
+                              },
+                            ),
+                          );
+                        }
+//                        alertDialog(context, "List Slider", apiMercurisk.message);
+                        return Container();
+                      } else {
+                        return Container();
+                      }
                     },
-                    child: Carousel(
-                      images: [
-                        Image.network(
-                            "https://media-cdn.tripadvisor.com/media/photo-s/18/63/79/02/patisserie-product-series.jpg"),
-                        Image.network(
-                            "https://i2.wp.com/belahdoeren.id/wp-content/uploads/2019/10/15.jpg?fit=886%2C886&ssl=1"),
-                        Image.network(
-                            "https://b.zmtcdn.com/data/reviews_photos/0c4/faa61eded7ce69f39d0ee7656efaa0c4_1505908094.jpg"),
-                      ],
-                      autoplay: true,
-                      animationCurve: Curves.fastOutSlowIn,
-                      animationDuration: Duration(milliseconds: 800),
-                      dotSize: 6.0,
-                      dotColor: Colors.grey[700],
-                      boxFit: BoxFit.cover,
-                      dotPosition: DotPosition.bottomLeft,
-                      dotBgColor: Colors.transparent,
-                      dotIncreasedColor: Colors.white,
-                    ),
                   ),
                 ),
                 Container(

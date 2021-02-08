@@ -1,5 +1,6 @@
 import 'package:belah_duren/aktifasi_berhasil.dart';
 import 'package:belah_duren/api/activation.dart';
+import 'package:belah_duren/api/send_activation_code.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_field.dart';
@@ -114,6 +115,29 @@ class _AktifasiState extends State<Aktifasi> {
                       ),
                       SizedBox(
                         height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              showCircular(context);
+                              futureApiSendActivationCode(currentUser.email)
+                                  .then((value) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                if (value.isSuccess()) {
+                                  alertDialog(
+                                      context, "Berhasil", "Kode Aktifasi baru telah dikirim ke email anda.");
+                                } else {
+                                  alertDialog(
+                                      context, "Gagal", value.message);
+                                }
+                              });
+                            },
+                            child: Text("Kirim Ulang Kode Aktifasi", style: TextStyle(color: Colors.brown[200], fontWeight: FontWeight.bold)),
+                          ),
+                        ],
                       )
                     ],
                   ),

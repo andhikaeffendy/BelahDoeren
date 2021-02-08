@@ -42,7 +42,7 @@ class _ProfileState extends State<Profile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Hallo John",
+                        "Hallo "+currentUser.name,
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
