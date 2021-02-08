@@ -17,7 +17,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: Container(
         //padding: EdgeInsets.only(left: 16, right: 16.0),
         width: MediaQuery.of(context).size.width,

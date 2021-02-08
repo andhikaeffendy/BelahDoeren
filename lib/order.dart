@@ -1,3 +1,4 @@
+import 'package:belah_duren/list_alamat.dart';
 import 'package:belah_duren/list_store.dart';
 import 'package:flutter/material.dart';
 
@@ -64,7 +65,7 @@ class _OrderState extends State<Order> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ListStore()),
+                        MaterialPageRoute(builder: (context) => ListAlamat()),
                       );
                     },
                     child: Container(
