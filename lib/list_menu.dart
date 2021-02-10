@@ -369,10 +369,11 @@ class _ListMenuState extends State<ListMenu>
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.network(
+                  Expanded(child: Image.network(
                     menus[index].imageUrl,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     width: double.infinity,
+                  ),
                   ),
                   SizedBox(
                     height: 8,

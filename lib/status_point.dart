@@ -174,6 +174,7 @@ class _StatusPointState extends State<StatusPoint> {
                             ),
                             Text(
                               "250\nPoint",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.brown,
                                   fontSize: 16,
@@ -184,11 +185,11 @@ class _StatusPointState extends State<StatusPoint> {
                             ),
                             Text(
                               "Cashback\n5%",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.brown,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -218,6 +219,7 @@ class _StatusPointState extends State<StatusPoint> {
                           ),
                           Text(
                             "250\nPoint",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.brown,
                                 fontSize: 16,
@@ -228,11 +230,11 @@ class _StatusPointState extends State<StatusPoint> {
                           ),
                           Text(
                             "Cashback\n5%",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.brown,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
@@ -261,6 +263,7 @@ class _StatusPointState extends State<StatusPoint> {
                           ),
                           Text(
                             "250\nPoint",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.brown,
                                 fontSize: 16,
@@ -271,11 +274,11 @@ class _StatusPointState extends State<StatusPoint> {
                           ),
                           Text(
                             "Cashback\n5%",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.brown,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),
@@ -304,6 +307,7 @@ class _StatusPointState extends State<StatusPoint> {
                           ),
                           Text(
                             "250\nPoint",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.brown,
                                 fontSize: 16,
@@ -314,11 +318,11 @@ class _StatusPointState extends State<StatusPoint> {
                           ),
                           Text(
                             "Cashback\n5%",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.brown,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
                           ),
                         ],
                       ),

@@ -1,5 +1,8 @@
+import 'package:belah_duren/api/transactions.dart';
+import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/list_alamat.dart';
 import 'package:belah_duren/list_store.dart';
+import 'package:belah_duren/model/transaction.dart';
 import 'package:flutter/material.dart';
 
 class Order extends StatefulWidget {
@@ -8,6 +11,9 @@ class Order extends StatefulWidget {
 }
 
 class _OrderState extends State<Order> {
+
+  List<Transaction> listTransaction = List<Transaction>.empty();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,121 +62,150 @@ class _OrderState extends State<Order> {
               ),SizedBox(
                 height: 24,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ListAlamat()),
+              FutureBuilder(
+                future: futureApiTransaction(currentUser.token, currentUser.id),
+                  builder: (context, snapshot){
+                    if(snapshot.connectionState == ConnectionState.waiting){
+                      //print(snapshot.data);
+                      return Center(
+                        child: new CircularProgressIndicator(),
                       );
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 16),
-                      padding: EdgeInsets.only(bottom: 24),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            offset: Offset(0.0, 1.0), //(x,y)
-                            blurRadius: 6.0,
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              padding: EdgeInsets.only(top: 8, bottom: 8),
-                              decoration: BoxDecoration(
-                                  color: Colors.brown[300],
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10))),
-                              width: double.infinity,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Delivery - Dalam Perjalanan",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[800]),
+                    }
+                    else if(snapshot.data == null){
+                      return Text("Error");
+                    }
+                    else if(snapshot.connectionState == ConnectionState.done){
+                      print(snapshot.data);
+                      ApiTransaction apiTransaction = snapshot.data;
+                      if (apiTransaction.isSuccess()){
+                        listTransaction = apiTransaction.data;
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: listTransaction.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ListAlamat()),
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 16),
+                                padding: EdgeInsets.only(bottom: 24),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
+                                    ),
+                                  ],
                                 ),
-                              )),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Nomor Pesanan : BD001901221",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(
-                                    height: 12,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        padding: EdgeInsets.only(top: 8, bottom: 8),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Colors.brown,
-                                        ),
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      SizedBox(
-                                        width: 16,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "01 Feb 2021",
+                                            color: Colors.brown[300],
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10))),
+                                        width: double.infinity,
+                                        child: Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            listTransaction[index].tax.toString(),
                                             style: TextStyle(
-                                                color: Colors.brown[500]),
-                                          ),
-                                          SizedBox(
-                                            height: 4,
-                                          ),
-                                          Text(
-                                            "Durian Brownies, Pancake Durian",
-                                            style: TextStyle(
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.brown[500]),
+                                                color: Colors.brown[800]),
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              Text(
-                                "150.000",
-                                style: TextStyle(
-                                  color: Colors.brown[800],
-                                  fontWeight: FontWeight.bold,
+                                        )),
+                                    SizedBox(
+                                      height: 12,
+                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Nomor Pesanan : " + listTransaction[index].transaction_number.toString(),
+                                              style: TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              height: 12,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(5),
+                                                    color: Colors.brown,
+                                                  ),
+                                                  height: 50,
+                                                  width: 50,
+                                                ),
+                                                SizedBox(
+                                                  width: 16,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Discount : " + listTransaction[index].discount.toString() + "%",
+                                                      style: TextStyle(
+                                                          color: Colors.brown[500]),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 4,
+                                                    ),
+                                                    Text(
+                                                      listTransaction[index].voucher_code,
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.brown[500]),
+                                                    ),SizedBox(
+                                                      height: 4,
+                                                    ),
+                                                    Text(
+                                                      listTransaction[index].total_price.toString(),
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Colors.brown[500]),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        Text(
+                                          listTransaction[index].grand_total.toString(),
+                                          style: TextStyle(
+                                            color: Colors.brown[800],
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    }
+                  }
               )
             ],
           ),
