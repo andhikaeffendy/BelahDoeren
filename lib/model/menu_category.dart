@@ -1,6 +1,9 @@
+import 'package:belah_duren/model/menu.dart';
+
 class MenuCategory{
   int id;
   String name;
+  List<Menu> menus = [];
 
   MenuCategory(
       this.id,

@@ -1,22 +1,42 @@
 import 'package:belah_duren/about.dart';
+import 'package:belah_duren/api/menu.dart';
 import 'package:belah_duren/api/slider.dart';
 import 'package:belah_duren/detail_slider.dart';
+import 'package:belah_duren/global/location.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/list_store.dart';
 import 'package:belah_duren/login.dart';
+import 'package:belah_duren/model/menu.dart';
 import 'package:belah_duren/model/slider.dart';
 import 'package:belah_duren/status_point.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
+
 }
 
 class _HomeState extends State<Home> {
   List<SliderMenu> listSlider = List<SliderMenu>.empty();
   List imageSlider = [];
+  List<Menu> featuredMenus = [];
+  final currency = new NumberFormat("###,###,###.#");
+
+  _HomeState();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    determinePosition().then((value){
+      setState(() {
+        currentPosition = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,9 +156,23 @@ class _HomeState extends State<Home> {
                     )),
                 Row(
                   children: [
-                    Image.asset("assets/images/pickup.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedOrderType = "pickup";
+                        });
+                      },
+                      child: Image.asset("assets/images/pickup.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
+                    ),
                     Spacer(),
-                    Image.asset("assets/images/delivery.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover)
+                    GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          selectedOrderType = "delivery";
+                        });
+                      },
+                      child: Image.asset("assets/images/delivery.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
+                    ),
                   ],
                 ),
                 Container(
@@ -206,53 +240,65 @@ class _HomeState extends State<Home> {
                     color: Colors.black26,
                   ),
                 ),
-                Column(
-                  children: [
-                    GridView.builder(
-                        itemCount: 4,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.98,
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 8),
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: (){
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    offset: Offset(0.0, 1.0), //(x,y)
-                                    blurRadius: 6.0,
+                FutureBuilder(
+                  future: futureApiFeaturedMenus(currentUser.token),
+                  builder: (context, snapshot){
+                    if(snapshot.connectionState == ConnectionState.done){
+                      print(snapshot.data);
+                      ApiMenu apiData = snapshot.data;
+                      if(apiData.isSuccess()){
+                        featuredMenus = apiData.data;
+                      }
+                    }
+                    return Column(
+                      children: [
+                        GridView.builder(
+                            itemCount: featuredMenus.length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.98,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 8),
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: (){
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey,
+                                        offset: Offset(0.0, 1.0), //(x,y)
+                                        blurRadius: 6.0,
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.network("https://awsimages.detik.net.id/community/media/visual/2017/10/06/d90ddfb6-c25b-4bd0-9893-0ac1738d3a5b.jpg?a=1",
-                                    fit: BoxFit.fill,width: double.infinity,),
-                                  SizedBox(height: 8,),
-                                  Text("Pancake Durian Original", style: TextStyle(fontSize: 12,
-                                      color: Colors.brown[600], fontWeight: FontWeight.bold),),
-                                  SizedBox(height: 4,),
-                                  Text("200.000", style: TextStyle(fontSize: 12),),
-                                  SizedBox(height: 8,),
-                                ],
-                              ),
-                            ),
-                          );
-                        })
-                  ],
-                )
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Image.network(featuredMenus[index].imageUrl,
+                                        fit: BoxFit.fill,width: double.infinity,),
+                                      SizedBox(height: 8,),
+                                      Text(featuredMenus[index].name, style: TextStyle(fontSize: 12,
+                                          color: Colors.brown[600], fontWeight: FontWeight.bold),),
+                                      SizedBox(height: 4,),
+                                      Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12),),
+                                      SizedBox(height: 8,),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            })
+                      ],
+                    );
+                  },
+                ),
               ]),
         ),
     );

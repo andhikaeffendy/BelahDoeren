@@ -1,3 +1,6 @@
+import 'package:belah_duren/global/location.dart';
+import 'package:belah_duren/global/variable.dart';
+
 class Branch{
   int id;
   String name;
@@ -19,8 +22,8 @@ class Branch{
         id = json["id"],
         name = json["name"],
         address = json["address"],
-        latitude = json["lat"],
-        longitude = json["long"],
+        latitude = json["lat"] is String ? double.parse(json["lat"]) : json["lat"],
+        longitude = json["long"] is String ? double.parse(json["long"]) : json["long"],
         imageUrl = json["image_url"]
   ;
 
@@ -32,4 +35,25 @@ class Branch{
     "long": longitude,
     "image_url": imageUrl,
   };
+
+  String distanceFromHere(){
+    if(currentPosition == null) return "Posisi belum ditemukan";
+    double distance = this.distanceFrom(currentPosition.latitude,
+        currentPosition.longitude);
+    return distance.toStringAsFixed(1) + " KM";
+  }
+
+  double distance(){
+    double distance = distanceBetween(currentPosition.latitude,
+        currentPosition.longitude, this.latitude, this.longitude);
+    if(distance < 100 ) return 0.1;
+    return distance/1000;
+  }
+
+  double distanceFrom(double lat, double long){
+    double distance = distanceBetween(lat, long,
+        this.latitude, this.longitude);
+    if(distance < 100 ) return 0.1;
+    return distance/1000;
+  }
 }

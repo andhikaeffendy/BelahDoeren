@@ -4,7 +4,7 @@ import 'package:belah_duren/model/branch.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 
-Future<ApiBranch> futureApiMenuCategories(String token) async{
+Future<ApiBranch> futureApiBranches(String token) async{
   var dio = Dio();
   String url = api_url + "branches_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =

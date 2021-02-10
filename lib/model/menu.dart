@@ -2,7 +2,7 @@ class Menu{
   int id;
   String name;
   String description;
-  double price;
+  int price;
   int activeStatus;
   int featured;
   String imageUrl;

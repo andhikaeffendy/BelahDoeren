@@ -1,3 +1,6 @@
+import 'package:belah_duren/api/branch.dart';
+import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/model/branch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +11,7 @@ class ListStore extends StatefulWidget {
 
 class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
   TabController _tabController;
+  List<Branch> branches = [];
 
   @override
   void initState() {
@@ -36,14 +40,29 @@ class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset("assets/images/pickup.png",
-                    width: MediaQuery.of(context).size.width / 2.2,
-                    height: 100,
-                    fit: BoxFit.cover),
-                Image.asset("assets/images/delivery.png",
-                    width: MediaQuery.of(context).size.width / 2.2,
-                    height: 100,
-                    fit: BoxFit.cover)
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      selectedOrderType = "pickup";
+                    });
+                  },
+                  child: Image.asset("assets/images/pickup.png",
+                      width: MediaQuery.of(context).size.width / 2.2,
+                      height: 100,
+                      fit: BoxFit.cover),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      selectedOrderType = "delivery";
+                    });
+                  },
+                  child: Image.asset("assets/images/delivery.png",
+                      width: MediaQuery.of(context).size.width / 2.2,
+                      height: 100,
+                      fit: BoxFit.cover),
+                ),
+
               ],
             ),
             SizedBox(
@@ -113,12 +132,7 @@ class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: [
-                  _listViewAlamat(context),
-                  _listViewAlamat(context),
-                  _listViewAlamat(context),
-                  _listViewAlamat(context),
-                ],
+                children: viewAddress(context),
               ),
             )
           ],
@@ -126,62 +140,95 @@ class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
       ),
     );
   }
+
+  List<Widget> viewAddress(BuildContext context){
+    List<Widget> addressViews = [];
+    addressViews.add(
+      FutureBuilder(
+        future: futureApiBranches(currentUser.token),
+        builder: (context, snapshot){
+          if(snapshot.connectionState == ConnectionState.done){
+            print(snapshot.data);
+            ApiBranch apiData = snapshot.data;
+            if(apiData.isSuccess()){
+              branches = apiData.data;
+            }
+          }
+          return _listViewAlamat(context, branches);
+        },
+      )
+    );
+    addressViews.add(_listViewAlamat(context, []));
+    addressViews.add(_listViewAlamat(context, []));
+    addressViews.add(_listViewAlamat(context, []));
+    return addressViews;
+  }
 }
 
-Widget _listViewAlamat(BuildContext context){
+Widget _listViewAlamat(BuildContext context, List<Branch> branches){
   return ListView.builder(
-    itemCount: 5,
+    itemCount: branches.length,
     itemBuilder: (context, index){
-      return Column(
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.check,
-                  size: 30,
-                  color: Colors.grey,
-                ),SizedBox(
-                  width: 12,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      return GestureDetector(
+          onTap: (){
+            Navigator.pop(context, [branches[index], selectedOrderType]);
+          },
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(left: 16, right: 16, top: 8),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "5 KM",
-                      style: TextStyle(
-                          color: Colors.brown[700]),
-                    ),Text(
-                      "Outlet Progo",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.brown[700],
-                          fontSize: 18),
-                    ),Text(
-                      "Jalan Progo No. 3",
-                      style: TextStyle(
-                          color: Colors.brown[700]),
-                    ),Text(
-                      "Kota Bandung",
-                      style: TextStyle(
-                          color: Colors.brown[700]),
-                    )
+                    selectedBranch.id == branches[index].id ?
+                        Icon(
+                          Icons.check,
+                          size: 30,
+                          color: Colors.grey,
+                        ) :
+                        SizedBox(
+                          width: 24,
+                        )
+                    ,SizedBox(
+                      width: 12,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          (selectedOrderType == "pickup" ? "Pickup - " : "Delivery - ") + branches[index].distanceFromHere(),
+                          style: TextStyle(
+                              color: Colors.brown[700]),
+                        ),Text(
+                          branches[index].name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown[700],
+                              fontSize: 18),
+                        ),Text(
+                          branches[index].address,
+                          style: TextStyle(
+                              color: Colors.brown[700]),
+                        ),Text(
+                          "Kota Bandung",
+                          style: TextStyle(
+                              color: Colors.brown[700]),
+                        )
+                      ],
+                    ),Spacer(),
+                    Icon(Icons.help_outline, color: Colors.lightGreen[700])
                   ],
-                ),Spacer(),
-                Icon(Icons.help_outline, color: Colors.lightGreen[700])
-              ],
-            ),
-          ),SizedBox(
-            height: 16,
-          ),Container(
-            margin: EdgeInsets.only(left: 16, right: 16),
-            height: 1,
-            color: Colors.brown,
+                ),
+              ),SizedBox(
+                height: 16,
+              ),Container(
+                margin: EdgeInsets.only(left: 16, right: 16),
+                height: 1,
+                color: Colors.brown,
+              )
+            ],
           )
-        ],
       );
     },
   );
