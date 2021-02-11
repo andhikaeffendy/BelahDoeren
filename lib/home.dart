@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
+  final Function gotoMenu;
+  Home(this.gotoMenu);
   @override
   _HomeState createState() => _HomeState();
 
@@ -24,8 +26,6 @@ class _HomeState extends State<Home> {
   List imageSlider = [];
   List<Menu> featuredMenus = [];
   final currency = new NumberFormat("###,###,###.#");
-
-  _HomeState();
 
   @override
   void initState() {
@@ -158,18 +158,16 @@ class _HomeState extends State<Home> {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        setState(() {
                           selectedOrderType = "pickup";
-                        });
+                          widget.gotoMenu();
                       },
                       child: Image.asset("assets/images/pickup.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
                     ),
                     Spacer(),
                     GestureDetector(
                       onTap: (){
-                        setState(() {
-                          selectedOrderType = "delivery";
-                        });
+                        selectedOrderType = "delivery";
+                        widget.gotoMenu();
                       },
                       child: Image.asset("assets/images/delivery.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
                     ),

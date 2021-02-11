@@ -42,18 +42,30 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  void gotoMenu(){
+    globalKey.currentState.changePage(1);
+  }
+
   int _selectedItem = 0;
-  final List pages = [
-    Home(),
-    ListMenu(),
-    Order(),
-    Profile()
-  ];
+  List pages ;
+  GlobalKey<_CustomBottomNavigationBarState> globalKey = GlobalKey();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pages = [
+      Home(gotoMenu),
+      ListMenu(),
+      Order(),
+      Profile()
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: CustomBottomNavigationBar(
+      bottomNavigationBar: CustomBottomNavigationBar(key: globalKey,
         iconList: [
           Icons.home_rounded,
           Icons.shopping_bag_outlined,
@@ -84,10 +96,7 @@ class CustomBottomNavigationBar extends StatefulWidget {
   final Function(int) onChange;
   final List<IconData> iconList;
 
-  CustomBottomNavigationBar(
-      {this.defaultSelectedIndex = 0,
-        @required this.iconList,
-        @required this.onChange});
+  CustomBottomNavigationBar({Key key, this.defaultSelectedIndex, this.onChange, this.iconList}) : super(key: key);
 
   @override
   _CustomBottomNavigationBarState createState() =>
@@ -98,6 +107,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   int _selectedIndexItem = 0;
   List<IconData> _iconList=[];
 
+  void changePage(int index){
+    widget.onChange(index);
+    setState(() {
+      _selectedIndexItem = index;
+    });
+  }
 
   @override
   void initState() {
@@ -124,10 +139,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   Widget buildNavBar(IconData iconData, int index) {
     return GestureDetector(
       onTap: () {
-        widget.onChange(index);
-        setState(() {
-          _selectedIndexItem = index;
-        });
+        changePage(index);
       },
       child: Container(
         height: 50.0,
