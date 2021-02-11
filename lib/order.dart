@@ -172,7 +172,8 @@ class _OrderState extends State<Order> {
                                                   height: 4,
                                                 ),
                                                 Text(
-                                                  transaction[index].voucher_code,
+                                                  transaction[index].voucher_code == null ? "0" :
+                                                   transaction[index].voucher_code,
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.bold,
                                                       color: Colors.brown[500]),
