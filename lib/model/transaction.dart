@@ -1,10 +1,10 @@
 class Transaction {
   int id;
-  double transaction_number;
-  double total_price;
-  int tax;
-  double grand_total;
-  double discount;
+  String transaction_number;
+  String total_price;
+  String tax;
+  String grand_total;
+  String discount;
   String voucher_code;
 
   Transaction({this.id, this.transaction_number, this.total_price, this.tax,

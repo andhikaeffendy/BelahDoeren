@@ -36,4 +36,5 @@ class Menu{
     "featured": featured,
     "image_url": imageUrl,
   };
+
 }

@@ -11,7 +11,7 @@ Future<ApiTransaction> futureApiTransaction(String token, int userId) async{
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
   Response response = await dio.get(url);
-  print("response : " + response.toString());
+  //print("response : " + response.toString());
   print(response.data);
 
   return ApiTransaction.fromStringJson(response.toString());
@@ -59,7 +59,11 @@ class ApiTransaction {
   String message;
   List<Transaction> data;
 
-  ApiTransaction({this.status, this.message, this.data});
+  ApiTransaction({
+    this.status,
+    this.message,
+    this.data
+  });
 
   ApiTransaction.fromJson(Map<String, dynamic> json) :
         status = json["status"],
