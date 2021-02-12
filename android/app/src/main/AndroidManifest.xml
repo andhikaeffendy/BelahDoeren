@@ -2,8 +2,12 @@
     package="com.example.belah_duren">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
    <application
-        android:label="belah_duren"
+        android:name=".Application"
+        android:label="Belah Doeren"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
         <activity

@@ -280,8 +280,8 @@ class _HomeState extends State<Home> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
-                                      Image.network(featuredMenus[index].imageUrl,
-                                        fit: BoxFit.fill,width: double.infinity,),
+                                      Expanded(child: Image.network(featuredMenus[index].imageUrl,
+                                        fit: BoxFit.cover,width: double.infinity,)),
                                       SizedBox(height: 8,),
                                       Text(featuredMenus[index].name, style: TextStyle(fontSize: 12,
                                           color: Colors.brown[600], fontWeight: FontWeight.bold),),
