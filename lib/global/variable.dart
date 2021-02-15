@@ -1,4 +1,5 @@
 import 'package:belah_duren/model/branch.dart';
+import 'package:belah_duren/model/member_level.dart';
 import 'package:belah_duren/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
