@@ -12,6 +12,8 @@ class Order extends StatefulWidget {
 
 class _OrderState extends State<Order> {
 
+  int _counter = 0;
+
   List<Transaction> transaction = [];
 
   @override
@@ -33,8 +35,7 @@ class _OrderState extends State<Order> {
           child: Column(
             children: [
               Container(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16),
+                padding: EdgeInsets.only(left: 16, right: 16),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.grey[200]),
@@ -59,24 +60,25 @@ class _OrderState extends State<Order> {
                     ))
                   ],
                 ),
-              ),SizedBox(
+              ),
+              SizedBox(
                 height: 24,
               ),
               FutureBuilder(
-                future: futureApiTransaction(currentUser.token, currentUser.id),
-                  builder: (context, snapshot){
-                    if(snapshot.connectionState == ConnectionState.waiting){
+                  future:
+                      futureApiTransaction(currentUser.token, currentUser.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       //print(snapshot.data);
                       return Center(
                         child: new CircularProgressIndicator(),
                       );
-                    }
-                    else if(snapshot.hasError){
+                    } else if (snapshot.hasError) {
                       print(snapshot.data);
-                    }
-                    else if(snapshot.connectionState == ConnectionState.done){
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
                       ApiTransaction apiTransaction = snapshot.data;
-                      if (apiTransaction.isSuccess()){
+                      if (apiTransaction.isSuccess()) {
                         transaction = apiTransaction.data;
                         print(transaction);
                         //transaction.addAll(apiTransaction.data);
@@ -88,11 +90,12 @@ class _OrderState extends State<Order> {
                       itemCount: transaction.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ListAlamat()),
-                            );
+                          onTap: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => ListAlamat()),
+                            // );
+                            _cartBottomSheet(context);
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 16),
@@ -134,14 +137,20 @@ class _OrderState extends State<Order> {
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Nomor Pesanan : " + transaction[index].transaction_number.toString(),
-                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                          "Nomor Pesanan : " +
+                                              transaction[index]
+                                                  .transaction_number
+                                                  .toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(
                                           height: 12,
@@ -150,7 +159,8 @@ class _OrderState extends State<Order> {
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(5),
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
                                                 color: Colors.brown,
                                               ),
                                               height: 50,
@@ -161,10 +171,14 @@ class _OrderState extends State<Order> {
                                             ),
                                             Column(
                                               crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "Discount : " + transaction[index].discount.toString() + "%",
+                                                  "Discount : " +
+                                                      transaction[index]
+                                                          .discount
+                                                          .toString() +
+                                                      "%",
                                                   style: TextStyle(
                                                       color: Colors.brown[500]),
                                                 ),
@@ -172,18 +186,27 @@ class _OrderState extends State<Order> {
                                                   height: 4,
                                                 ),
                                                 Text(
-                                                  transaction[index].voucher_code == null ? "0" :
-                                                   transaction[index].voucher_code,
+                                                  transaction[index]
+                                                              .voucher_code ==
+                                                          null
+                                                      ? "0"
+                                                      : transaction[index]
+                                                          .voucher_code,
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.brown[500]),
-                                                ),SizedBox(
+                                                ),
+                                                SizedBox(
                                                   height: 4,
                                                 ),
                                                 Text(
-                                                  transaction[index].total_price.toString(),
+                                                  transaction[index]
+                                                      .total_price
+                                                      .toString(),
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                       color: Colors.brown[500]),
                                                 ),
                                               ],
@@ -207,12 +230,150 @@ class _OrderState extends State<Order> {
                         );
                       },
                     );
-                  }
-              )
+                  })
             ],
           ),
         ),
       ),
     );
   }
+
+  void _cartBottomSheet(context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            margin: EdgeInsets.all(16),
+            height: MediaQuery.of(context).size.height * .80,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                  child: Image.network(
+                    "https://assets-pergikuliner.com/iTri-jidIqg2A6bOiLMcuK5Irp0=/385x290/smart/https:/"
+                    "/assets-pergikuliner.com/uploads/image/picture/851309/picture-1520915650.JPG",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Pancake Durian Original',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      'Rp. 80.000',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * .60,
+                    child: Text(
+                        "Terbuat dari 100% durian asli yang dibalut kulit crepes yang lembut"),
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    '1 box - Isi 8 pcs',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  color: Colors.brown[100],
+                  height: 1,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "Jumlah Pesanan",
+                      style: TextStyle(fontSize: 12, color: Colors.brown[200]),
+                    ),
+                    SizedBox(
+                      width: 16,
+                    ),
+                    IconButton(
+                        icon: Icon(Icons.remove, size: 20),
+                        onPressed: () {
+                          setState(() {
+                            _counter = _counter;
+                            if (_counter != 0) {
+                              _counter--;
+                            }
+                          });
+                        }),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      color: Colors.grey[300],
+                      child: Text(
+                        '$_counter',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    IconButton(
+                        icon: Icon(Icons.add, size: 20),
+                        onPressed: () {
+                          setState(() {
+                            _counter = _counter;
+                            _counter++;
+                          });
+                        }),
+                  ],
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(color: Colors.yellow[700])),
+                    onPressed: () {},
+                    color: Colors.yellow[700],
+                    textColor: Colors.black,
+                    child: Text("Tambah Ke Keranjang".toUpperCase(),
+                        style: TextStyle(fontSize: 14)),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
+  }
+
 }
