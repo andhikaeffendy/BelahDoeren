@@ -1,4 +1,9 @@
 import 'package:belah_duren/api/transactions.dart';
+import 'package:belah_duren/cart_alamat.dart';
+import 'package:belah_duren/cart_delivery.dart';
+import 'package:belah_duren/cart_pickup.dart';
+import 'package:belah_duren/detail_order.dart';
+import 'package:belah_duren/edit_profile.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/list_alamat.dart';
 import 'package:belah_duren/list_store.dart';
@@ -91,11 +96,11 @@ class _OrderState extends State<Order> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => ListAlamat()),
-                            // );
-                            _cartBottomSheet(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ListAlamat()),
+                            );
+                            // _cartBottomSheet(context);
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 16),
