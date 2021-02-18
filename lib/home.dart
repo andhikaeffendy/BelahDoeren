@@ -41,7 +41,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
         width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           child: Column(
@@ -51,13 +50,23 @@ class _HomeState extends State<Home> {
                 Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    Image.asset("assets/images/header_home.png",width: double.infinity,fit: BoxFit.fill,height: 100,),Positioned(
-                        top: -20,
+                    Image.asset("assets/images/header_home.png",width: double.infinity,fit: BoxFit.fill,height: 140,),Positioned(
+                        top: -10,
                         child: Image.asset("assets/images/logo_home.png",
-                          width: 130, fit: BoxFit.fill,)),
+                          width: 150, fit: BoxFit.cover,)),
+                    Positioned(
+                        right: 50,
+                        top: 40,
+                        child: GestureDetector(
+                          onTap: (){},
+                          child: Image.asset("assets/images/scanqr.png",
+                            width: 40, fit: BoxFit.fill,),
+                        )
+                    ),
                   ],
                 ),
                 Container(
+                  margin: EdgeInsets.only(left: 16.0, right: 16.0),
                   decoration: BoxDecoration(
                       border: Border.all(
                         color: Colors.white,
@@ -109,6 +118,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Container(
+                    margin: EdgeInsets.only(left: 16.0, right: 16.0),
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
                         color: Colors.grey[200],
@@ -154,26 +164,30 @@ class _HomeState extends State<Home> {
                         )
                       ],
                     )),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: (){
-                          selectedOrderType = "pickup";
+                Container(
+                  margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                            selectedOrderType = "pickup";
+                            widget.gotoMenu();
+                        },
+                        child: Image.asset("assets/images/pickup.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: (){
+                          selectedOrderType = "delivery";
                           widget.gotoMenu();
-                      },
-                      child: Image.asset("assets/images/pickup.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: (){
-                        selectedOrderType = "delivery";
-                        widget.gotoMenu();
-                      },
-                      child: Image.asset("assets/images/delivery.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
-                    ),
-                  ],
+                        },
+                        child: Image.asset("assets/images/delivery.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
+                      ),
+                    ],
+                  ),
                 ),
                 Container(
+                  margin: EdgeInsets.only(left: 16.0, right: 16.0),
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
@@ -216,18 +230,21 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 16,
                 ),
-                Row(
-                  children: [
-                    Text(
-                      "Promo",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Spacer(),
-                    Text(
-                      "Lihat Semua",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+                Container(
+                  margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Promo",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Spacer(),
+                      Text(
+                        "Lihat Semua",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 12,
@@ -235,6 +252,7 @@ class _HomeState extends State<Home> {
                 SizedBox(
                   height: 1,
                   child: Container(
+                    margin: EdgeInsets.only(left: 16.0, right: 16.0),
                     color: Colors.black26,
                   ),
                 ),
@@ -248,52 +266,55 @@ class _HomeState extends State<Home> {
                         featuredMenus = apiData.data;
                       }
                     }
-                    return Column(
-                      children: [
-                        GridView.builder(
-                            itemCount: featuredMenus.length,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.98,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 8),
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: (){
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        offset: Offset(0.0, 1.0), //(x,y)
-                                        blurRadius: 6.0,
-                                      ),
-                                    ],
+                    return Container(
+                      margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                      child: Column(
+                        children: [
+                          GridView.builder(
+                              itemCount: featuredMenus.length,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 0.98,
+                                  mainAxisSpacing: 10,
+                                  crossAxisSpacing: 8),
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: (){
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          offset: Offset(0.0, 1.0), //(x,y)
+                                          blurRadius: 6.0,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(child: Image.network(featuredMenus[index].imageUrl,
+                                          fit: BoxFit.cover,width: double.infinity,)),
+                                        SizedBox(height: 8,),
+                                        Text(featuredMenus[index].name, style: TextStyle(fontSize: 12,
+                                            color: Colors.brown[600], fontWeight: FontWeight.bold),),
+                                        SizedBox(height: 4,),
+                                        Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12),),
+                                        SizedBox(height: 8,),
+                                      ],
+                                    ),
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(child: Image.network(featuredMenus[index].imageUrl,
-                                        fit: BoxFit.cover,width: double.infinity,)),
-                                      SizedBox(height: 8,),
-                                      Text(featuredMenus[index].name, style: TextStyle(fontSize: 12,
-                                          color: Colors.brown[600], fontWeight: FontWeight.bold),),
-                                      SizedBox(height: 4,),
-                                      Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12),),
-                                      SizedBox(height: 8,),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            })
-                      ],
+                                );
+                              })
+                        ],
+                      ),
                     );
                   },
                 ),

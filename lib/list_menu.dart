@@ -16,6 +16,9 @@ class ListMenu extends StatefulWidget {
 
 class _ListMenuState extends State<ListMenu>
     with TickerProviderStateMixin {
+  int _counter = 0;
+
+
   TabController _tabController;
   List<MenuCategory> menuCategories = [new MenuCategory(0, "Featured")];
 
@@ -213,7 +216,7 @@ class _ListMenuState extends State<ListMenu>
         builder: (context, setState){
       return AlertDialog(
         content: Container(
-          height: 220.0,
+          height: MediaQuery.of(context).size.height/2.5,
           width: 400,
           // decoration: BoxDecoration(
           //     border: Border.all(),
@@ -289,12 +292,15 @@ class _ListMenuState extends State<ListMenu>
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 16, bottom: 16),
-                          child: Text(
-                            selectedBranch.address,
-                            style: TextStyle(
-                                color: Colors.brown[500],
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
+                          child: Container(
+                            width: 200,
+                            child: Text(
+                              selectedBranch.address,
+                              style: TextStyle(
+                                  color: Colors.brown[500],
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ],
@@ -349,7 +355,7 @@ class _ListMenuState extends State<ListMenu>
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-
+                _cartBottomSheet(context);
             },
             child: Container(
               padding: EdgeInsets.only(bottom: 8),
@@ -399,6 +405,147 @@ class _ListMenuState extends State<ListMenu>
               ),
             ),
           );
+        });
+  }
+
+  void _cartBottomSheet(context) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(builder: (context, setState){
+            return Container(
+              margin: EdgeInsets.all(16),
+              height: MediaQuery.of(context).size.height * .80,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                      child: Image.network(
+                        "https://assets-pergikuliner.com/iTri-jidIqg2A6bOiLMcuK5Irp0=/385x290/smart/https:/"
+                            "/assets-pergikuliner.com/uploads/image/picture/851309/picture-1520915650.JPG",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Pancake Durian Original',
+                          style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        Text(
+                          'Rp. 80.000',
+                          style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * .60,
+                        child: Text(
+                            "Terbuat dari 100% durian asli yang dibalut kulit crepes yang lembut"),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        '1 box - Isi 8 pcs',
+                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      color: Colors.brown[100],
+                      height: 1,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Jumlah Pesanan",
+                          style: TextStyle(fontSize: 12, color: Colors.brown[200]),
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.remove, size: 20),
+                            onPressed: () {
+                              setState(() {
+                                _counter = _counter;
+                                if (_counter != 0) {
+                                  _counter--;
+                                }
+                              });
+                            }),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Container(
+                          padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          color: Colors.grey[300],
+                          child: Text(
+                            '$_counter',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.add, size: 20),
+                            onPressed: () {
+                              setState(() {
+                                _counter++;
+                              });
+                            }),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(color: Colors.yellow[700])),
+                        onPressed: () {},
+                        color: Colors.yellow[700],
+                        textColor: Colors.black,
+                        child: Text("Tambah Ke Keranjang".toUpperCase(),
+                            style: TextStyle(fontSize: 14)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
         });
   }
 

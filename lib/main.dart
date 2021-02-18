@@ -66,11 +66,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: FloatingActionButton(
+          child: Icon(Icons.shopping_cart_outlined, color: Colors.brown[700], size: 30,),
+          backgroundColor: Colors.white,
+          onPressed: (){
+
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: CustomBottomNavigationBar(key: globalKey,
         iconList: [
           Icons.home_rounded,
-          Icons.shopping_bag_outlined,
-          Icons.mail_outline,
+          Icons.store,
+          Icons.mail,
           Icons.perm_identity
         ],
           onChange: (val){
@@ -79,14 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
           defaultSelectedIndex: 0),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-
-        },
-        backgroundColor: Colors.white,
-        child: ImageIcon(AssetImage("assets/images/scan_qr.png",), color: Colors.brown,),
-      ),
       body: pages[_selectedItem],
     );
   }
@@ -132,8 +135,22 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       _navBarItem.add(buildNavBar(_iconList[i], i));
     }
 
-    return Row(
-      children: _navBarItem,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: _navBarItem,
+      ),
     );
   }
 
@@ -143,25 +160,32 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         changePage(index);
       },
       child: Container(
-        height: 50.0,
-        width: MediaQuery.of(context).size.width / _iconList.length,
-        decoration: index == _selectedIndexItem
-            ? BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(width: 4, color: Colors.yellow[700])),
-                gradient: LinearGradient(colors: [
-                  Colors.yellow[700].withOpacity(0.3),
-                  Colors.yellow[700].withOpacity(0.18),
-                  Colors.yellow[700].withOpacity(0.50),
-                ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
-                // color: index == _selectedIndexItem ? Colors.yellow : Colors.white
-                )
-            : BoxDecoration(),
-        child: Icon(
-          iconData,
-          color: index == _selectedIndexItem ? Colors.brown[700] : Colors.grey,
+        height: 55,
+        child: Row(
+          children: [
+            Row(
+              children: [
+                MaterialButton(
+                    minWidth: 40,
+                    onPressed: (){
+                      setState(() {
+                        changePage(index);
+                      });
+                    },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(iconData, color: _selectedIndexItem == index ? Colors.brown[700] : Colors.black26,size: 40,),
+                    ],
+                  ),
+                    ),
+              ],
+            )
+          ],
         ),
       ),
     );
   }
+
 }
+

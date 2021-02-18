@@ -1,10 +1,13 @@
 import 'package:belah_duren/about.dart';
 import 'package:belah_duren/api/logout.dart';
 import 'package:belah_duren/api/member_level.dart';
+import 'package:belah_duren/edit_profile.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/login.dart';
 import 'package:flutter/material.dart';
+
+import 'list_alamat.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -111,18 +114,26 @@ class _ProfileState extends State<Profile> {
             ),
             Container(
               margin: EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.person_rounded,
-                    color: Colors.brown,
-                  ),
-                  SizedBox(width: 16),
-                  Text(
-                    "Edit Profile",
-                    style: TextStyle(color: Colors.brown, fontSize: 16),
-                  )
-                ],
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EditProfile()),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.person_rounded,
+                      color: Colors.brown,
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Edit Profile",
+                      style: TextStyle(color: Colors.brown, fontSize: 16),
+                    )
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -138,18 +149,23 @@ class _ProfileState extends State<Profile> {
               height: 12,
             ),Container(
               margin: EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.history,
-                    color: Colors.brown,
-                  ),
-                  SizedBox(width: 16),
-                  Text(
-                    "Riwayat Pemesanan",
-                    style: TextStyle(color: Colors.brown, fontSize: 16),
-                  )
-                ],
+              child: GestureDetector(
+                onTap: (){
+
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.history,
+                      color: Colors.brown,
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Riwayat Pemesanan",
+                      style: TextStyle(color: Colors.brown, fontSize: 16),
+                    )
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -165,18 +181,26 @@ class _ProfileState extends State<Profile> {
               height: 12,
             ),Container(
               margin: EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.location_on,
-                    color: Colors.brown,
-                  ),
-                  SizedBox(width: 16),
-                  Text(
-                    "Alamat Pengiriman",
-                    style: TextStyle(color: Colors.brown, fontSize: 16),
-                  )
-                ],
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ListAlamat()),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      color: Colors.brown,
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Alamat Pengiriman",
+                      style: TextStyle(color: Colors.brown, fontSize: 16),
+                    )
+                  ],
+                ),
               ),
             ),
             SizedBox(

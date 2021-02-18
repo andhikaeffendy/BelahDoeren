@@ -206,10 +206,13 @@ Widget _listViewAlamat(BuildContext context, List<Branch> branches){
                               fontWeight: FontWeight.bold,
                               color: Colors.brown[700],
                               fontSize: 18),
-                        ),Text(
-                          branches[index].address,
-                          style: TextStyle(
-                              color: Colors.brown[700]),
+                        ),Container(
+                          width: MediaQuery.of(context).size.width/1.5,
+                          child: Text(
+                            branches[index].address,
+                            style: TextStyle(
+                                color: Colors.brown[700]),
+                          ),
                         ),Text(
                           "Kota Bandung",
                           style: TextStyle(
