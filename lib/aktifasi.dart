@@ -39,7 +39,7 @@ class _AktifasiState extends State<Aktifasi> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Aktifasi",
+                        "Aktivasi",
                         style: TextStyle(
                             color: Colors.brown[700],
                             fontSize: 30.0,
@@ -51,7 +51,7 @@ class _AktifasiState extends State<Aktifasi> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "Masukkan kode OTP",
+                          "Masukkan Kode OTP yang telah dikirim ke email anda",
                           style: TextStyle(color: Colors.brown[300]),
                           textAlign: TextAlign.center,
                         ),
@@ -128,14 +128,14 @@ class _AktifasiState extends State<Aktifasi> {
                                     .pop();
                                 if (value.isSuccess()) {
                                   alertDialog(
-                                      context, "Berhasil", "Kode Aktifasi baru telah dikirim ke email anda.");
+                                      context, "Berhasil", "Kode Aktivasi baru telah dikirim ke email anda.");
                                 } else {
                                   alertDialog(
                                       context, "Gagal", value.message);
                                 }
                               });
                             },
-                            child: Text("Kirim Ulang Kode Aktifasi", style: TextStyle(color: Colors.brown[200], fontWeight: FontWeight.bold)),
+                            child: Text("Kirim Ulang Kode Aktivasi", style: TextStyle(color: Colors.brown[200], fontWeight: FontWeight.bold)),
                           ),
                         ],
                       )

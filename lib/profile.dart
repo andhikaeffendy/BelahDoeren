@@ -22,13 +22,13 @@ class _ProfileState extends State<Profile> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 30, bottom: 8),
+              padding: EdgeInsets.only(left: 16, right: 16, top: 44, bottom: 16),
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.yellow[600],
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15),
-                      bottomRight: Radius.circular(15)),
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12)),
                   border: Border.all(
                       width: 1,
                       color: Colors.yellow,
@@ -38,9 +38,9 @@ class _ProfileState extends State<Profile> {
                 children: [
                   Image.asset(
                       "assets/images/smile.png",
-                      width: 80,
-                      height: 80,
-                      fit: BoxFit.fill),
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover),
                   SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

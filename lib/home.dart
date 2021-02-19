@@ -50,72 +50,77 @@ class _HomeState extends State<Home> {
                 Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    Image.asset("assets/images/header_home.png",width: double.infinity,fit: BoxFit.fill,height: 140,),Positioned(
-                        top: -10,
-                        child: Image.asset("assets/images/logo_home.png",
-                          width: 150, fit: BoxFit.cover,)),
+                    Container(
+                      margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 90),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.white,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      //margin: EdgeInsets.only(top: 30.0),
+                      height: 200.0,
+                      child: FutureBuilder(
+                        future: futureApiSliders(currentUser.token),
+                        builder: (context, snapshot){
+                          if(snapshot.connectionState == ConnectionState.waiting){
+                            return Center(
+                              child: new CircularProgressIndicator(),
+                            );
+                          } else if(snapshot.connectionState == ConnectionState.done){
+                            print(snapshot.data);
+                            ApiSlider apiSlider = snapshot.data;
+                            if(apiSlider.isSuccess()){
+                              listSlider = apiSlider.data;
+                              imageSlider = [];
+                              listSlider.forEach((slider) {
+                                imageSlider.add(Image.network(
+                                    slider.imageUrl));
+                              });
+                              return GestureDetector(
+                                child: Carousel(
+                                  images: imageSlider,
+                                  autoplay: true,
+                                  animationCurve: Curves.fastOutSlowIn,
+                                  animationDuration: Duration(milliseconds: 800),
+                                  dotSize: 6.0,
+                                  dotColor: Colors.grey[700],
+                                  boxFit: BoxFit.cover,
+                                  dotPosition: DotPosition.bottomLeft,
+                                  dotBgColor: Colors.transparent,
+                                  dotIncreasedColor: Colors.white,
+                                  onImageTap: (index){
+                                    nextPage(context, DetailSlider(sliderMenu: listSlider[index]));
+                                  },
+                                ),
+                              );
+                            }
+//                        alertDialog(context, "List Slider", apiMercurisk.message);
+                            return Container();
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                    ),
+                    Image.asset("assets/images/header_home.png",
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                      height: MediaQuery.of(context).size.height*.23,),
                     Positioned(
-                        right: 50,
-                        top: 40,
+                        top: -20,
+                        child: Image.asset("assets/images/logo_home.png",
+                          width: 180, fit: BoxFit.cover,)),
+                    Positioned(
+                        right: 60,
+                        top: 50,
                         child: GestureDetector(
                           onTap: (){},
                           child: Image.asset("assets/images/scanqr.png",
-                            width: 40, fit: BoxFit.fill,),
+                            width: 25, fit: BoxFit.fill,),
                         )
                     ),
+
                   ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 16.0, right: 16.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  //margin: EdgeInsets.only(top: 30.0),
-                  height: 200.0,
-                  child: FutureBuilder(
-                    future: futureApiSliders(currentUser.token),
-                    builder: (context, snapshot){
-                      if(snapshot.connectionState == ConnectionState.waiting){
-                        return Center(
-                          child: new CircularProgressIndicator(),
-                        );
-                      } else if(snapshot.connectionState == ConnectionState.done){
-                        print(snapshot.data);
-                        ApiSlider apiSlider = snapshot.data;
-                        if(apiSlider.isSuccess()){
-                          listSlider = apiSlider.data;
-                          imageSlider = [];
-                          listSlider.forEach((slider) {
-                            imageSlider.add(Image.network(
-                                slider.imageUrl));
-                          });
-                          return GestureDetector(
-                            child: Carousel(
-                              images: imageSlider,
-                              autoplay: true,
-                              animationCurve: Curves.fastOutSlowIn,
-                              animationDuration: Duration(milliseconds: 800),
-                              dotSize: 6.0,
-                              dotColor: Colors.grey[700],
-                              boxFit: BoxFit.cover,
-                              dotPosition: DotPosition.bottomLeft,
-                              dotBgColor: Colors.transparent,
-                              dotIncreasedColor: Colors.white,
-                              onImageTap: (index){
-                                nextPage(context, DetailSlider(sliderMenu: listSlider[index]));
-                              },
-                            ),
-                          );
-                        }
-//                        alertDialog(context, "List Slider", apiMercurisk.message);
-                        return Container();
-                      } else {
-                        return Container();
-                      }
-                    },
-                  ),
                 ),
                 Container(
                     margin: EdgeInsets.only(left: 16.0, right: 16.0),
@@ -173,7 +178,7 @@ class _HomeState extends State<Home> {
                             selectedOrderType = "pickup";
                             widget.gotoMenu();
                         },
-                        child: Image.asset("assets/images/pickup.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
+                        child: Image.asset("assets/images/pickup.png", width: MediaQuery.of(context).size.width/2.2, height: 110, fit: BoxFit.cover),
                       ),
                       Spacer(),
                       GestureDetector(
@@ -181,7 +186,7 @@ class _HomeState extends State<Home> {
                           selectedOrderType = "delivery";
                           widget.gotoMenu();
                         },
-                        child: Image.asset("assets/images/delivery.png", width: MediaQuery.of(context).size.width/2.2, height: 100, fit: BoxFit.cover),
+                        child: Image.asset("assets/images/delivery.png", width: MediaQuery.of(context).size.width/2.4, height: 100, fit: BoxFit.fitWidth),
                       ),
                     ],
                   ),
@@ -220,7 +225,7 @@ class _HomeState extends State<Home> {
                       SizedBox(
                         width: 8,
                       ),
-                      Text("Event Code",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.brown[500])),
+                      Text("Voucher Code",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.brown[500])),
                       SizedBox(
                         width: 24,
                       ),
