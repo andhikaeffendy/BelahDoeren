@@ -50,62 +50,69 @@ class _HomeState extends State<Home> {
                 Stack(
                   alignment: AlignmentDirectional.topCenter,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 90),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.white,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(20))),
-                      //margin: EdgeInsets.only(top: 30.0),
-                      height: 200.0,
-                      child: FutureBuilder(
-                        future: futureApiSliders(currentUser.token),
-                        builder: (context, snapshot){
-                          if(snapshot.connectionState == ConnectionState.waiting){
-                            return Center(
-                              child: new CircularProgressIndicator(),
-                            );
-                          } else if(snapshot.connectionState == ConnectionState.done){
-                            print(snapshot.data);
-                            ApiSlider apiSlider = snapshot.data;
-                            if(apiSlider.isSuccess()){
-                              listSlider = apiSlider.data;
-                              imageSlider = [];
-                              listSlider.forEach((slider) {
-                                imageSlider.add(Image.network(
-                                    slider.imageUrl));
-                              });
-                              return GestureDetector(
-                                child: Carousel(
-                                  images: imageSlider,
-                                  autoplay: true,
-                                  animationCurve: Curves.fastOutSlowIn,
-                                  animationDuration: Duration(milliseconds: 800),
-                                  dotSize: 6.0,
-                                  dotColor: Colors.grey[700],
-                                  boxFit: BoxFit.cover,
-                                  dotPosition: DotPosition.bottomLeft,
-                                  dotBgColor: Colors.transparent,
-                                  dotIncreasedColor: Colors.white,
-                                  onImageTap: (index){
-                                    nextPage(context, DetailSlider(sliderMenu: listSlider[index]));
-                                  },
-                                ),
-                              );
-                            }
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 100,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.white,
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                          //margin: EdgeInsets.only(top: 30.0),
+                          height: 200.0,
+                          child: FutureBuilder(
+                            future: futureApiSliders(currentUser.token),
+                            builder: (context, snapshot){
+                              if(snapshot.connectionState == ConnectionState.waiting){
+                                return Center(
+                                  child: new CircularProgressIndicator(),
+                                );
+                              } else if(snapshot.connectionState == ConnectionState.done){
+                                print(snapshot.data);
+                                ApiSlider apiSlider = snapshot.data;
+                                if(apiSlider.isSuccess()){
+                                  listSlider = apiSlider.data;
+                                  imageSlider = [];
+                                  listSlider.forEach((slider) {
+                                    imageSlider.add(Image.network(
+                                        slider.imageUrl));
+                                  });
+                                  return GestureDetector(
+                                    child: Carousel(
+                                      images: imageSlider,
+                                      autoplay: true,
+                                      animationCurve: Curves.fastOutSlowIn,
+                                      animationDuration: Duration(milliseconds: 800),
+                                      dotSize: 6.0,
+                                      dotColor: Colors.grey[700],
+                                      boxFit: BoxFit.cover,
+                                      dotPosition: DotPosition.bottomLeft,
+                                      dotBgColor: Colors.transparent,
+                                      dotIncreasedColor: Colors.white,
+                                      onImageTap: (index){
+                                        nextPage(context, DetailSlider(sliderMenu: listSlider[index]));
+                                      },
+                                    ),
+                                  );
+                                }
 //                        alertDialog(context, "List Slider", apiMercurisk.message);
-                            return Container();
-                          } else {
-                            return Container();
-                          }
-                        },
-                      ),
+                                return Container();
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     Image.asset("assets/images/header_home.png",
                       width: double.infinity,
                       fit: BoxFit.contain,
-                      height: MediaQuery.of(context).size.height*.23,),
+                      height: MediaQuery.of(context).size.height*.20,),
                     Positioned(
                         top: -20,
                         child: Image.asset("assets/images/logo_home.png",
@@ -122,53 +129,49 @@ class _HomeState extends State<Home> {
 
                   ],
                 ),
-                Container(
-                    margin: EdgeInsets.only(left: 16.0, right: 16.0),
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/box_poin.png"),
-                          fit: BoxFit.cover
-                        ),
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(15),
-                            bottomRight: Radius.circular(15)),
-                        border: Border.all(
-                            width: 1,
-                            color: Colors.white60,
-                            style: BorderStyle.solid)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Point Reward",
-                          style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
-                        ),
-                        Spacer(),
-                        Image.asset("assets/images/icon_poin.png", scale: 30,),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          "1,015",
-                          style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          width: 16.0,
-                        ),
-                        GestureDetector(
-                          onTap: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => StatusPoint()),
-                            );
-                          },
-                          child: Icon(Icons.arrow_forward, color: Colors.white, size: 25,),
-                        )
-                      ],
-                    )),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StatusPoint()),
+                    );
+                  },
+                  child: Container(
+                      margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                      padding: EdgeInsets.only(top: 16, bottom: 16, left: 12, right: 8),
+                      decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          image: DecorationImage(
+                            image: AssetImage("assets/images/box_poin.png"),
+                            fit: BoxFit.fill
+                          ),
+                          border: Border.all(
+                              width: 1,
+                              color: Colors.white60,
+                              style: BorderStyle.solid)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Point Reward",
+                            style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
+                          ),
+                          Spacer(),
+                          Image.asset("assets/images/icon_poin.png", scale: 30,),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            "1,015",
+                            style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width*.15,
+                          ),
+                        ],
+                      )),
+                ),
                 Container(
                   margin: EdgeInsets.only(left: 16.0, right: 16.0),
                   child: Row(
@@ -193,16 +196,11 @@ class _HomeState extends State<Home> {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 16.0, right: 16.0),
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10)),
                       image: DecorationImage(
                           image: AssetImage("assets/images/box_promotion.png"),
-                          fit: BoxFit.cover
+                          fit: BoxFit.fill
                       ),
                       border: Border.all(
                           width: 1,

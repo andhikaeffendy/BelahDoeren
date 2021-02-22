@@ -140,7 +140,7 @@ class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
               labelColor: Colors.white,
               controller: _tabController,
               indicator: BoxDecoration(
-                  color: Colors.yellow[800],
+                  color: Color(0XFFfab4b4),
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(15),
                       topLeft: Radius.circular(15))),

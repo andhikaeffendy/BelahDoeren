@@ -5,6 +5,7 @@ import 'package:belah_duren/edit_profile.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/login.dart';
+import 'package:belah_duren/status_point.dart';
 import 'package:flutter/material.dart';
 
 import 'list_alamat.dart';
@@ -70,45 +71,49 @@ class _ProfileState extends State<Profile> {
                 ],
               ),
             ),
-            Container(
-                padding: EdgeInsets.all(12),
-                margin: EdgeInsets.only(left: 16, right: 16),
-                decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/box_poin.png"),
-                        fit: BoxFit.cover
-                    ),
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15)),
-                    border: Border.all(
-                        width: 1,
-                        color: Colors.white60,
-                        style: BorderStyle.solid)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Point Reward",
-                      style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
-                    ),
-                    Spacer(),
-                    Image.asset("assets/images/icon_poin.png", scale: 30,),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      "1,015",
-                      style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: 16.0,
-                    ),
-                    Icon(Icons.arrow_forward, color: Colors.white, size: 25,)
-                  ],
-                )),
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StatusPoint()),
+                );
+              },
+              child: Container(
+                  padding: EdgeInsets.all(12),
+                  margin: EdgeInsets.only(left: 16, right: 16),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/box_poin.png"),
+                          fit: BoxFit.fill
+                      ),
+                      border: Border.all(
+                          width: 1,
+                          color: Colors.white60,
+                          style: BorderStyle.solid)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Point Reward",
+                        style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
+                      ),
+                      Spacer(),
+                      Image.asset("assets/images/icon_poin.png", scale: 30,),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "1,015",
+                        style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width*.10,
+                      ),
+                    ],
+                  )),
+            ),
             SizedBox(
               height: 24.0,
             ),

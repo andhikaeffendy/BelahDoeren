@@ -76,8 +76,8 @@ class _ListMenuState extends State<ListMenu>
           decoration: BoxDecoration(
               color: Colors.yellow[600],
               borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(25),
-                  bottomLeft: Radius.circular(25))),
+                  bottomRight: Radius.circular(20),
+                  bottomLeft: Radius.circular(20))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -98,12 +98,12 @@ class _ListMenuState extends State<ListMenu>
                 children: [
                   Text(
                     selectedBranch == null ? "" : (selectedOrderType == "pickup" ? "Pickup - " : "Delivery - ") + selectedBranch.distanceFromHere(),
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: Colors.brown),
                   ),
                   Text(
                     selectedBranch == null ? "belum dipilih" : selectedBranch.name,
                     style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                        fontSize: 18, fontWeight: FontWeight.bold,color: Colors.brown),
                   )
                 ],
               ),
@@ -148,7 +148,7 @@ class _ListMenuState extends State<ListMenu>
               controller: _tabController,
               isScrollable: false,
               indicator: BoxDecoration(
-                  color: Colors.yellow[800],
+                  color: Color(0XFFfab4b4),
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(15),
                       topLeft: Radius.circular(15))),
@@ -218,7 +218,7 @@ class _ListMenuState extends State<ListMenu>
         builder: (context, setState){
       return AlertDialog(
         content: Container(
-          height: MediaQuery.of(context).size.height/2.2,
+          height: MediaQuery.of(context).size.height/3,
           width: 400,
           // decoration: BoxDecoration(
           //     border: Border.all(),
@@ -362,44 +362,55 @@ class _ListMenuState extends State<ListMenu>
               margin: EdgeInsets.only(left: 16, right: 16, bottom: 8),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(7),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey,
-                    offset: Offset(0.0, 1.0), //(x,y)
-                    blurRadius: 6.0,
+                    offset: Offset(1.0, 1.0), //(x,y)
+                    blurRadius: 8.0,
                   ),
                 ],
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: Image.network(
-                    menus[index].imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
+                  Expanded(child:
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(7),
+                      topLeft: Radius.circular(7)
+                    ),
+                    child: Image.network(
+                      menus[index].imageUrl,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
                   ),
                   ),
                   SizedBox(
                     height: 8,
                   ),
                   Container(
+                    padding: EdgeInsets.only(left: 8),
                     child: Text(
                       menus[index].name,
                       style: TextStyle(
                           fontSize: 12,
                           color: Colors.brown[600],
                           fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                   SizedBox(
                     height: 4,
                   ),
-                  Text(
-                    currency.format(menus[index].price),
-                    style: TextStyle(fontSize: 12),
+                  Container(
+                    padding: EdgeInsets.only(left: 8),
+                    child: Text(
+                      currency.format(menus[index].price),
+                      style: TextStyle(fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                    ),
                   ),
                   SizedBox(
                     height: 4,
@@ -419,7 +430,7 @@ class _ListMenuState extends State<ListMenu>
           return StatefulBuilder(builder: (context, setState){
             return Container(
               margin: EdgeInsets.all(16),
-              height: MediaQuery.of(context).size.height * .80,
+              height: MediaQuery.of(context).size.height * .60,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
