@@ -7,16 +7,16 @@ import 'package:belah_duren/edit_profile.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/list_alamat.dart';
 import 'package:belah_duren/list_store.dart';
+import 'package:belah_duren/model/order.dart';
 import 'package:belah_duren/model/transaction.dart';
 import 'package:flutter/material.dart';
 
-class Order extends StatefulWidget {
+class ListOrder extends StatefulWidget {
   @override
-  _OrderState createState() => _OrderState();
+  _ListOrderState createState() => _ListOrderState();
 }
 
-class _OrderState extends State<Order> {
-
+class _ListOrderState extends State<ListOrder> {
   List<Transaction> transaction = [];
 
   @override
@@ -94,10 +94,7 @@ class _OrderState extends State<Order> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ListAlamat()),
-                            );
+                            nextPage(context, DetailOrder(transactionMenu: transaction[index]));
                             // _cartBottomSheet(context);
                           },
                           child: Container(

@@ -213,7 +213,7 @@ class _ListMenuState extends State<ListMenu>
 
   Widget _alertDialog(BuildContext context) {
     String dialogType = selectedOrderType;
-    Branch dialogBranch = selectedBranch;
+    Items dialogBranch = selectedBranch;
     return StatefulBuilder(
         builder: (context, setState){
       return AlertDialog(

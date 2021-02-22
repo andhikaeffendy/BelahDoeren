@@ -2,7 +2,7 @@ import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/home.dart';
 import 'package:belah_duren/login.dart';
-import 'package:belah_duren/order.dart';
+import 'package:belah_duren/list_order.dart';
 import 'package:belah_duren/list_menu.dart';
 import 'package:belah_duren/profile.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     pages = [
       Home(gotoMenu),
       ListMenu(),
-      Order(),
+      ListOrder(),
       Profile()
     ];
   }

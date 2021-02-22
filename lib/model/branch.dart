@@ -1,7 +1,7 @@
 import 'package:belah_duren/global/location.dart';
 import 'package:belah_duren/global/variable.dart';
 
-class Branch{
+class Items{
   int id;
   String name;
   String address;
@@ -9,7 +9,7 @@ class Branch{
   double longitude;
   String imageUrl;
 
-  Branch(
+  Items(
       this.id,
       this.name,
       this.address,
@@ -18,7 +18,7 @@ class Branch{
       this.imageUrl,
       );
 
-  Branch.fromJson(Map<String, dynamic> json) :
+  Items.fromJson(Map<String, dynamic> json) :
         id = json["id"],
         name = json["name"],
         address = json["address"],

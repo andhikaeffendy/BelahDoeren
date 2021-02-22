@@ -8,7 +8,7 @@ String domain = "http://belahdoeren.wiradipa.com/";
 String api_url = domain+"/api/v1/";
 
 User currentUser;
-Branch selectedBranch;
+Items selectedBranch;
 Position currentPosition;
 String selectedOrderType = "pickup";
 

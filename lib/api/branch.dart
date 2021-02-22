@@ -41,7 +41,7 @@ Future<ApiListBranch> futureApiListBranches(String token) async{
 class ApiBranch {
   String status;
   String message;
-  List<Branch> data;
+  List<Items> data;
 
   ApiBranch({
     this.status,
@@ -52,7 +52,7 @@ class ApiBranch {
   ApiBranch.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<Branch>.from(json["data"].map((x) => Branch.fromJson(x)));
+        data = List<Items>.from(json["data"].map((x) => Items.fromJson(x)));
 
   ApiBranch.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));

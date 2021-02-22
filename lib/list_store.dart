@@ -12,7 +12,7 @@ class ListStore extends StatefulWidget {
 
 class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
   TabController _tabController;
-  List<Branch> branches = [];
+  List<Items> branches = [];
   List<DistrictBranch> districtBranch = [];
 
   @override
@@ -197,7 +197,7 @@ class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
   }
 }
 
-Widget _listViewAlamat(BuildContext context, List<Branch> branches) {
+Widget _listViewAlamat(BuildContext context, List<Items> branches) {
   return ListView.builder(
     itemCount: branches.length,
     itemBuilder: (context, index) {

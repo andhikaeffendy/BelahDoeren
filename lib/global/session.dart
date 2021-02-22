@@ -30,7 +30,7 @@ Future loadSession() async {
     currentUser = User.fromJson(json.decode(userSession));
   }
   if(branchSession != null){
-    selectedBranch = Branch.fromJson(json.decode(branchSession));
+    selectedBranch = Items.fromJson(json.decode(branchSession));
   }
 }
 

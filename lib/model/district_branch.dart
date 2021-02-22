@@ -3,7 +3,7 @@ import 'package:belah_duren/model/branch.dart';
 class DistrictBranch{
   int id;
   String name;
-  List<Branch> branchs = [];
+  List<Items> branchs = [];
 
   DistrictBranch(
       this.id,
