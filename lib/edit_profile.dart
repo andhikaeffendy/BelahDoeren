@@ -16,15 +16,14 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        centerTitle: true,
         iconTheme: IconThemeData(color: Colors.brown),
-        title: Center(
-          child: Text(
-            "Edit Profile",
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.brown[700]),
-          ),
+        title: Text(
+          "Edit Profile",
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.brown[700]),
         ),
       ),
       body: Container(

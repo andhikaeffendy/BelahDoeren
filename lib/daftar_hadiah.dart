@@ -1,0 +1,245 @@
+import 'package:flutter/material.dart';
+
+class DaftarHadiah extends StatefulWidget {
+  @override
+  _DaftarHadiahState createState() => _DaftarHadiahState();
+}
+
+class _DaftarHadiahState extends State<DaftarHadiah> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.brown),
+        title: Center(
+          child: Text(
+            "Daftar Hadiah",
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.brown[700]),
+          ),
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                  padding:
+                      EdgeInsets.only(top: 16, bottom: 16, left: 12, right: 8),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/box_poin.png"),
+                          fit: BoxFit.fill),
+                      border: Border.all(
+                          width: 1,
+                          color: Colors.white60,
+                          style: BorderStyle.solid)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Point Reward",
+                        style: TextStyle(
+                            color: Colors.brown[500],
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Spacer(),
+                      Image.asset(
+                        "assets/images/icon_poin.png",
+                        scale: 30,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "1,015",
+                        style: TextStyle(
+                            color: Colors.brown[500],
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * .15,
+                      ),
+                    ],
+                  )),
+              SizedBox(
+                height: 16,
+              ),
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            child: Image.network("https://awsimages.detik.net.id/community/media/visual/2017/10/06/169766de-d48c-4ec3-945b-61db8c90a30c.jpg?a=1",
+                            fit: BoxFit.fill, height: 150,),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Durian Chewy Soes",
+                                      style: TextStyle(
+                                        color: Colors.brown, fontSize: 14, fontWeight: FontWeight.bold
+                                      ),
+                                    ),Text(
+                                      "25000 Points",
+                                      style: TextStyle(
+                                          color: Colors.green[900], fontSize: 12
+                                      ),
+                                    ),
+                                  ],
+                                ), FlatButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      side: BorderSide(color: Colors.yellow[700])),
+                                  color: Colors.yellow[700],
+                                  textColor: Colors.black,
+                                  onPressed: () {
+                                    _modalBottomSheetMenu();
+                                  },
+                                  child: Text(
+                                    "Tukar",
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  })
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _modalBottomSheetMenu(){
+    showModalBottomSheet(
+      isScrollControlled: true,
+        context: context,
+        builder: (builder){
+          return new Container(
+            height: MediaQuery.of(context).size.height*.55,
+            padding: EdgeInsets.all(16),
+            color: Colors.transparent, //could change this to Color(0xFF737373),
+            //so you don't have to change MaterialApp canvasColor
+            child: Column(
+              children: [
+                Container(
+                  width: 50,
+                  color: Colors.brown,
+                  height: 1,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                  child: Image.network(
+                    "https://assets-pergikuliner.com/iTri-jidIqg2A6bOiLMcuK5Irp0=/385x290/smart/https:/"
+                        "/assets-pergikuliner.com/uploads/image/picture/851309/picture-1520915650.JPG",
+                    fit: BoxFit.cover,
+                    height: 200,
+                    width: double.infinity,
+                  ),
+                ),SizedBox(
+                  height: 16,
+                ),Text(
+                    "Konfirmasi Penukaran Point",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown[700]
+                  ),
+                ),SizedBox(
+                  height: 8,
+                ),Text(
+                  "Apakah anda yakin ingin menukar point?",
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black38
+                  ),
+                ),SizedBox(
+                  height: 8,
+                ),Text(
+                  "25000 Points",
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green[900]
+                  ),
+                ),SizedBox(
+                  height: 16,
+                ),ButtonTheme(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  minWidth: double.infinity,
+                    child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(color: Colors.yellow[600])),
+                      onPressed: (){
+                      },
+                      color: Colors.yellow[600],
+                      textColor: Colors.black,
+                      child: Text("Tukar Sekarang",
+                          style: TextStyle(
+                              fontSize: 16,
+                            fontWeight: FontWeight.bold,
+
+                          )
+                      ),
+                )),SizedBox(
+                  height: 8,
+                ),ButtonTheme(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    minWidth: double.infinity,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          side: BorderSide(color: Colors.black45)),
+                      onPressed: (){
+                      },
+                      color: Colors.white,
+                      textColor: Colors.brown[800],
+                      child: Text("Batal",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+
+                          )
+                      ),
+                    ))
+              ],
+            ),
+          );
+        }
+    );
+  }
+
+}
+
+

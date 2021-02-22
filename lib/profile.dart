@@ -1,9 +1,12 @@
 import 'package:belah_duren/about.dart';
 import 'package:belah_duren/api/logout.dart';
 import 'package:belah_duren/api/member_level.dart';
+import 'package:belah_duren/daftar_hadiah.dart';
 import 'package:belah_duren/edit_profile.dart';
+import 'package:belah_duren/faq.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/kontak_cs.dart';
 import 'package:belah_duren/login.dart';
 import 'package:belah_duren/status_point.dart';
 import 'package:flutter/material.dart';
@@ -156,7 +159,10 @@ class _ProfileState extends State<Profile> {
               margin: EdgeInsets.only(left: 16, right: 16),
               child: GestureDetector(
                 onTap: (){
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => KontakCS()),
+                  );
                 },
                 child: Row(
                   children: [
@@ -256,18 +262,26 @@ class _ProfileState extends State<Profile> {
               height: 12,
             ),Container(
               margin: EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.help_center_outlined,
-                    color: Colors.brown,
-                  ),
-                  SizedBox(width: 16),
-                  Text(
-                    "Ketentuan Layanan",
-                    style: TextStyle(color: Colors.brown, fontSize: 16),
-                  )
-                ],
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FAQ()),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.help_center_outlined,
+                      color: Colors.brown,
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Ketentuan Layanan",
+                      style: TextStyle(color: Colors.brown, fontSize: 16),
+                    )
+                  ],
+                ),
               ),
             ),
             SizedBox(

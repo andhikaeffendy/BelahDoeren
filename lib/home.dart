@@ -279,9 +279,9 @@ class _HomeState extends State<Home> {
                               physics: NeverScrollableScrollPhysics(),
                               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
-                                  childAspectRatio: 0.98,
-                                  mainAxisSpacing: 10,
-                                  crossAxisSpacing: 8),
+                                  childAspectRatio: 1,
+                                  mainAxisSpacing: 24,
+                                  crossAxisSpacing: 32),
                               scrollDirection: Axis.vertical,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
