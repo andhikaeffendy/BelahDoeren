@@ -6,6 +6,7 @@ import 'package:belah_duren/edit_profile.dart';
 import 'package:belah_duren/faq.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/history_penukaran_points.dart';
 import 'package:belah_duren/kontak_cs.dart';
 import 'package:belah_duren/login.dart';
 import 'package:belah_duren/status_point.dart';
@@ -61,7 +62,7 @@ class _ProfileState extends State<Profile> {
                             width: 8,
                           ),
                           Text(
-                            "Member Gold",
+                            "Member " + currentPoints.member_level_name,
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.white,
@@ -108,7 +109,7 @@ class _ProfileState extends State<Profile> {
                         width: 8,
                       ),
                       Text(
-                        "1,015",
+                        currentPoints != null ? currentPoints.points.toString() : "Null",
                         style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
@@ -161,7 +162,7 @@ class _ProfileState extends State<Profile> {
                 onTap: (){
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => KontakCS()),
+                    MaterialPageRoute(builder: (context) => HistoryPenukaranPoints()),
                   );
                 },
                 child: Row(

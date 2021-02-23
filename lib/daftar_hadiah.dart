@@ -1,4 +1,8 @@
+import 'package:belah_duren/api/point_transaction.dart';
+import 'package:belah_duren/global/variable.dart';
 import 'package:flutter/material.dart';
+
+import 'model/present_list.dart';
 
 class DaftarHadiah extends StatefulWidget {
   @override
@@ -6,6 +10,9 @@ class DaftarHadiah extends StatefulWidget {
 }
 
 class _DaftarHadiahState extends State<DaftarHadiah> {
+
+  List<PresentList> presents = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +65,7 @@ class _DaftarHadiahState extends State<DaftarHadiah> {
                         width: 8,
                       ),
                       Text(
-                        "1,015",
+                        currentPoints.points.toString(),
                         style: TextStyle(
                             color: Colors.brown[500],
                             fontWeight: FontWeight.bold),
@@ -71,172 +78,197 @@ class _DaftarHadiahState extends State<DaftarHadiah> {
               SizedBox(
                 height: 16,
               ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      child: Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            child: Image.network("https://awsimages.detik.net.id/community/media/visual/2017/10/06/169766de-d48c-4ec3-945b-61db8c90a30c.jpg?a=1",
-                            fit: BoxFit.fill, height: 150,),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              FutureBuilder(
+                  future: futureApiPresentList(currentUser.token),
+                  builder: (context, snapshot){
+                    if(snapshot.connectionState == ConnectionState.waiting){
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }else if(snapshot.connectionState == ConnectionState.done){
+                      ApiPresentList apiPresent = snapshot.data;
+                      if(apiPresent.isSuccess()){
+                        presents = apiPresent.data;
+                      }
+                    } return ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: presents.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            child: Column(
                               children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Durian Chewy Soes",
-                                      style: TextStyle(
-                                        color: Colors.brown, fontSize: 14, fontWeight: FontWeight.bold
-                                      ),
-                                    ),Text(
-                                      "25000 Points",
-                                      style: TextStyle(
-                                          color: Colors.green[900], fontSize: 12
-                                      ),
-                                    ),
-                                  ],
-                                ), FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      side: BorderSide(color: Colors.yellow[700])),
-                                  color: Colors.yellow[700],
-                                  textColor: Colors.black,
-                                  onPressed: () {
-                                    _modalBottomSheetMenu();
-                                  },
-                                  child: Text(
-                                    "Tukar",
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
+                                Container(
+                                  width: double.infinity,
+                                  child: Image.network(presents[index].image_url,
+                                    fit: BoxFit.fill, height: 150,),
                                 ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            presents[index].name,
+                                            style: TextStyle(
+                                                color: Colors.brown, fontSize: 14, fontWeight: FontWeight.bold
+                                            ),
+                                          ),Text(
+                                            presents[index].point.toString(),
+                                            style: TextStyle(
+                                                color: Colors.green[900], fontSize: 12
+                                            ),
+                                          ),
+                                        ],
+                                      ), FlatButton(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            side: BorderSide(color: Colors.yellow[700])),
+                                        color: Colors.yellow[700],
+                                        textColor: Colors.black,
+                                        onPressed: () {
+                                          showModalBottomSheet(
+                                              isScrollControlled: true,
+                                              context: context,
+                                              builder: (builder){
+                                                return new Container(
+                                                  height: MediaQuery.of(context).size.height*.55,
+                                                  padding: EdgeInsets.all(16),
+                                                  color: Colors.transparent, //could change this to Color(0xFF737373),
+                                                  //so you don't have to change MaterialApp canvasColor
+                                                  child: SingleChildScrollView(
+                                                    child: Column(
+                                                      children: [
+                                                        Container(
+                                                          width: 50,
+                                                          color: Colors.brown,
+                                                          height: 1,
+                                                        ),
+                                                        SizedBox(
+                                                          height: 16,
+                                                        ),
+                                                        Container(
+                                                          decoration:
+                                                          BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                                                          child: Image.network(
+                                                            presents[index].image_url,
+                                                            fit: BoxFit.cover,
+                                                            height: 200,
+                                                            width: double.infinity,
+                                                          ),
+                                                        ),SizedBox(
+                                                          height: 16,
+                                                        ),Container(
+                                                          child: Text(
+                                                            presents[index].description,
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                fontWeight: FontWeight.bold,
+                                                                color: Colors.brown[700]
+                                                            ),
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                        ),SizedBox(
+                                                          height: 8,
+                                                        ),Text(
+                                                          "Apakah anda yakin ingin menukar point?",
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: Colors.black38
+                                                          ),
+                                                        ),SizedBox(
+                                                          height: 8,
+                                                        ),Text(
+                                                          presents[index].point.toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.bold,
+                                                              color: Colors.green[900]
+                                                          ),
+                                                        ),SizedBox(
+                                                          height: 16,
+                                                        ),ButtonTheme(
+                                                            padding: EdgeInsets.symmetric(vertical: 8),
+                                                            minWidth: double.infinity,
+                                                            child: RaisedButton(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.circular(8.0),
+                                                                  side: BorderSide(color: Colors.yellow[600])),
+                                                              onPressed: (){
+                                                                showCircular(context);
+                                                                futureApiSubmitPointsTransaction(currentUser.token, presents[index].id).then((value){
+                                                                  Navigator.of(context, rootNavigator: true).pop();
+                                                                  if(value.isSuccess()){
+                                                                    alertDialog(context, "Tukar Point", "Tukar Point Berhasil");
+                                                                  }else{
+                                                                    alertDialog(context, "Tukar Point", value.message);
+                                                                  }
+                                                                });
+                                                              },
+                                                              color: Colors.yellow[600],
+                                                              textColor: Colors.black,
+                                                              child: Text("Tukar Sekarang",
+                                                                  style: TextStyle(
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.bold,
 
+                                                                  )
+                                                              ),
+                                                            )),SizedBox(
+                                                          height: 8,
+                                                        ),ButtonTheme(
+                                                            padding: EdgeInsets.symmetric(vertical: 8),
+                                                            minWidth: double.infinity,
+                                                            child: RaisedButton(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.circular(8.0),
+                                                                  side: BorderSide(color: Colors.black45)),
+                                                              onPressed: (){
+                                                                Navigator.of(context).pop();
+                                                              },
+                                                              color: Colors.white,
+                                                              textColor: Colors.brown[800],
+                                                              child: Text("Batal",
+                                                                  style: TextStyle(
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.bold,
+
+                                                                  )
+                                                              ),
+                                                            ))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                          );
+                                        },
+                                        child: Text(
+                                          "Tukar",
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
-                          )
-                        ],
-                      ),
-                    );
-                  })
+                          );
+                        });
+                  }
+                  )
+
             ],
           ),
         ),
       ),
-    );
-  }
-
-  void _modalBottomSheetMenu(){
-    showModalBottomSheet(
-      isScrollControlled: true,
-        context: context,
-        builder: (builder){
-          return new Container(
-            height: MediaQuery.of(context).size.height*.55,
-            padding: EdgeInsets.all(16),
-            color: Colors.transparent, //could change this to Color(0xFF737373),
-            //so you don't have to change MaterialApp canvasColor
-            child: Column(
-              children: [
-                Container(
-                  width: 50,
-                  color: Colors.brown,
-                  height: 1,
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(40)),
-                  child: Image.network(
-                    "https://assets-pergikuliner.com/iTri-jidIqg2A6bOiLMcuK5Irp0=/385x290/smart/https:/"
-                        "/assets-pergikuliner.com/uploads/image/picture/851309/picture-1520915650.JPG",
-                    fit: BoxFit.cover,
-                    height: 200,
-                    width: double.infinity,
-                  ),
-                ),SizedBox(
-                  height: 16,
-                ),Text(
-                    "Konfirmasi Penukaran Point",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.brown[700]
-                  ),
-                ),SizedBox(
-                  height: 8,
-                ),Text(
-                  "Apakah anda yakin ingin menukar point?",
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black38
-                  ),
-                ),SizedBox(
-                  height: 8,
-                ),Text(
-                  "25000 Points",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[900]
-                  ),
-                ),SizedBox(
-                  height: 16,
-                ),ButtonTheme(
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  minWidth: double.infinity,
-                    child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        side: BorderSide(color: Colors.yellow[600])),
-                      onPressed: (){
-                      },
-                      color: Colors.yellow[600],
-                      textColor: Colors.black,
-                      child: Text("Tukar Sekarang",
-                          style: TextStyle(
-                              fontSize: 16,
-                            fontWeight: FontWeight.bold,
-
-                          )
-                      ),
-                )),SizedBox(
-                  height: 8,
-                ),ButtonTheme(
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    minWidth: double.infinity,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          side: BorderSide(color: Colors.black45)),
-                      onPressed: (){
-                      },
-                      color: Colors.white,
-                      textColor: Colors.brown[800],
-                      child: Text("Batal",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-
-                          )
-                      ),
-                    ))
-              ],
-            ),
-          );
-        }
     );
   }
 

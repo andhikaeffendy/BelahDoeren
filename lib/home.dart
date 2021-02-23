@@ -1,5 +1,6 @@
 import 'package:belah_duren/about.dart';
 import 'package:belah_duren/api/branch.dart';
+import 'package:belah_duren/api/member_level.dart';
 import 'package:belah_duren/api/menu.dart';
 import 'package:belah_duren/api/profile.dart';
 import 'package:belah_duren/api/slider.dart';
@@ -176,8 +177,17 @@ class _HomeState extends State<Home> {
                           SizedBox(
                             width: 8,
                           ),
+                          currentPoints == null ?
+                              futureApiMemberLevel(currentUser.token).then((value){
+                                if(value.isSuccess()){
+                                  currentPoints = value.data;
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }) :
                           Text(
-                            "1,015",
+                            currentPoints.points.toString(),
                             style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
                           ),
                           SizedBox(

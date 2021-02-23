@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/address.dart';
-import 'package:belah_duren/model/user.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 

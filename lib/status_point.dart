@@ -2,6 +2,7 @@ import 'package:belah_duren/api/member_level.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/member_level.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StatusPoint extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class StatusPoint extends StatefulWidget {
 }
 
 class _StatusPointState extends State<StatusPoint> {
-
+  SharedPreferences prefs;
   List<MemberLevel> memberLevel = [];
 
   @override
@@ -30,6 +31,9 @@ class _StatusPointState extends State<StatusPoint> {
                       //print("Member "+apiMemberLevel.toStringJson());
                     }else if(snapshot.connectionState == ConnectionState.done){
                       ApiMemberLevel apiMemberLevel = snapshot.data;
+                      if(apiMemberLevel.isSuccess()){
+                        print(apiMemberLevel);
+                      }
                       return Column(
                         children: [
                           Container(
@@ -57,7 +61,7 @@ class _StatusPointState extends State<StatusPoint> {
                                   Row(
                                     children: [
                                       Image.network(
-                                        apiMemberLevel.image_url,
+                                        apiMemberLevel.data.image_url,
                                         fit: BoxFit.cover,
                                         width: 30,
                                       ),
@@ -65,7 +69,7 @@ class _StatusPointState extends State<StatusPoint> {
                                         width: 12,
                                       ),
                                       Text(
-                                        apiMemberLevel.member_level_name,
+                                        apiMemberLevel.data.member_level_name,
                                         style: TextStyle(
                                             fontSize: 30,
                                             color: Colors.white,
@@ -95,7 +99,8 @@ class _StatusPointState extends State<StatusPoint> {
                                               width: 8,
                                             ),
                                             Text(
-                                              apiMemberLevel.points.toString(),
+
+                                              apiMemberLevel.data.points.toString(),
                                               style: TextStyle(
                                                   color: Colors.brown[700],
                                                   fontWeight: FontWeight.bold,
@@ -128,7 +133,7 @@ class _StatusPointState extends State<StatusPoint> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image.network(
-                                apiMemberLevel.data[0].image_url,
+                                apiMemberLevel.items[0].image_url,
                                 fit: BoxFit.cover,
                                 width: 50,
                                 height: 50,
@@ -139,7 +144,7 @@ class _StatusPointState extends State<StatusPoint> {
                                 width: 55,
                               ),
                               Image.network(
-                                apiMemberLevel.data[1].image_url,
+                                apiMemberLevel.items[1].image_url,
                                 fit: BoxFit.cover,
                                 width: 50,
                                 height: 50,
@@ -150,7 +155,7 @@ class _StatusPointState extends State<StatusPoint> {
                                 width: 55,
                               ),
                               Image.network(
-                                apiMemberLevel.data[2].image_url,
+                                apiMemberLevel.items[2].image_url,
                                 fit: BoxFit.cover,
                                 width: 50,
                                 height: 50,
@@ -161,7 +166,7 @@ class _StatusPointState extends State<StatusPoint> {
                                 width: 55,
                               ),
                               Image.network(
-                                apiMemberLevel.data[3].image_url,
+                                apiMemberLevel.items[3].image_url,
                                 fit: BoxFit.cover,
                                 width: 50,
                                 height: 50,
@@ -181,7 +186,7 @@ class _StatusPointState extends State<StatusPoint> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      apiMemberLevel.data[0].name,
+                                      apiMemberLevel.items[0].name,
                                       style: TextStyle(
                                           color: Colors.brown,
                                           fontSize: 12,
@@ -191,7 +196,7 @@ class _StatusPointState extends State<StatusPoint> {
                                       height: 12,
                                     ),
                                     Text(
-                                      "Min point \n" + apiMemberLevel.data[0].min_point.toString(),
+                                      "Min point \n" + apiMemberLevel.items[0].min_point.toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.brown,
@@ -204,7 +209,7 @@ class _StatusPointState extends State<StatusPoint> {
                                     Container(
                                       width: 80,
                                       child: Text(
-                                        apiMemberLevel.data[0].description,
+                                        apiMemberLevel.items[0].description,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.brown,
@@ -229,7 +234,7 @@ class _StatusPointState extends State<StatusPoint> {
                               Column(
                                 children: [
                                   Text(
-                                    apiMemberLevel.data[1].name,
+                                    apiMemberLevel.items[1].name,
                                     style: TextStyle(
                                         color: Colors.brown,
                                         fontSize: 12,
@@ -239,7 +244,7 @@ class _StatusPointState extends State<StatusPoint> {
                                     height: 12,
                                   ),
                                   Text(
-                                    "Min point \n" + apiMemberLevel.data[1].min_point.toString(),
+                                    "Min point \n" + apiMemberLevel.items[1].min_point.toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.brown,
@@ -252,7 +257,7 @@ class _StatusPointState extends State<StatusPoint> {
                                   Container(
                                     width: 80,
                                     child: Text(
-                                      apiMemberLevel.data[1].description,
+                                      apiMemberLevel.items[1].description,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.brown,
@@ -276,7 +281,7 @@ class _StatusPointState extends State<StatusPoint> {
                               Column(
                                 children: [
                                   Text(
-                                    apiMemberLevel.data[2].name,
+                                    apiMemberLevel.items[2].name,
                                     style: TextStyle(
                                         color: Colors.brown,
                                         fontSize: 12,
@@ -286,7 +291,7 @@ class _StatusPointState extends State<StatusPoint> {
                                     height: 12,
                                   ),
                                   Text(
-                                    "Min point \n" + apiMemberLevel.data[2].min_point.toString(),
+                                    "Min point \n" + apiMemberLevel.items[2].min_point.toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.brown,
@@ -299,7 +304,7 @@ class _StatusPointState extends State<StatusPoint> {
                                   Container(
                                     width: 80,
                                     child: Text(
-                                      apiMemberLevel.data[2].description,
+                                      apiMemberLevel.items[2].description,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.brown,
@@ -323,7 +328,7 @@ class _StatusPointState extends State<StatusPoint> {
                               Column(
                                 children: [
                                   Text(
-                                    apiMemberLevel.data[3].name,
+                                    apiMemberLevel.items[3].name,
                                     style: TextStyle(
                                         color: Colors.brown,
                                         fontSize: 12,
@@ -333,7 +338,7 @@ class _StatusPointState extends State<StatusPoint> {
                                     height: 12,
                                   ),
                                   Text(
-                                    "Min point \n" + apiMemberLevel.data[3].min_point.toString(),
+                                    "Min point \n" + apiMemberLevel.items[3].min_point.toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.brown,
@@ -346,7 +351,7 @@ class _StatusPointState extends State<StatusPoint> {
                                   Container(
                                     width: 80,
                                     child: Text(
-                                      apiMemberLevel.data[3].description,
+                                      apiMemberLevel.items[3].description,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.brown,

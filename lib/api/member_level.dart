@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/member_level.dart';
+import 'package:belah_duren/model/member_poins.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 
@@ -18,27 +19,21 @@ Future<ApiMemberLevel> futureApiMemberLevel(String token) async{
 class ApiMemberLevel {
   String status;
   String message;
-  int points;
-  String member_level_name;
-  String image_url;
-  List<MemberLevel> data;
+  MemberPoints data;
+  List<MemberLevel> items;
 
   ApiMemberLevel({
     this.status,
     this.message,
-    this.points,
-    this.member_level_name,
-    this.image_url,
     this.data,
+    this.items,
   });
 
   ApiMemberLevel.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        points = json["points"],
-        member_level_name = json["member_level_name"],
-        image_url = json["image_url"],
-        data = List<MemberLevel>.from(json["data"].map((x) => MemberLevel.fromJson(x)));
+        data = MemberPoints.fromJson(json),
+        items = List<MemberLevel>.from(json["data"].map((x) => MemberLevel.fromJson(x)));
 
   ApiMemberLevel.fromStringJson(String stringJson) :
       this.fromJson(json.decode(stringJson));
@@ -46,10 +41,8 @@ class ApiMemberLevel {
   Map<String, dynamic> toJson() => {
     "status": status,
     "message": message,
-    "points" : points,
-    "member_level_name" : member_level_name,
-    "image_url" : image_url,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+    "data" : data.toJson(),
+    "items": List<dynamic>.from(items.map((x) => x.toJson())),
   };
 
   String toStringJson() => json.encode(this.toJson());
