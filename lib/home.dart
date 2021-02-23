@@ -1,8 +1,11 @@
 import 'package:belah_duren/about.dart';
+import 'package:belah_duren/api/branch.dart';
 import 'package:belah_duren/api/menu.dart';
+import 'package:belah_duren/api/profile.dart';
 import 'package:belah_duren/api/slider.dart';
 import 'package:belah_duren/detail_slider.dart';
 import 'package:belah_duren/global/location.dart';
+import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/list_store.dart';
 import 'package:belah_duren/login.dart';
@@ -35,6 +38,17 @@ class _HomeState extends State<Home> {
       setState(() {
         currentPosition = value;
       });
+    });
+    futureApiFeaturedMenus(currentUser.token).then((value){
+      if(value.isSuccess()){
+        setState(() {
+          featuredMenus = value.data;
+        });
+      } else if(value.message == "Token not valid/authorized"){
+        currentUser = null;
+        destroySession();
+        startNewPage(context, Login());
+      }
     });
   }
 
@@ -259,67 +273,56 @@ class _HomeState extends State<Home> {
                     color: Colors.black26,
                   ),
                 ),
-                FutureBuilder(
-                  future: futureApiFeaturedMenus(currentUser.token),
-                  builder: (context, snapshot){
-                    if(snapshot.connectionState == ConnectionState.done){
-                      print(snapshot.data);
-                      ApiMenu apiData = snapshot.data;
-                      if(apiData.isSuccess()){
-                        featuredMenus = apiData.data;
-                      }
-                    }
-                    return Container(
-                      margin: EdgeInsets.only(left: 16.0, right: 16.0),
-                      child: Column(
-                        children: [
-                          GridView.builder(
-                              itemCount: featuredMenus.length,
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 1,
-                                  mainAxisSpacing: 24,
-                                  crossAxisSpacing: 32),
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                return GestureDetector(
-                                  onTap: (){
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey,
-                                          offset: Offset(0.0, 1.0), //(x,y)
-                                          blurRadius: 6.0,
-                                        ),
-                                      ],
+                Container(
+                  margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: Column(
+                    children: [
+                      GridView.builder(
+                          itemCount: featuredMenus.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1,
+                              mainAxisSpacing: 24,
+                              crossAxisSpacing: 32),
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: (){
+                                cartBottomSheet(context, featuredMenus[index]);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 6.0,
                                     ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(child: Image.network(featuredMenus[index].imageUrl,
-                                          fit: BoxFit.cover,width: double.infinity,)),
-                                        SizedBox(height: 8,),
-                                        Text(featuredMenus[index].name, style: TextStyle(fontSize: 12,
-                                            color: Colors.brown[600], fontWeight: FontWeight.bold),),
-                                        SizedBox(height: 4,),
-                                        Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12),),
-                                        SizedBox(height: 8,),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              })
-                        ],
-                      ),
-                    );
-                  },
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(child: Image.network(featuredMenus[index].imageUrl,
+                                      fit: BoxFit.cover,width: double.infinity,)),
+                                    SizedBox(height: 8,),
+                                    Text(featuredMenus[index].name, style: TextStyle(fontSize: 12,
+                                        color: Colors.brown[600], fontWeight: FontWeight.bold),),
+                                    SizedBox(height: 4,),
+                                    Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12),),
+                                    SizedBox(height: 8,),
+                                  ],
+                                ),
+                              ),
+                            );
+                          })
+                    ],
+                  ),
                 ),
               ]),
         ),

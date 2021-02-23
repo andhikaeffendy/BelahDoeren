@@ -23,5 +23,5 @@ class GlobalResponse {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS" ;
 }

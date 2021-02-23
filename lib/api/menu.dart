@@ -123,7 +123,7 @@ class ApiMenu {
   ApiMenu.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<Menu>.from(json["data"].map((x) => Menu.fromJson(x)));
+        data = json.containsKey("data") ? List<Menu>.from(json["data"].map((x) => Menu.fromJson(x))) : null;
 
   ApiMenu.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));

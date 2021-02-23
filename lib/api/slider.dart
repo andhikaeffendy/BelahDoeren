@@ -29,7 +29,7 @@ class ApiSlider {
   ApiSlider.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<SliderMenu>.from(json["data"].map((x) => SliderMenu.fromJson(x)));
+        data = json.containsKey("data") ? List<SliderMenu>.from(json["data"].map((x) => SliderMenu.fromJson(x))) : null ;
 
   ApiSlider.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));

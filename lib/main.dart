@@ -1,3 +1,5 @@
+import 'package:belah_duren/cart_delivery.dart';
+import 'package:belah_duren/cart_pickup.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/home.dart';
@@ -44,12 +46,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   void gotoMenu(){
-    globalKey.currentState.changePage(1);
+    setState(() {
+      _selectedItem = 1;
+    });
   }
 
   int _selectedItem = 0;
   List pages ;
-  GlobalKey<_CustomBottomNavigationBarState> globalKey = GlobalKey();
 
   @override
   void initState() {
@@ -71,9 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: FloatingActionButton(
           child: Icon(Icons.shopping_cart_outlined, color: Colors.brown[700], size: 35,),
           backgroundColor: Colors.white,
-          onPressed: (){
-
-          },
+          onPressed: () => nextPage(context, CartPickup()),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

@@ -1,3 +1,4 @@
+import 'package:belah_duren/api/address.dart';
 import 'package:belah_duren/api/branch.dart';
 import 'package:belah_duren/api/menu.dart';
 import 'package:belah_duren/global/session.dart';
@@ -7,18 +8,18 @@ import 'package:belah_duren/model/branch.dart';
 import 'package:belah_duren/model/menu.dart';
 import 'package:belah_duren/model/menu_category.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ListMenu extends StatefulWidget {
+  var addMenu = false;
+
+  ListMenu([this.addMenu = false]);
+
   @override
   _ListMenuState createState() => _ListMenuState();
 }
 
 class _ListMenuState extends State<ListMenu>
     with TickerProviderStateMixin {
-  int _counter = 0;
-
-
   TabController _tabController;
   List<MenuCategory> menuCategories = [new MenuCategory(0, "Featured")];
 
@@ -27,7 +28,7 @@ class _ListMenuState extends State<ListMenu>
     // TODO: implement initState
     super.initState();
     _tabController = TabController(vsync: this, length: 1);
-    if (selectedBranch == null){
+    if (selectedBranch == null && !widget.addMenu){
       futureApiBranches(currentUser.token).then((value){
         if(value.isSuccess()){
           setState(() {
@@ -43,27 +44,68 @@ class _ListMenuState extends State<ListMenu>
         }
       });
     }
+    if (selectedAddress == null && !widget.addMenu){
+      futureApiAddress(currentUser.token, currentUser.id).then((value){
+        if(value.isSuccess()){
+          setState(() {
+            if(value.data.length > 0) {
+              selectedAddress = value.data[0];
+              storeAddressSession();
+            }
+          });
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: FutureBuilder(
-        future: futureApiMenuCategories(currentUser.token),
-        builder: (context, snapshot){
-          if(snapshot.connectionState == ConnectionState.done){
-            print(snapshot.data);
-            ApiMenuCategory apiData = snapshot.data;
-            if(apiData.isSuccess()){
-              menuCategories = [new MenuCategory(0, "Featured")];
-              menuCategories.addAll(apiData.data);
-              _tabController = TabController(vsync: this, length: menuCategories.length);
+    if(widget.addMenu) {
+      return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.brown),
+            title: Text("Tambah Pesanan", style: TextStyle(color: Colors.brown)),
+          ),
+        body: Container(
+          child: FutureBuilder(
+            future: futureApiMenuCategories(currentUser.token),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                print(snapshot.data);
+                ApiMenuCategory apiData = snapshot.data;
+                if (apiData.isSuccess()) {
+                  menuCategories = [new MenuCategory(0, "Featured")];
+                  menuCategories.addAll(apiData.data);
+                  _tabController =
+                      TabController(vsync: this, length: menuCategories.length);
+                }
+              }
+              return addMenuViews();
+            },
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        child: FutureBuilder(
+          future: futureApiMenuCategories(currentUser.token),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              print(snapshot.data);
+              ApiMenuCategory apiData = snapshot.data;
+              if (apiData.isSuccess()) {
+                menuCategories = [new MenuCategory(0, "Featured")];
+                menuCategories.addAll(apiData.data);
+                _tabController =
+                    TabController(vsync: this, length: menuCategories.length);
+              }
             }
-          }
-          return menuViews();
-        },
-      ),
-    );
+            return menuViews();
+          },
+        ),
+      );
+    }
   }
 
   Widget menuViews(){
@@ -84,6 +126,11 @@ class _ListMenuState extends State<ListMenu>
               SizedBox(
                 height: 16,
               ),
+              selectedBranch == null ?
+              SizedBox(
+                width: 50,
+                height: 50,
+              ) :
               Image.network(
                 selectedBranch.imageUrl,
                 height: 50,
@@ -137,6 +184,41 @@ class _ListMenuState extends State<ListMenu>
         SizedBox(
           height: 16,
         ),
+        Container(
+          margin: EdgeInsets.only(left: 16, right: 16),
+          padding: EdgeInsets.only(top: 8),
+          child: SizedBox(
+            height: 30,
+            child: TabBar(
+              unselectedLabelColor: Colors.brown,
+              labelColor: Colors.white,
+              controller: _tabController,
+              isScrollable: false,
+              indicator: BoxDecoration(
+                  color: Color(0XFFfab4b4),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(15),
+                      topLeft: Radius.circular(15))),
+              tabs: tabCategories(),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Expanded(child: TabBarView(
+          controller: _tabController,
+          children: tabViewCategories(context),
+        )
+        ),
+      ],
+    );
+  }
+
+  Widget addMenuViews(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Container(
           margin: EdgeInsets.only(left: 16, right: 16),
           padding: EdgeInsets.only(top: 8),
@@ -343,7 +425,6 @@ class _ListMenuState extends State<ListMenu>
   }
 
   Widget _listViewMenu(BuildContext context, List<Menu> menus){
-    final currency = new NumberFormat("###,###,###.#");
     return GridView.builder(
         itemCount: menus.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -355,7 +436,7 @@ class _ListMenuState extends State<ListMenu>
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-                _cartBottomSheet(context);
+                cartBottomSheet(context, menus[index]);
             },
             child: Container(
               padding: EdgeInsets.only(bottom: 8),
@@ -407,7 +488,7 @@ class _ListMenuState extends State<ListMenu>
                   Container(
                     padding: EdgeInsets.only(left: 8),
                     child: Text(
-                      currency.format(menus[index].price),
+                      formatCurrency(menus[index].price),
                       style: TextStyle(fontSize: 12,
                       fontWeight: FontWeight.bold),
                     ),
@@ -419,145 +500,6 @@ class _ListMenuState extends State<ListMenu>
               ),
             ),
           );
-        });
-  }
-
-  void _cartBottomSheet(context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext bc) {
-          return StatefulBuilder(builder: (context, setState){
-            return Container(
-              margin: EdgeInsets.all(16),
-              height: MediaQuery.of(context).size.height * .60,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(40)),
-                    child: Image.network(
-                      "https://assets-pergikuliner.com/iTri-jidIqg2A6bOiLMcuK5Irp0=/385x290/smart/https:/"
-                          "/assets-pergikuliner.com/uploads/image/picture/851309/picture-1520915650.JPG",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Pancake Durian Original',
-                        style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Text(
-                        'Rp. 80.000',
-                        style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * .60,
-                      child: Text(
-                          "Terbuat dari 100% durian asli yang dibalut kulit crepes yang lembut"),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      '1 box - Isi 8 pcs',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    color: Colors.brown[100],
-                    height: 1,
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Jumlah Pesanan",
-                        style: TextStyle(fontSize: 12, color: Colors.brown[200]),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      IconButton(
-                          icon: Icon(Icons.remove, size: 20),
-                          onPressed: () {
-                            setState(() {
-                              _counter = _counter;
-                              if (_counter != 0) {
-                                _counter--;
-                              }
-                            });
-                          }),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Container(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        color: Colors.grey[300],
-                        child: Text(
-                          '$_counter',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      IconButton(
-                          icon: Icon(Icons.add, size: 20),
-                          onPressed: () {
-                            setState(() {
-                              _counter++;
-                            });
-                          }),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          side: BorderSide(color: Colors.yellow[700])),
-                      onPressed: () {},
-                      color: Colors.yellow[700],
-                      textColor: Colors.black,
-                      child: Text("Tambah Ke Keranjang".toUpperCase(),
-                          style: TextStyle(fontSize: 14)),
-                    ),
-                  )
-                ],
-              ),
-            );
-          });
         });
   }
 
