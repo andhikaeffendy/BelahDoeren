@@ -144,7 +144,7 @@ class _ListMenuState extends State<ListMenu>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    selectedBranch == null ? "" : (selectedOrderType == "pickup" ? "Pickup - " : "Delivery - ") + selectedBranch.distanceFromHere(),
+                    selectedBranch == null ? "" : (isPickupOrder() ? "Pickup - " : "Delivery - ") + selectedBranch.distanceFromHere(),
                     style: TextStyle(fontSize: 16, color: Colors.brown),
                   ),
                   Text(

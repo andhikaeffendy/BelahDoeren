@@ -1,4 +1,5 @@
 import 'package:belah_duren/api/cart.dart';
+import 'package:belah_duren/api/voucher.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/list_menu.dart';
 import 'package:belah_duren/model/cart.dart';
@@ -11,6 +12,8 @@ class CartPickup extends StatefulWidget {
 
 class _CartPickupState extends State<CartPickup> {
   List<Cart> carts = [];
+  int discount = 0;
+  String voucherCode = "";
 
   @override
   void initState() {
@@ -33,7 +36,7 @@ class _CartPickupState extends State<CartPickup> {
             Column(
               children: [
                 Text(
-                  selectedBranch == null ? "" : (selectedOrderType == "pickup" ? "Pickup - " : "Delivery - ") + selectedBranch.distanceFromHere(),
+                  selectedBranch == null ? "" : (isPickupOrder() ? "Pickup - " : "Delivery - ") + selectedBranch.distanceFromHere(),
                   style: TextStyle(fontSize: 12, color: Colors.brown),
                 ),
                 Text(
@@ -118,7 +121,7 @@ class _CartPickupState extends State<CartPickup> {
               SizedBox(
                 height: 32,
               ),
-              selectedOrderType == "pickup" ? Container() :
+              isPickupOrder() ? Container() :
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -143,20 +146,20 @@ class _CartPickupState extends State<CartPickup> {
                   )
                 ],
               ),
-              selectedOrderType == "pickup" ? Container() :
+              isPickupOrder() ? Container() :
               SizedBox(
                 height: 8,
               ),
-              selectedOrderType == "pickup" ? Container() :
+              isPickupOrder() ? Container() :
               Container(
                 height: 1,
                 color: Colors.brown[100],
               ),
-              selectedOrderType == "pickup" ? Container() :
+              isPickupOrder() ? Container() :
               SizedBox(
                 height: 16,
               ),
-              selectedOrderType == "pickup" ? Container() :
+              isPickupOrder() ? Container() :
               GestureDetector(
                 onTap: () {},
                 child: Row(
@@ -197,7 +200,7 @@ class _CartPickupState extends State<CartPickup> {
                   ],
                 ),
               ),
-              selectedOrderType == "pickup" ? Container() :
+              isPickupOrder() ? Container() :
               SizedBox(
                 height: 24,
               ),
@@ -258,19 +261,22 @@ class _CartPickupState extends State<CartPickup> {
                         color: Colors.white60,
                         style: BorderStyle.solid),
                 color: Colors.yellow[400]),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/images/event_code.png", scale: 30,),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text("Event Code",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.brown[700])),
-                    SizedBox(
-                      width: 24,
-                    ),
-                  ],
+                child: GestureDetector(
+//                  onTap: () => _showVoucherDialog(totalCart(carts)),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/images/event_code.png", scale: 30,),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text("Voucher Code",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.brown[700])),
+                      SizedBox(
+                        width: 24,
+                      ),
+                    ],
+                  ),
                 ),
               ),SizedBox(
                 height: 16,
@@ -368,6 +374,30 @@ class _CartPickupState extends State<CartPickup> {
                           ),
                         ],
                       ),
+                      discount == 0 && voucherCode == "" ? Container() :
+                      SizedBox(
+                        height: 12,
+                      ),
+                      discount == 0 && voucherCode == "" ? Container() :
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Discount Voucher",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.green[900],
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            formatCurrency(discount),
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.green[900],
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 16,
                       ),
@@ -389,7 +419,7 @@ class _CartPickupState extends State<CartPickup> {
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            formatCurrency(totalCart(carts)),
+                            formatCurrency(totalCart(carts) - discount),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.brown[700],
@@ -414,13 +444,33 @@ class _CartPickupState extends State<CartPickup> {
                       borderRadius: BorderRadius.circular(10.0),
                       side: BorderSide(color: Colors.yellow[600])),
                   onPressed: () {
-//                    showCircular(context);
-//                    futureApiSubmitCart(currentUser.token, selectedBranch.id, selectedAddress.id, carts).then((value){
-//                      Navigator.of(context, rootNavigator: true).pop();
-//                      if(value.isSuccess()){
-//                        Navigator.of(context, rootNavigator: true).pop();
-//                      } else alertDialog(context, "Kirim Pesanan Gagal", value.message);
-//                    });
+                    showCircular(context);
+                    if(isPickupOrder()) {
+                      futureApiSubmitCart(
+                          currentUser.token, selectedBranch.id, orderTypeId(),
+                          carts, discount, voucherCode).then((value) {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        if (value.isSuccess()) {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        } else
+                          alertDialog(
+                              context, "Kirim Pesanan Gagal", value.message);
+                      });
+                    } else {
+                      futureApiSubmitCart(
+                          currentUser.token, selectedBranch.id, orderTypeId(),
+                          carts, discount, voucherCode, selectedAddress.id)
+                          .then((value) async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        if (value.isSuccess()) {
+                          await alertDialog(
+                              context, "Kirim Pesanan Berhasil", "Pesanan Berhasil Dibuat");
+                          Navigator.of(context, rootNavigator: true).pop();
+                        } else
+                          alertDialog(
+                              context, "Kirim Pesanan Gagal", value.message);
+                      });
+                    }
                   },
                   color: Colors.yellow[600],
                   textColor: Colors.black,
@@ -600,6 +650,121 @@ class _CartPickupState extends State<CartPickup> {
           carts = value.data;
         });
       }
+    });
+  }
+
+  _showVoucherDialog(total) async {
+    final voucherController = TextEditingController();
+    var errorMessage = "";
+    int getDiscount = 0;
+    String getVoucher = "";
+    await showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(builder: (context, setState){
+            return Container(
+              margin: EdgeInsets.all(16),
+              height: MediaQuery.of(context).size.height * .50,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width - 140,
+                        child:
+                          TextFormField(
+                            controller: voucherController,
+                            autofocus: false,
+                            decoration: new InputDecoration(
+                              labelText: "Enter Voucher",
+                              fillColor: Colors.grey,
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(10.0),
+                                borderSide: new BorderSide(),
+                              ),
+                            ),
+                            style: new TextStyle(
+                              fontFamily: "Poppins",
+                            ),
+                          ),
+                      ),
+                      SizedBox(
+                        height: 70,
+                        width: 100,
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.yellow[700])),
+                          onPressed: () {
+                            showCircular(context);
+                            futureApiRedeemVoucher(currentUser.token,
+                                voucherController.text, total).then((value){
+                              Navigator.of(context, rootNavigator: true).pop();
+                              if(value.isSuccess()){
+                                setState(() {
+                                  voucherCode = value.name;
+                                  discount = value.discount;
+                                  errorMessage = "voucher berhasil ditambahkan";
+                                });
+                              } else {
+                                setState(() {
+                                  voucherCode = "";
+                                  discount = 0;
+                                  errorMessage = value.message;
+                                });
+                              }
+                            });
+                          },
+                          color: Colors.yellow[700],
+                          textColor: Colors.black,
+                          child: Text("Redeem".toUpperCase(),
+                              style: TextStyle(fontSize: 14)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    errorMessage,
+                    style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.red),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(color: Colors.yellow[700])),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      color: Colors.yellow[700],
+                      textColor: Colors.black,
+                      child: Text("Lanjut".toUpperCase(),
+                          style: TextStyle(fontSize: 14)),
+                    ),
+                  )
+                ],
+              ),
+            );
+          });
+        });
+    setState(() {
+      voucherCode = getVoucher;
+      discount = getDiscount;
     });
   }
 }

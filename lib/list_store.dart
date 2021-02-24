@@ -229,7 +229,7 @@ Widget _listViewAlamat(BuildContext context, List<Items> branches) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          (selectedOrderType == "pickup"
+                          (isPickupOrder()
                                   ? "Pickup - "
                                   : "Delivery - ") +
                               branches[index].distanceFromHere(),

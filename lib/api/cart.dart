@@ -59,16 +59,22 @@ Future<GlobalResponse> futureApiRemoveCart(String token, int cart_id) async{
   return GlobalResponse.fromStringJson(response.toString());
 }
 
-Future<GlobalResponse> futureApiSubmitCart(String token, int branch_id, int address_id, List<Cart> carts) async{
+Future<GlobalResponse> futureApiSubmitCart(String token, int branch_id,
+    int order_type, List<Cart> carts, [int discount = 0,
+      String voucher = "", int address_id = 0]) async{
   var dio = Dio();
   String url = api_url + "submit_order";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  FormData formData = new FormData.fromMap({
-    "my_address_id": address_id,
+  var data = {
     "branch_id": branch_id,
+    "transaction_type_id": order_type,
+    "discount": discount,
+    "voucher_code": voucher,
     "carts": toStringJson(carts),
-  });
+  };
+  if(address_id > 0) data["my_address_id"] = address_id;
+  FormData formData = new FormData.fromMap(data);
   Response response = await dio.post(url, data: formData);
   print(response.data);
 

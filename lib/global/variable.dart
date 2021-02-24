@@ -25,6 +25,14 @@ PickedFile currentImage;
 Position currentPosition;
 String selectedOrderType = "pickup";
 
+bool isPickupOrder(){
+  return selectedOrderType == "pickup";
+}
+
+int orderTypeId(){
+  return isPickupOrder() ? 1 : 2;
+}
+
 showCircular(context){
   showDialog(
       context: context,
@@ -36,8 +44,8 @@ showCircular(context){
   );
 }
 
-alertDialog(context, title, message){
-  showDialog(
+alertDialog(context, title, message) async {
+  return showDialog(
       context: context,
       builder: (BuildContext context){
         return AlertDialog(
@@ -201,6 +209,7 @@ cartBottomSheet(context,Menu menu) {
                           Navigator.of(context, rootNavigator: true).pop();
                           if(value.isSuccess()){
                             alertDialog(context, "Keranjang", "Berhasil Memasukkan Menu Ke Keranjang");
+                            Navigator.pop(context);
                           } else {
                             alertDialog(context, "Keranjang", value.message);
                           }
