@@ -76,7 +76,7 @@ class _HomeState extends State<Home> {
                               border: Border.all(
                                 color: Colors.white,
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                              borderRadius: BorderRadius.all(Radius.circular(12))),
                           //margin: EdgeInsets.only(top: 30.0),
                           height: 200.0,
                           child: FutureBuilder(
@@ -93,8 +93,10 @@ class _HomeState extends State<Home> {
                                   listSlider = apiSlider.data;
                                   imageSlider = [];
                                   listSlider.forEach((slider) {
-                                    imageSlider.add(Image.network(
-                                        slider.imageUrl));
+                                    imageSlider.add(
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(10),
+                                            child: Image.network(slider.imageUrl)));
                                   });
                                   return GestureDetector(
                                     child: Carousel(
@@ -105,6 +107,8 @@ class _HomeState extends State<Home> {
                                       dotSize: 6.0,
                                       dotColor: Colors.grey[700],
                                       boxFit: BoxFit.cover,
+                                      borderRadius: true,
+                                      radius: Radius.circular(12),
                                       dotPosition: DotPosition.bottomLeft,
                                       dotBgColor: Colors.transparent,
                                       dotIncreasedColor: Colors.white,
