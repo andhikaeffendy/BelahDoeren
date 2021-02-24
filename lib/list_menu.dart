@@ -377,13 +377,16 @@ class _ListMenuState extends State<ListMenu>
                         Padding(
                           padding: EdgeInsets.only(left: 16, bottom: 16),
                           child: Container(
+                            height: 100,
                             width: 200,
-                            child: Text(
-                              selectedBranch.address,
-                              style: TextStyle(
-                                  color: Colors.brown[500],
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
+                            child: SingleChildScrollView(
+                              child: Text(
+                                dialogBranch.address,
+                                style: TextStyle(
+                                    color: Colors.brown[500],
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
                         ),

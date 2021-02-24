@@ -1,5 +1,6 @@
 import 'package:belah_duren/model/address.dart';
 import 'package:belah_duren/model/member_poins.dart';
+import 'package:belah_duren/model/profile.dart';
 import 'package:belah_duren/model/user.dart';
 import 'package:belah_duren/model/branch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +11,7 @@ final String sessionUser = "belahDurenUserSession";
 final String sessionBranch = "belahDurenBranchSession";
 final String sessionAddress = "belahDurenAddressSession";
 final String sessionPoints = "belahDurenPointsSession";
+final String sessionProfile = "belahDurenProfileSession";
 
 storeSession() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -19,6 +21,11 @@ storeSession() async {
 pointsSession() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString(sessionPoints, json.encode(currentPoints.toJson()));
+}
+
+profileSession() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString(sessionProfile, json.encode(currentProfile.toJson()));
 }
 
 storeBranchSession() async {
@@ -42,6 +49,7 @@ Future loadSession() async {
   String branchSession = _get_data(prefs, sessionBranch);
   String addressSession = _get_data(prefs, sessionAddress);
   String pointsSession = _get_data(prefs, sessionPoints);
+  String profileSession = _get_data(prefs, sessionProfile);
   if(userSession != null){
     currentUser = User.fromJson(json.decode(userSession));
   }
@@ -53,6 +61,9 @@ Future loadSession() async {
   }
   if(pointsSession != null){
     currentPoints = MemberPoints.fromJson(json.decode(pointsSession));
+  }
+  if(profileSession != null){
+    currentProfile = Profile.fromJson(json.decode(profileSession));
   }
 }
 

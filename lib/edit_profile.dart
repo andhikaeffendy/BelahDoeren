@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:belah_duren/api/branch.dart';
 import 'package:belah_duren/api/profile.dart';
 import 'package:belah_duren/model/district_branch.dart';
 import 'package:belah_duren/model/user.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'global/variable.dart';
@@ -18,6 +21,14 @@ class _EditProfileState extends State<EditProfile> {
   List<DistrictBranch> districts = [];
   String districtName;
   int selectedIndex = 0;
+
+  final ImagePicker _picker = ImagePicker();
+
+
+  Future getImage() async {
+    final image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+  }
 
   final phoneNumberController = TextEditingController();
   final genderController = TextEditingController();
@@ -111,6 +122,35 @@ class _EditProfileState extends State<EditProfile> {
               // SizedBox(
               //   height: 16,
               // ),
+
+              Center(
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 50.0,
+                      backgroundImage:
+                      currentImage == null ?
+                      AssetImage(
+                          "assets/images/smile.png",):
+                      FileImage(File(currentImage.path)),
+                    ),
+                    Positioned(
+                      bottom: 15.0,
+                      right: 10,
+                      child: InkWell(
+                        onTap: (){
+                          showModalBottomSheet(context: context, builder: ((builder) => _bottomSheetImage(context)));
+                        },
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.brown[700],
+                          size: 30,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
               Text(
                 "Nomor HP",
                 style: TextStyle(
@@ -373,7 +413,7 @@ class _EditProfileState extends State<EditProfile> {
                             addressController.text,
                             selectedIndex,
                             districtName,
-                            null)
+                            currentImage.path)
                         .then((value) {
                       print(value.message);
                       if (value.isSuccess()) {
@@ -400,4 +440,49 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+
+  Widget _bottomSheetImage(BuildContext context){
+    return Container(
+      height: 100,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          Text("Pilih Foto Profil",
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold
+            ),),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              FlatButton.icon(
+                onPressed: (){
+                  takePhoto(ImageSource.camera);
+                },
+                icon: Icon(Icons.camera),
+                label: Text("Camera"),),
+              FlatButton.icon(
+                onPressed: (){
+                  takePhoto(ImageSource.gallery);
+                },
+                icon: Icon(Icons.image),
+                label: Text("Gallery"),),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void takePhoto(ImageSource source) async {
+    final pickedFile = await _picker.getImage(source: source);
+    setState(() {
+      currentImage = pickedFile;
+    });
+  }
+
 }

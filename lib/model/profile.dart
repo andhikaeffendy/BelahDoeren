@@ -11,7 +11,6 @@ class Profile{
   int district_id;
   String district_name;
 
-
   Profile(
       this.id,
       this.name,

@@ -1,12 +1,16 @@
+import 'dart:io';
+
 import 'package:belah_duren/api/cart.dart';
 import 'package:belah_duren/model/address.dart';
 import 'package:belah_duren/model/branch.dart';
 import 'package:belah_duren/model/member_level.dart';
 import 'package:belah_duren/model/member_poins.dart';
 import 'package:belah_duren/model/menu.dart';
+import 'package:belah_duren/model/profile.dart';
 import 'package:belah_duren/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 String domain = "http://belahdoeren.wiradipa.com/";
@@ -16,6 +20,8 @@ User currentUser;
 Items selectedBranch;
 MemberPoints currentPoints;
 Address selectedAddress;
+Profile currentProfile;
+PickedFile currentImage;
 Position currentPosition;
 String selectedOrderType = "pickup";
 

@@ -30,7 +30,7 @@ Future<ApiProfile> futureApiUpdateProfile(String token, String phone_number, int
     "address" : address,
     "district_id" : district_id,
     "district_name" : district_name,
-    "photo" : photo
+    "photo" : await MultipartFile.fromFile(currentImage.path)
   });
   Response response = await dio.post(url, data: formData);
   print(response.data);
@@ -90,8 +90,8 @@ class ApiEditProfile{
   ApiEditProfile({this.status, this.message, this.data});
 
   ApiEditProfile.fromJson(Map<String, dynamic> json ) :
-        status = json["id"],
-        message = json["name"],
+        status = json["status"],
+        message = json["message"],
         data = Profile.fromJson(json);
 
   ApiEditProfile.fromStringJson(String stringJson) :

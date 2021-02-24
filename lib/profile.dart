@@ -1,6 +1,7 @@
 import 'package:belah_duren/about.dart';
 import 'package:belah_duren/api/logout.dart';
 import 'package:belah_duren/api/member_level.dart';
+import 'package:belah_duren/api/profile.dart';
 import 'package:belah_duren/daftar_hadiah.dart';
 import 'package:belah_duren/edit_profile.dart';
 import 'package:belah_duren/faq.dart';
@@ -41,11 +42,21 @@ class _ProfileState extends State<Profile> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                      "assets/images/smile.png",
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover),
+                  currentProfile == null ?
+                      futureApiEditProfile(currentUser.token).then((value){
+                        if(value.isSuccess()){
+                          currentProfile = value.data;
+                        }else{
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      }
+                      ):
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(currentProfile.photo),
+                  ),
                   SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
