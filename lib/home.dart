@@ -288,7 +288,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
                   child: Column(
                     children: [
                       GridView.builder(
@@ -297,9 +297,9 @@ class _HomeState extends State<Home> {
                           physics: NeverScrollableScrollPhysics(),
                           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              childAspectRatio: 1,
+                              childAspectRatio: 1.05,
                               mainAxisSpacing: 24,
-                              crossAxisSpacing: 32),
+                              crossAxisSpacing: 24),
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
                             return GestureDetector(
@@ -307,28 +307,40 @@ class _HomeState extends State<Home> {
                                 cartBottomSheet(context, featuredMenus[index]);
                               },
                               child: Container(
+                                margin: EdgeInsets.only(bottom: 8),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(7),
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey,
-                                      offset: Offset(0.0, 1.0), //(x,y)
-                                      blurRadius: 6.0,
+                                      offset: Offset(1.0, 1.0), //(x,y)
+                                      blurRadius: 8.0,
                                     ),
                                   ],
                                 ),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(child: Image.network(featuredMenus[index].imageUrl,
-                                      fit: BoxFit.cover,width: double.infinity,)),
+                                    Expanded(child: ClipRRect(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(7),
+                                          topLeft: Radius.circular(7)
+                                      ),
+                                      child: Image.network(featuredMenus[index].imageUrl,
+                                        fit: BoxFit.cover,width: double.infinity,),
+                                    )),
                                     SizedBox(height: 8,),
-                                    Text(featuredMenus[index].name, style: TextStyle(fontSize: 12,
-                                        color: Colors.brown[600], fontWeight: FontWeight.bold),),
+                                    Container(
+                                      padding: EdgeInsets.only(left: 8),
+                                      child: Text(featuredMenus[index].name, style: TextStyle(fontSize: 12,
+                                          color: Colors.brown[600], fontWeight: FontWeight.bold),),
+                                    ),
                                     SizedBox(height: 4,),
-                                    Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12),),
+                                    Container(
+                                        padding: EdgeInsets.only(left: 8),
+                                        child: Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12),)),
                                     SizedBox(height: 8,),
                                   ],
                                 ),
@@ -337,7 +349,9 @@ class _HomeState extends State<Home> {
                           })
                     ],
                   ),
-                ),
+                ),SizedBox(
+                  height: 16,
+                )
               ]),
         ),
     );
