@@ -262,7 +262,7 @@ class _CartPickupState extends State<CartPickup> {
                         style: BorderStyle.solid),
                 color: Colors.yellow[400]),
                 child: GestureDetector(
-//                  onTap: () => _showVoucherDialog(totalCart(carts)),
+                  onTap: () => _showVoucherDialog(totalCart(carts)),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -383,14 +383,14 @@ class _CartPickupState extends State<CartPickup> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Discount Voucher",
+                            "Discount Voucher ($voucherCode)",
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.green[900],
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            formatCurrency(discount),
+                            "-"+formatCurrency(discount),
                             style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.green[900],
@@ -667,7 +667,7 @@ class _CartPickupState extends State<CartPickup> {
               margin: EdgeInsets.all(16),
               height: MediaQuery.of(context).size.height * .50,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: 8,
@@ -696,7 +696,7 @@ class _CartPickupState extends State<CartPickup> {
                           ),
                       ),
                       SizedBox(
-                        height: 70,
+                        height: 60,
                         width: 100,
                         child: RaisedButton(
                           shape: RoundedRectangleBorder(
@@ -709,14 +709,14 @@ class _CartPickupState extends State<CartPickup> {
                               Navigator.of(context, rootNavigator: true).pop();
                               if(value.isSuccess()){
                                 setState(() {
-                                  voucherCode = value.name;
-                                  discount = value.discount;
+                                  getVoucher = value.name;
+                                  getDiscount = value.discount;
                                   errorMessage = "voucher berhasil ditambahkan";
                                 });
                               } else {
                                 setState(() {
-                                  voucherCode = "";
-                                  discount = 0;
+                                  getVoucher = "";
+                                  getDiscount = 0;
                                   errorMessage = value.message;
                                 });
                               }
@@ -736,8 +736,7 @@ class _CartPickupState extends State<CartPickup> {
                   Text(
                     errorMessage,
                     style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.red),
+                        color: getDiscount == 0 ? Colors.red : Colors.black ),
                   ),
                   SizedBox(
                     height: 8,

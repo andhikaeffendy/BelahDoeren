@@ -205,10 +205,10 @@ cartBottomSheet(context,Menu menu) {
                       onPressed: () {
                         showCircular(context);
                         futureApiAddToCart(currentUser.token, menu.id,
-                            _counter, menu.price).then((value){
+                            _counter, menu.price).then((value) async {
                           Navigator.of(context, rootNavigator: true).pop();
                           if(value.isSuccess()){
-                            alertDialog(context, "Keranjang", "Berhasil Memasukkan Menu Ke Keranjang");
+                            await alertDialog(context, "Keranjang", "Berhasil Memasukkan Menu Ke Keranjang");
                             Navigator.pop(context);
                           } else {
                             alertDialog(context, "Keranjang", value.message);
