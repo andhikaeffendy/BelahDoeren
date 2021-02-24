@@ -56,7 +56,9 @@ class _ProfileState extends State<Profile> {
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundImage: NetworkImage(currentProfile.photo),
+                          backgroundImage:
+                              currentProfile != ""?
+                          NetworkImage(currentProfile.photo) : AssetImage("assets/images/smile.png"),
                         ),
                         SizedBox(width: 16),
                         Column(

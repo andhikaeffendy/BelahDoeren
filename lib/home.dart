@@ -201,7 +201,7 @@ class _HomeState extends State<Home> {
                       )),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 16.0, right: 16.0),
+                  margin: EdgeInsets.only(left: 8.0, right: 16.0),
                   child: Row(
                     children: [
                       GestureDetector(

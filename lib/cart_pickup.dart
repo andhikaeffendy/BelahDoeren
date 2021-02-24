@@ -81,9 +81,9 @@ class _CartPickupState extends State<CartPickup> {
                       });
                     },
                     child: Image.asset("assets/images/delivery.png",
-                        width: MediaQuery.of(context).size.width / 2.2,
+                        width: MediaQuery.of(context).size.width / 2.4,
                         height: 100,
-                        fit: BoxFit.cover),
+                        fit: BoxFit.contain),
                   )
                 ],
               ),
