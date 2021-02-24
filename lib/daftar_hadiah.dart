@@ -19,14 +19,13 @@ class _DaftarHadiahState extends State<DaftarHadiah> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.brown),
-        title: Center(
-          child: Text(
-            "Daftar Hadiah",
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.brown[700]),
-          ),
+        centerTitle: true,
+        title: Text(
+          "Daftar Hadiah",
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.brown[700]),
         ),
       ),
       body: Container(

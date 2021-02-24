@@ -1,4 +1,5 @@
 import 'package:belah_duren/api/member_level.dart';
+import 'package:belah_duren/daftar_hadiah.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/member_level.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ class StatusPoint extends StatefulWidget {
 }
 
 class _StatusPointState extends State<StatusPoint> {
-  SharedPreferences prefs;
   List<MemberLevel> memberLevel = [];
 
   @override
@@ -99,7 +99,6 @@ class _StatusPointState extends State<StatusPoint> {
                                               width: 8,
                                             ),
                                             Text(
-
                                               apiMemberLevel.data.points.toString(),
                                               style: TextStyle(
                                                   color: Colors.brown[700],
@@ -110,13 +109,32 @@ class _StatusPointState extends State<StatusPoint> {
                                         ),
                                       ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                           SizedBox(
                             height: 16,
+                          ),
+                          FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: BorderSide(color: Colors.red)),
+                            color: Colors.white,
+                            textColor: Colors.red,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => DaftarHadiah()),
+                              );
+                            },
+                            child: Text(
+                              "Tukar Points".toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
                           ),
                           Text(
                             "Tahapan level dan benefit",

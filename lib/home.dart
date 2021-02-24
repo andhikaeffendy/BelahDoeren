@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
                                     imageSlider.add(
                                         ClipRRect(
                                           borderRadius: BorderRadius.circular(10),
-                                            child: Image.network(slider.imageUrl)));
+                                            child: Image.network(slider.imageUrl, fit: BoxFit.fill,)));
                                   });
                                   return GestureDetector(
                                     child: Carousel(
