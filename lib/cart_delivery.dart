@@ -12,6 +12,7 @@ class _CartDeliveryState extends State<CartDelivery> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.brown),
+        centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -223,7 +224,7 @@ class _CartDeliveryState extends State<CartDelivery> {
                 height: 32,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
                     "Alamat Pengiriman",
@@ -250,50 +251,54 @@ class _CartDeliveryState extends State<CartDelivery> {
                 height: 8,
               ),
               Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
                 height: 1,
                 color: Colors.brown[100],
               ),
               SizedBox(
                 height: 16,
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.monetization_on_outlined,
-                      size: 20,
-                      color: Colors.brown[700],
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Rumah",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.brown[700],
-                              fontSize: 14),
-                        ),
-                        Text(
-                          "Jl. Batununggal Mulia X, no 9",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black26,
-                              fontSize: 12),
-                        ),
-                      ],
-                    ),Spacer(),
-                    Icon(
-                      Icons.keyboard_arrow_right_rounded,
-                      color: Colors.brown[700],
-                      size: 30,
-                    )
-                  ],
+              Container(
+                margin: EdgeInsets.only(left: 16, right: 16),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.monetization_on_outlined,
+                        size: 20,
+                        color: Colors.brown[700],
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Rumah",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.brown[700],
+                                fontSize: 14),
+                          ),
+                          Text(
+                            "Jl. Batununggal Mulia X, no 9",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black26,
+                                fontSize: 12),
+                          ),
+                        ],
+                      ),Spacer(),
+                      Icon(
+                        Icons.keyboard_arrow_right_rounded,
+                        color: Colors.brown[700],
+                        size: 30,
+                      )
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
