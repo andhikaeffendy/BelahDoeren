@@ -658,8 +658,10 @@ class _CartPickupState extends State<CartPickup> {
 
   addQuantity(Cart cart){
     showCircular(context);
-    futureApiChangeQuantityCart(currentUser.token, cart.id, cart.quantity+1).then((value){
+    futureApiChangeQuantityCart(currentUser.token, cart.id, cart.quantity+1).then((value) async {
       Navigator.of(context, rootNavigator: true).pop();
+      if(value.isSuccess())
+        await alertDialog(context, "Keranjang", "Berhasil Menambah Jumlah Menu");
       updateCart();
     });
   }
@@ -667,13 +669,17 @@ class _CartPickupState extends State<CartPickup> {
   substractQuantity(Cart cart){
     showCircular(context);
     if(cart.quantity == 1){
-      futureApiRemoveCart(currentUser.token, cart.id).then((value){
+      futureApiRemoveCart(currentUser.token, cart.id).then((value) async {
         Navigator.of(context, rootNavigator: true).pop();
+        if(value.isSuccess())
+          await alertDialog(context, "Keranjang", "Berhasil Menghapus Menu");
         updateCart();
       });
     } else
-      futureApiChangeQuantityCart(currentUser.token, cart.id, cart.quantity-1).then((value){
+      futureApiChangeQuantityCart(currentUser.token, cart.id, cart.quantity-1).then((value) async {
         Navigator.of(context, rootNavigator: true).pop();
+        if(value.isSuccess())
+          await alertDialog(context, "Keranjang", "Berhasil Mengurangi Jumlah Menu");
         updateCart();
       });
   }
