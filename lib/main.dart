@@ -72,7 +72,22 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: FloatingActionButton(
-          child: Icon(Icons.shopping_cart_outlined, color: Colors.brown[700], size: 35,),
+          child: Stack(
+            children: [
+              Icon(Icons.shopping_cart_outlined, color: Colors.brown[700], size: 35,),
+              Positioned(
+                top: -2,
+                  right: 0,
+                  child: Container(
+                    padding: EdgeInsets.all(4),
+                      decoration: new BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text("4",
+                      style: TextStyle(color: Colors.brown, fontSize: 12),))),
+            ],
+          ),
           backgroundColor: Colors.white,
           onPressed: () => nextPage(context, CartPickup()),
         ),
@@ -80,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: CircularNotchedRectangle(),
-        notchMargin: 2,
+        notchMargin: 3,
         child: Container(
           height: 60,
           child: Row(

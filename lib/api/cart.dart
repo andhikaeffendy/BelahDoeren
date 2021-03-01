@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 
 Future<GlobalResponse> futureApiAddToCart(String token,
-    int menu_id, int quantity, int price) async{
+    int menu_id, int quantity, int price, String note) async{
   var dio = Dio();
   String url = api_url + "add_to_cart";
   dio.options.headers[HttpHeaders.authorizationHeader] =
@@ -15,6 +15,7 @@ Future<GlobalResponse> futureApiAddToCart(String token,
     "menu_id": menu_id,
     "quantity": quantity,
     "price": price,
+    "note" : note
   });
   Response response = await dio.post(url, data: formData);
   print(response.data);
@@ -24,7 +25,7 @@ Future<GlobalResponse> futureApiAddToCart(String token,
 
 Future<ApiCart> futureApiCartList(String token) async{
   var dio = Dio();
-  String url = api_url + "carts_list";
+    String url = api_url + "carts_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
   Response response = await dio.get(url);

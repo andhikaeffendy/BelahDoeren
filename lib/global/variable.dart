@@ -77,6 +77,7 @@ String formatCurrency(dynamic number){
 }
 
 cartBottomSheet(context,Menu menu) {
+  final TextEditingController notes = TextEditingController();
   int _counter = 1;
   showModalBottomSheet(
       isScrollControlled: true,
@@ -136,6 +137,28 @@ cartBottomSheet(context,Menu menu) {
                     child: Text(
                       '',
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    controller: notes,
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(fontSize: 14, color: Colors.brown[700]),
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hoverColor: Colors.white,
+                      filled: true,
+                      contentPadding: EdgeInsets.only(left: 16),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      hintText: "Tambah Catatan",
+                      hintStyle: TextStyle(color: Colors.grey[400]),
                     ),
                   ),
                   SizedBox(
@@ -205,7 +228,7 @@ cartBottomSheet(context,Menu menu) {
                       onPressed: () {
                         showCircular(context);
                         futureApiAddToCart(currentUser.token, menu.id,
-                            _counter, menu.price).then((value) async {
+                            _counter, menu.price, notes.text).then((value) async {
                           Navigator.of(context, rootNavigator: true).pop();
                           if(value.isSuccess()){
                             await alertDialog(context, "Keranjang", "Berhasil Memasukkan Menu Ke Keranjang");
@@ -217,7 +240,7 @@ cartBottomSheet(context,Menu menu) {
                       },
                       color: Colors.yellow[700],
                       textColor: Colors.black,
-                      child: Text("Tambah Ke Keranjang".toUpperCase(),
+                      child: Text("Tambah Ke Keranjang - " + 'Rp. '+ formatCurrency(menu.price),
                           style: TextStyle(fontSize: 14)),
                     ),
                   )

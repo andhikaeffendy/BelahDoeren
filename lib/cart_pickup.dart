@@ -14,6 +14,7 @@ class _CartPickupState extends State<CartPickup> {
   List<Cart> carts = [];
   int discount = 0;
   String voucherCode = "";
+  List<TextEditingController> itemNotes = new List();
 
   @override
   void initState() {
@@ -531,6 +532,8 @@ class _CartPickupState extends State<CartPickup> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: carts.length,
               itemBuilder: (context, index) {
+                itemNotes.add(new TextEditingController());
+                itemNotes[index].text = carts[index].note;
                 return Container(
                   child: Column(
                     children: [
@@ -646,6 +649,28 @@ class _CartPickupState extends State<CartPickup> {
                             ],
                           )
                         ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      TextFormField(
+                        controller: itemNotes[index],
+                        keyboardType: TextInputType.text,
+                        style: TextStyle(fontSize: 14, color: Colors.brown[700]),
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          hoverColor: Colors.white,
+                          filled: true,
+                          contentPadding: EdgeInsets.only(left: 16),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                              borderRadius: BorderRadius.circular(8.0)),
+                          hintText: "Tambah Catatan",
+                          hintStyle: TextStyle(color: Colors.grey[400]),
+                        ),
                       ),
                     ],
                   ),

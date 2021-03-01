@@ -8,6 +8,7 @@ class Cart{
   int subTotal;
   String priceText;
   String subTotalText;
+  String note;
 
   Cart(
       this.id,
@@ -19,6 +20,7 @@ class Cart{
       this.subTotal,
       this.priceText,
       this.subTotalText,
+      this.note
       );
 
   Cart.fromJson(Map<String, dynamic> json) :
@@ -30,7 +32,8 @@ class Cart{
         price = json["price"],
         subTotal = json["sub_total"],
         priceText = json["price_str"],
-        subTotalText = json["sub_total_str"];
+        subTotalText = json["sub_total_str"],
+        note = json["note"];
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -43,5 +46,6 @@ class Cart{
     "sub_total": subTotal,
     "price_str": priceText,
     "sub_total_str": subTotalText,
+    "note" : note
   };
 }
