@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:belah_duren/api/cart.dart';
 import 'package:belah_duren/model/address.dart';
 import 'package:belah_duren/model/branch.dart';
+import 'package:belah_duren/model/cart.dart';
 import 'package:belah_duren/model/member_level.dart';
 import 'package:belah_duren/model/member_poins.dart';
 import 'package:belah_duren/model/menu.dart';
@@ -23,6 +24,8 @@ Address selectedAddress;
 Profile currentProfile;
 PickedFile currentImage;
 Position currentPosition;
+int currentIdCarts;
+int countCart = 0;
 String selectedOrderType = "pickup";
 
 bool isPickupOrder(){
@@ -78,6 +81,7 @@ String formatCurrency(dynamic number){
 
 cartBottomSheet(context,Menu menu) {
   final TextEditingController notes = TextEditingController();
+  notes.text = "";
   int _counter = 1;
   showModalBottomSheet(
       isScrollControlled: true,
@@ -229,6 +233,7 @@ cartBottomSheet(context,Menu menu) {
                         showCircular(context);
                         futureApiAddToCart(currentUser.token, menu.id,
                             _counter, menu.price, notes.text).then((value) async {
+                              print(menu.id);
                           Navigator.of(context, rootNavigator: true).pop();
                           if(value.isSuccess()){
                             await alertDialog(context, "Keranjang", "Berhasil Memasukkan Menu Ke Keranjang");

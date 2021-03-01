@@ -1,4 +1,3 @@
-import 'package:belah_duren/cart_delivery.dart';
 import 'package:belah_duren/cart_pickup.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
@@ -84,8 +83,13 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),
-                      child: Text("4",
-                      style: TextStyle(color: Colors.brown, fontSize: 12),))),
+                      child: StatefulBuilder(
+
+                        builder: (context, setState){
+                          return Text(countCart.toString(),
+                            style: TextStyle(color: Colors.brown, fontSize: 12),);
+                        },
+                      ))),
             ],
           ),
           backgroundColor: Colors.white,

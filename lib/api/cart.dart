@@ -49,6 +49,20 @@ Future<GlobalResponse> futureApiChangeQuantityCart(String token, int cart_id,
   return GlobalResponse.fromStringJson(response.toString());
 }
 
+Future<GlobalResponse> futureApiChangeNotesCart(String token,int cart_id, String note) async{
+  var dio = Dio();
+  String url = api_url + "update_cart_note/"+cart_id.toString();
+  dio.options.headers[HttpHeaders.authorizationHeader] =
+      'Bearer ' + token;
+  FormData formData = new FormData.fromMap({
+    "note": note,
+  });
+  Response response = await dio.post(url, data: formData);
+  print(response.data);
+
+  return GlobalResponse.fromStringJson(response.toString());
+}
+
 Future<GlobalResponse> futureApiRemoveCart(String token, int cart_id) async{
   var dio = Dio();
   String url = api_url + "remove_from_cart/"+cart_id.toString();

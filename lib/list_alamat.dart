@@ -1,6 +1,7 @@
 import 'package:belah_duren/api/address.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/address.dart';
+import 'package:belah_duren/tambah_alamat.dart';
 import 'package:flutter/material.dart';
 
 class ListAlamat extends StatefulWidget {
@@ -28,7 +29,12 @@ class _ListAlamatState extends State<ListAlamat> {
         ),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.add), iconSize: 30, color: Colors.brown,
-              onPressed: (){})
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TambahAlamat()),
+                );
+              })
         ],
         backgroundColor: Colors.white,
       ),

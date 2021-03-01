@@ -14,7 +14,8 @@ class _CartPickupState extends State<CartPickup> {
   List<Cart> carts = [];
   int discount = 0;
   String voucherCode = "";
-  List<TextEditingController> itemNotes = new List();
+  //List<TextEditingController> itemNotes = new List();
+  TextEditingController itemNotes = TextEditingController();
 
   @override
   void initState() {
@@ -532,8 +533,6 @@ class _CartPickupState extends State<CartPickup> {
               physics: NeverScrollableScrollPhysics(),
               itemCount: carts.length,
               itemBuilder: (context, index) {
-                itemNotes.add(new TextEditingController());
-                itemNotes[index].text = carts[index].note;
                 return Container(
                   child: Column(
                     children: [
@@ -626,25 +625,30 @@ class _CartPickupState extends State<CartPickup> {
                                   ),
                                 ],
                               ),
-                              Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.sticky_note_2_outlined,
-                                    size: 30,
-                                    color: Colors.brown,
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    "Catatan",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.brown),
-                                  )
-                                ],
+                              GestureDetector(
+                                onTap: (){
+
+                                },
+                                child: Row(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.sticky_note_2_outlined,
+                                      size: 30,
+                                      color: Colors.brown,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      "Catatan",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.brown),
+                                    )
+                                  ],
+                                ),
                               )
                             ],
                           )
@@ -653,23 +657,15 @@ class _CartPickupState extends State<CartPickup> {
                       SizedBox(
                         height: 16,
                       ),
-                      TextFormField(
-                        controller: itemNotes[index],
-                        keyboardType: TextInputType.text,
-                        style: TextStyle(fontSize: 14, color: Colors.brown[700]),
-                        decoration: InputDecoration(
-                          fillColor: Colors.white,
-                          hoverColor: Colors.white,
-                          filled: true,
-                          contentPadding: EdgeInsets.only(left: 16),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey[400], width: 3),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey[400], width: 3),
-                              borderRadius: BorderRadius.circular(8.0)),
-                          hintText: "Tambah Catatan",
-                          hintStyle: TextStyle(color: Colors.grey[400]),
+                      Container(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            carts[index].note != "" ? carts[index].note : "Tambah Catatan untuk pesanan ini",
+                            style: TextStyle(
+                              fontSize: 14, color: Colors.brown,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -716,9 +712,69 @@ class _CartPickupState extends State<CartPickup> {
       if(value.isSuccess()){
         setState(() {
           carts = value.data;
+          countCart = carts.length;
         });
       }
     });
+  }
+
+
+  _showChangeNotes(index) async {
+    showModalBottomSheet(
+        context: context,
+        builder: (context){
+          return Container(
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: itemNotes,
+                  keyboardType: TextInputType.text,
+                  style: TextStyle(fontSize: 14, color: Colors.brown[700]),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    hoverColor: Colors.white,
+                    filled: true,
+                    contentPadding: EdgeInsets.only(left: 16),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    hintText: "Tambah Catatan",
+                    hintStyle: TextStyle(color: Colors.grey[400]),
+                  ),
+                ),
+                SizedBox(
+                    height: 16
+                ),
+                SizedBox(
+                  height: 60,
+                  width: 100,
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        side: BorderSide(color: Colors.yellow[700])),
+                    onPressed: () {
+                      showCircular(context);
+                      futureApiChangeNotesCart(currentUser.token, carts[index].id,itemNotes.text).then((value) async {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        if(value.isSuccess()){
+                          await alertDialog(context, "Keranjang", "Berhasil Update Catatan");
+                        }
+                        updateCart();
+                      });
+                    },
+                    color: Colors.yellow[700],
+                    textColor: Colors.black,
+                    child: Text("Redeem".toUpperCase(),
+                        style: TextStyle(fontSize: 14)),
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   _showVoucherDialog(total) async {

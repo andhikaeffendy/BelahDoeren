@@ -304,6 +304,7 @@ class _HomeState extends State<Home> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: (){
+
                                 cartBottomSheet(context, featuredMenus[index]);
                               },
                               child: Container(
