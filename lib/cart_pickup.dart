@@ -15,7 +15,6 @@ class _CartPickupState extends State<CartPickup> {
   int discount = 0;
   String voucherCode = "";
   //List<TextEditingController> itemNotes = new List();
-  TextEditingController itemNotes = TextEditingController();
 
   @override
   void initState() {
@@ -627,7 +626,7 @@ class _CartPickupState extends State<CartPickup> {
                               ),
                               GestureDetector(
                                 onTap: (){
-
+                                  _showChangeNotes(index);
                                 },
                                 child: Row(
                                   crossAxisAlignment:
@@ -720,58 +719,76 @@ class _CartPickupState extends State<CartPickup> {
 
 
   _showChangeNotes(index) async {
+    TextEditingController itemNotes = TextEditingController();
+    itemNotes.text = carts[index].note;
     showModalBottomSheet(
         context: context,
         builder: (context){
           return Container(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: itemNotes,
-                  keyboardType: TextInputType.text,
-                  style: TextStyle(fontSize: 14, color: Colors.brown[700]),
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    hoverColor: Colors.white,
-                    filled: true,
-                    contentPadding: EdgeInsets.only(left: 16),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey[400], width: 3),
-                        borderRadius: BorderRadius.circular(8.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey[400], width: 3),
-                        borderRadius: BorderRadius.circular(8.0)),
-                    hintText: "Tambah Catatan",
-                    hintStyle: TextStyle(color: Colors.grey[400]),
+            margin: EdgeInsets.all(16),
+            height: MediaQuery.of(context).size.height * .60,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                    child: Image.network(
+                      carts[index].imageUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                SizedBox(
-                    height: 16
-                ),
-                SizedBox(
-                  height: 60,
-                  width: 100,
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        side: BorderSide(color: Colors.yellow[700])),
-                    onPressed: () {
-                      showCircular(context);
-                      futureApiChangeNotesCart(currentUser.token, carts[index].id,itemNotes.text).then((value) async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        if(value.isSuccess()){
-                          await alertDialog(context, "Keranjang", "Berhasil Update Catatan");
-                        }
-                        updateCart();
-                      });
-                    },
-                    color: Colors.yellow[700],
-                    textColor: Colors.black,
-                    child: Text("Redeem".toUpperCase(),
-                        style: TextStyle(fontSize: 14)),
+                  SizedBox(
+                    height: 8,
                   ),
-                )
-              ],
+                  TextFormField(
+                    controller: itemNotes,
+                    keyboardType: TextInputType.text,
+                    style: TextStyle(fontSize: 14, color: Colors.brown[700]),
+                    decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      hoverColor: Colors.white,
+                      labelText: "Tambah Catatan Untuk Pesanan Ini",
+                      filled: true,
+                      contentPadding: EdgeInsets.only(left: 16),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      hintText: "Tambah Catatan",
+                      hintStyle: TextStyle(color: Colors.grey[400]),
+                    ),
+                  ),
+                  SizedBox(
+                      height: 16
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(color: Colors.yellow[700])),
+                      onPressed: () {
+                        showCircular(context);
+                        futureApiChangeNotesCart(currentUser.token, carts[index].id,itemNotes.text).then((value) async {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          if(value.isSuccess()){
+                            await alertDialog(context, "Keranjang", "Berhasil Update Catatan");
+                            Navigator.of(context, rootNavigator: true).pop();
+                          }
+                          updateCart();
+                        });
+                      },
+                      color: Colors.yellow[700],
+                      textColor: Colors.black,
+                      child: Text("Update Catatan",
+                          style: TextStyle(fontSize: 14)),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         });

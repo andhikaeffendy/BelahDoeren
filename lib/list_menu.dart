@@ -439,7 +439,7 @@ class _ListMenuState extends State<ListMenu>
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-                cartBottomSheet(context, menus[index]);
+                cartBottomSheet(context, menus[index],);
             },
             child: Container(
               padding: EdgeInsets.only(bottom: 8),
