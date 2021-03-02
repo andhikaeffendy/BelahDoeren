@@ -1,7 +1,7 @@
 import 'package:belah_duren/api/address.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/address.dart';
-import 'package:belah_duren/tambah_alamat.dart';
+import 'package:belah_duren/form_alamat.dart';
 import 'package:flutter/material.dart';
 
 class ListAlamat extends StatefulWidget {
@@ -32,7 +32,7 @@ class _ListAlamatState extends State<ListAlamat> {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => TambahAlamat()),
+                  MaterialPageRoute(builder: (context) => FormAlamat()),
                 );
               })
         ],
@@ -91,10 +91,11 @@ class _ListAlamatState extends State<ListAlamat> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: (){
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => ListStore()),
-                            // );
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                builder: (context) => FormAlamat(),
+                            ));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 16),

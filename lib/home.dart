@@ -40,7 +40,6 @@ class _HomeState extends State<Home> {
         currentPosition = value;
       });
     });
-    print("posisi "+currentPosition.toString());
     futureApiFeaturedMenus(currentUser.token).then((value){
       if(value.isSuccess()){
         setState(() {
