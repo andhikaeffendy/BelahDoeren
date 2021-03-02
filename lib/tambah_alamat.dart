@@ -1,4 +1,8 @@
+import 'package:belah_duren/global/variable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class TambahAlamat extends StatefulWidget {
   @override
@@ -26,8 +30,31 @@ class _TambahAlamatState extends State<TambahAlamat> {
           child: Column(
             children: [
               Container(
-                height: 200,
-                color: Colors.brown,
+                height: 300,
+                child: GoogleMap(
+                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                    new Factory<OneSequenceGestureRecognizer>(
+                          () => new EagerGestureRecognizer(),
+                    ),
+                  ].toSet(),
+                  mapType: MapType.normal,
+                  initialCameraPosition: CameraPosition(
+                      target: LatLng(currentPosition.latitude, currentPosition.longitude),
+                      zoom: 14
+                  ),
+                  markers: [
+                    Marker(
+                      markerId: MarkerId('1'),
+                      position: LatLng(
+                          currentPosition.latitude, currentPosition.longitude),
+                      infoWindow: InfoWindow(title: 'Drag and hold this to location!'),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                        BitmapDescriptor.hueRed,
+                      ),
+                      draggable: true,
+                    ),
+                  ].toSet(),
+                ),
               ),
               SizedBox(
                 height: 16,
