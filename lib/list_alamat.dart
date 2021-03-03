@@ -14,6 +14,14 @@ class _ListAlamatState extends State<ListAlamat> {
   List<Address> listAddress = List<Address>.empty();
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      updateAlamat();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -29,11 +37,13 @@ class _ListAlamatState extends State<ListAlamat> {
         ),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.add), iconSize: 30, color: Colors.brown,
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FormAlamat()),
-                );
+              onPressed: () async{
+                await nextPage(context, FormAlamat(false, null));
+                updateAlamat();
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => FormAlamat(false, null)),
+                // );
               })
         ],
         backgroundColor: Colors.white,
@@ -90,12 +100,14 @@ class _ListAlamatState extends State<ListAlamat> {
                       itemCount: listAddress.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: (){
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                builder: (context) => FormAlamat(),
-                            ));
+                          onTap: ()async{
+                            await nextPage(context, FormAlamat(true, listAddress[index]));
+                            updateAlamat();
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //     builder: (context) => FormAlamat(true, listAddress[index]),
+                            // ));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 16),
@@ -182,5 +194,17 @@ class _ListAlamatState extends State<ListAlamat> {
         ),
       ),
     );
+  }
+
+  updateAlamat(){
+    showCircular(context);
+    futureApiAddress(currentUser.token, currentUser.id).then((value) async {
+      Navigator.of(context, rootNavigator: true).pop();
+      if(value.isSuccess()){
+        setState(() {
+          listAddress = value.data;
+        });
+      }
+    });
   }
 }

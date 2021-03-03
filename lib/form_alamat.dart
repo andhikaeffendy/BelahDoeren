@@ -1,13 +1,17 @@
 import 'dart:async';
-
 import 'package:belah_duren/api/address.dart';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/model/address.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FormAlamat extends StatefulWidget {
+  final bool editForm;
+  final Address currentAddress;
+  FormAlamat(this.editForm, this.currentAddress);
+
   @override
   _FormAlamatState createState() => _FormAlamatState();
 }
@@ -16,8 +20,7 @@ class _FormAlamatState extends State<FormAlamat> {
   TextEditingController tecName = TextEditingController();
   TextEditingController tecAddress = TextEditingController();
   Completer<GoogleMapController> _controller = Completer();
-  final Set<Marker> _markers = {};
-
+  Set<Marker> _markers = {};
   double mLat;
   double mLong;
 
@@ -26,7 +29,30 @@ class _FormAlamatState extends State<FormAlamat> {
   }
 
   @override
+  void initState() {
+
+    setState(() {
+      if (ConnectionState.waiting == true) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (widget.editForm) {
+        mLat = double.parse(widget.currentAddress.lat);
+        mLong = double.parse(widget.currentAddress.long);
+        tecName.text = widget.currentAddress.name;
+        tecAddress.text = widget.currentAddress.address;
+      } else {
+        mLong = currentPosition.longitude;
+        mLat = currentPosition.latitude;
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(mLat);
+    print(mLong);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -52,38 +78,84 @@ class _FormAlamatState extends State<FormAlamat> {
                       onMapCreated: _onMapCreated,
                       myLocationButtonEnabled: true,
                       myLocationEnabled: true,
-                      markers: _markers,
-                      gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                      markers: widget.editForm == false
+                          ? _markers
+                          : [
+                              Marker(
+                                  markerId: MarkerId('1'),
+                                  position: LatLng(mLat, mLong),
+                                  infoWindow: InfoWindow(
+                                      title: 'Drag and hold this to location!'),
+                                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                                    BitmapDescriptor.hueRed,
+                                  ),
+                                  draggable: true,
+                                  onDragEnd: ((newPosition) {
+                                    print(newPosition.latitude);
+                                    print(newPosition.longitude);
+                                    mLat = newPosition.latitude;
+                                    mLong = newPosition.longitude;
+                                  })),
+                            ].toSet(),
+                      gestureRecognizers:
+                          <Factory<OneSequenceGestureRecognizer>>[
                         new Factory<OneSequenceGestureRecognizer>(
-                              () => new EagerGestureRecognizer(),
+                          () => new EagerGestureRecognizer(),
                         ),
                       ].toSet(),
-                      mapType: MapType.normal,
-                      initialCameraPosition: CameraPosition(
-                          target: LatLng(
-                              currentPosition.latitude, currentPosition.longitude),
-                          zoom: 18),
+                      mapType: MapType.terrain,
+                      initialCameraPosition:
+                          CameraPosition(target: LatLng(mLat, mLong), zoom: 18),
                     ),
-                    IconButton(icon: Icon(Icons.maps_ugc_outlined), onPressed: (){
-                      setState(() {
-                        _markers.add(Marker(
-                          markerId: MarkerId('1'),
-                          position: LatLng(
-                              currentPosition.latitude, currentPosition.longitude),
-                          infoWindow: InfoWindow(title: 'Tahan dan geser untuk mengubah'),
-                          icon: BitmapDescriptor.defaultMarkerWithHue(
-                            BitmapDescriptor.hueRed,
-                          ),
-                          draggable: true,
-                            onDragEnd: ((newPosition) {
-                              print(newPosition.latitude);
-                              print(newPosition.longitude);
-                              mLat = newPosition.latitude;
-                              mLong= newPosition.longitude;
-                            })
-                        ));
-                      });
-                    })
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    // mLat = currentPosition.latitude;
+                    // mLong = currentPosition.longitude;
+
+                    mLat = currentPosition.latitude;
+                    mLong = currentPosition.longitude;
+                    _markers.add(Marker(
+                        markerId: MarkerId('1'),
+                        position: LatLng(mLat, mLong),
+                        infoWindow:
+                            InfoWindow(title: 'Tahan dan geser untuk mengubah'),
+                        icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueRed,
+                        ),
+                        draggable: true,
+                        onDragEnd: ((newPosition) {
+                          print(newPosition.latitude);
+                          print(newPosition.longitude);
+                          mLat = newPosition.latitude;
+                          mLong = newPosition.longitude;
+                        })));
+                  });
+                },
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.location_on_outlined,
+                      color: Colors.lightGreen[700],
+                      size: 30,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      "Gunakan Lokasi Saat Ini",
+                      style: TextStyle(
+                          color: Colors.lightGreen[700], fontSize: 12),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),
@@ -183,26 +255,43 @@ class _FormAlamatState extends State<FormAlamat> {
                         borderRadius: BorderRadius.circular(10.0),
                         side: BorderSide(color: Colors.yellow[600])),
                     onPressed: () {
-                      if(mLat == null && mLong == null){
-                        mLat = currentPosition.latitude;
-                        mLong = currentPosition.longitude;
-                      }
                       showCircular(context);
-                      futureApiTambahAlamat(
-                              currentUser.token,
-                              tecName.text,
-                              tecAddress.text,
-                              mLat.toString(),
-                              mLong.toString())
-                          .then((value) async {
-                        Navigator.of(context, rootNavigator: true).pop();
-                            if(value.isSuccess()){
-                              await alertDialog(context, "Alamat", "Berhasil Menambah Alamat");
-                              Navigator.pop(context);
-                            }else{
-                              await alertDialog(context, "Alamat", value.message);
-                            }
-                      });
+                      if (widget.editForm) {
+                        futureApiUpdateAlamat(
+                                currentUser.token,
+                                widget.currentAddress.id,
+                                tecName.text,
+                                tecAddress.text,
+                                mLat.toString(),
+                                mLong.toString())
+                            .then((value) async {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          if (value.isSuccess()) {
+                            await alertDialog(
+                                context, "Alamat", "Berhasil Update Alamat");
+                            Navigator.pop(context);
+                          } else {
+                            await alertDialog(context, "Alamat", value.message);
+                          }
+                        });
+                      } else {
+                        futureApiTambahAlamat(
+                                currentUser.token,
+                                tecName.text,
+                                tecAddress.text,
+                                mLat.toString(),
+                                mLong.toString())
+                            .then((value) async {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          if (value.isSuccess()) {
+                            await alertDialog(
+                                context, "Alamat", "Berhasil Menambah Alamat");
+                            Navigator.pop(context);
+                          } else {
+                            await alertDialog(context, "Alamat", value.message);
+                          }
+                        });
+                      }
                     },
                     color: Colors.yellow[600],
                     textColor: Colors.black,
@@ -220,7 +309,4 @@ class _FormAlamatState extends State<FormAlamat> {
       ),
     );
   }
-
 }
-
-

@@ -1,3 +1,6 @@
+import 'package:belah_duren/api/settings.dart';
+import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/model/faq_list.dart';
 import 'package:flutter/material.dart';
 
 
@@ -7,6 +10,9 @@ class FAQ extends StatefulWidget {
 }
 
 class _FAQState extends State<FAQ> {
+
+  List<FaqList> listFaq = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,26 +64,47 @@ class _FAQState extends State<FAQ> {
               SizedBox(
                 height: 24,
               ),
-              ExpansionTile(title: Text(
-                "Coba",
-                style: TextStyle(
-                  color: Colors.brown
-                ),
-              ),children: [
-                InkWell(
-                  onTap: (){},
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        "satu satu satu satu satu satu",
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ),
-                )
-              ],)
+              FutureBuilder(
+                  future: futureApiListFaq(currentUser.token),
+                  builder: (context, snapshot){
+                    if(snapshot.connectionState == ConnectionState.waiting){
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }else if(snapshot.connectionState == ConnectionState.done){
+                      ApiFaq apiFaq = snapshot.data;
+                      if(apiFaq.isSuccess()){
+                        listFaq = apiFaq.data;
+                        print(apiFaq);
+                      }
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: listFaq.length,
+                          itemBuilder: (context, index){
+                            return ExpansionTile(
+                              title: Text(
+                                listFaq[index].question,
+                                style: TextStyle(
+                                    color: Colors.brown
+                                ),
+                              ),children: [
+                              InkWell(
+                                onTap: (){},
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    padding: EdgeInsets.all(16),
+                                    child: Text(
+                                      listFaq[index].answer,
+                                      textAlign: TextAlign.start,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],);
+                          });
+                    }
+                  })
             ],
           ),
         ),

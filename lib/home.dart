@@ -8,7 +8,6 @@ import 'package:belah_duren/detail_slider.dart';
 import 'package:belah_duren/global/location.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
-import 'package:belah_duren/list_store.dart';
 import 'package:belah_duren/login.dart';
 import 'package:belah_duren/model/menu.dart';
 import 'package:belah_duren/model/slider.dart';
