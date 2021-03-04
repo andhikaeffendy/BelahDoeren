@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/transaction.dart';
+import 'package:belah_duren/model/transaction_list.dart';
 import 'package:belah_duren/model/user.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -53,6 +54,41 @@ Future<ApiTransactionDetail> futureApiTransactionDetail(String token, int id) as
   return ApiTransactionDetail.fromStringJson(response.toString());
 }
 
+Future<ApiListTransaction> futureApiGetActiveTransaction(String token) async{
+  var dio = Dio();
+  String url = api_url + "active_transactions_list";
+  dio.options.headers[HttpHeaders.authorizationHeader] =
+      'Bearer ' + token;
+  Response response = await dio.get(url);
+  print("response : " + response.toString());
+  print(response.data);
+
+  return ApiListTransaction.fromStringJson(response.toString());
+}
+
+Future<ApiListTransaction> futureApiGetPastTransaction(String token) async{
+  var dio = Dio();
+  String url = api_url + "past_transactions_list";
+  dio.options.headers[HttpHeaders.authorizationHeader] =
+      'Bearer ' + token;
+  Response response = await dio.get(url);
+  print("response : " + response.toString());
+  print(response.data);
+
+  return ApiListTransaction.fromStringJson(response.toString());
+}
+
+Future<ApiListTransaction> futureApiGetCanceledTransaction(String token) async{
+  var dio = Dio();
+  String url = api_url + "cancelled_transactions_list";
+  dio.options.headers[HttpHeaders.authorizationHeader] =
+      'Bearer ' + token;
+  Response response = await dio.get(url);
+  print("response : " + response.toString());
+  print(response.data);
+
+  return ApiListTransaction.fromStringJson(response.toString());
+}
 
 class ApiTransaction {
   String status;
@@ -152,6 +188,37 @@ class ApiTransactionDetail {
         data = List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x)));
 
   ApiTransactionDetail.fromStringJson(String stringJson) :
+        this.fromJson(json.decode(stringJson));
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "message": message,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
+
+  String toStringJson() => json.encode(this.toJson());
+
+  bool isSuccess() => status == "success";
+
+}
+
+class ApiListTransaction {
+  String status;
+  String message;
+  List<TransactionList> data;
+
+  ApiListTransaction({
+    this.status,
+    this.message,
+    this.data
+  });
+
+  ApiListTransaction.fromJson(Map<String, dynamic> json) :
+        status = json["status"],
+        message = json["message"],
+        data = List<TransactionList>.from(json["data"].map((x) => TransactionList.fromJson(x)));
+
+  ApiListTransaction.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
 
   Map<String, dynamic> toJson() => {

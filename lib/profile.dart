@@ -10,6 +10,7 @@ import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/history_penukaran_points.dart';
 import 'package:belah_duren/kontak_cs.dart';
 import 'package:belah_duren/login.dart';
+import 'package:belah_duren/my_order.dart';
 import 'package:belah_duren/status_point.dart';
 import 'package:flutter/material.dart';
 
@@ -176,7 +177,7 @@ class _ProfileState extends State<Profile> {
                       onTap: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HistoryPenukaranPoints()),
+                          MaterialPageRoute(builder: (context) => MyOrder()),
                         );
                       },
                       child: Row(

@@ -8,6 +8,7 @@ import 'package:belah_duren/detail_slider.dart';
 import 'package:belah_duren/global/location.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/list_promo.dart';
 import 'package:belah_duren/login.dart';
 import 'package:belah_duren/model/menu.dart';
 import 'package:belah_duren/model/slider.dart';
@@ -244,7 +245,11 @@ class _HomeState extends State<Home> {
                       SizedBox(
                         width: 8,
                       ),
-                      Text("Promotion", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[500]),),
+                      GestureDetector(
+                          onTap: (){
+                            nextPage(context, ListPromo());
+                          },
+                          child: Text("Promotion", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[500]),)),
                       Spacer(),
                       Image.asset("assets/images/event_code.png", scale: 30,),
                       SizedBox(
