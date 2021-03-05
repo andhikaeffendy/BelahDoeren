@@ -49,6 +49,17 @@ Future<ApiMenuDetail> futureApiMenu(String token, int menuId) async{
   return ApiMenuDetail.fromStringJson(response.toString());
 }
 
+Future<ApiMenu> futureApiPromotionMenus(String token) async{
+  var dio = Dio();
+  String url = api_url + "promotion_menus_list";
+  dio.options.headers[HttpHeaders.authorizationHeader] =
+      'Bearer ' + token;
+  Response response = await dio.get(url);
+  print(response.data);
+
+  return ApiMenu.fromStringJson(response.toString());
+}
+
 class ApiMenuDetail {
   String status;
   String message;

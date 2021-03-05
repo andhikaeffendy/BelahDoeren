@@ -28,6 +28,7 @@ int currentIdCarts;
 int countCart = 0;
 String selectedOrderType = "pickup";
 
+
 bool isPickupOrder(){
   return selectedOrderType == "pickup";
 }
@@ -116,7 +117,10 @@ cartBottomSheet(context,Menu menu) {
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
                       Text(
-                        'Rp. '+ formatCurrency(menu.price),
+                        menu.new_price == null ?
+                        'Rp. '+ formatCurrency(menu.price) :
+                        'Rp. '+ formatCurrency(menu.new_price)
+                        ,
                         style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                       ),
@@ -230,9 +234,18 @@ cartBottomSheet(context,Menu menu) {
                           borderRadius: BorderRadius.circular(10.0),
                           side: BorderSide(color: Colors.yellow[700])),
                       onPressed: () {
+                        int price;
+                        if(menu.new_price == null){
+                          price = menu.price;
+                          print(price);
+                        }
+                        else{
+                          price = menu.new_price;
+                          print(price);
+                        }
                         showCircular(context);
                         futureApiAddToCart(currentUser.token, menu.id,
-                            _counter, menu.price, notes.text).then((value) async {
+                            _counter, price, notes.text).then((value) async {
                           Navigator.of(context, rootNavigator: true).pop();
                           if(value.isSuccess()){
                             await alertDialog(context, "Keranjang", "Berhasil Memasukkan Menu Ke Keranjang");
@@ -244,7 +257,11 @@ cartBottomSheet(context,Menu menu) {
                       },
                       color: Colors.yellow[700],
                       textColor: Colors.black,
-                      child: Text("Tambah Ke Keranjang - " + 'Rp. '+ formatCurrency(menu.price),
+                      child: Text(
+                          menu.new_price == null ?
+                          "Tambah Ke Keranjang - " + 'Rp. '+ formatCurrency(menu.price)
+                          :
+                          "Tambah Ke Keranjang - " + 'Rp. '+ formatCurrency(menu.new_price),
                           style: TextStyle(fontSize: 14)),
                     ),
                   )

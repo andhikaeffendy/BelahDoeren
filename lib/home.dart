@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
         currentPosition = value;
       });
     });
-    futureApiFeaturedMenus(currentUser.token).then((value){
+    futureApiPromotionMenus(currentUser.token).then((value){
       if(value.isSuccess()){
         setState(() {
           featuredMenus = value.data;
@@ -344,7 +344,10 @@ class _HomeState extends State<Home> {
                                     SizedBox(height: 4,),
                                     Container(
                                         padding: EdgeInsets.only(left: 8),
-                                        child: Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12),)),
+                                        child: Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12,decoration: TextDecoration.lineThrough),)),
+                                    Container(
+                                        padding: EdgeInsets.only(left: 8),
+                                        child: Text(currency.format(featuredMenus[index].new_price), style: TextStyle(fontSize: 12,),)),
                                     SizedBox(height: 8,),
                                   ],
                                 ),

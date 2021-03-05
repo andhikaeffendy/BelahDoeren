@@ -21,7 +21,7 @@ class ListMenu extends StatefulWidget {
 class _ListMenuState extends State<ListMenu>
     with TickerProviderStateMixin {
   TabController _tabController;
-  List<MenuCategory> menuCategories = [new MenuCategory(0, "Featured")];
+  List<MenuCategory> menuCategories = [new MenuCategory(0, "Promotion")];
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _ListMenuState extends State<ListMenu>
                 print(snapshot.data);
                 ApiMenuCategory apiData = snapshot.data;
                 if (apiData.isSuccess()) {
-                  menuCategories = [new MenuCategory(0, "Featured")];
+                  menuCategories = [new MenuCategory(0, "Promotion")];
                   menuCategories.addAll(apiData.data);
                   _tabController =
                       TabController(vsync: this, length: menuCategories.length);
@@ -95,7 +95,7 @@ class _ListMenuState extends State<ListMenu>
               print(snapshot.data);
               ApiMenuCategory apiData = snapshot.data;
               if (apiData.isSuccess()) {
-                menuCategories = [new MenuCategory(0, "Featured")];
+                menuCategories = [new MenuCategory(0, "Promotion")];
                 menuCategories.addAll(apiData.data);
                 _tabController =
                     TabController(vsync: this, length: menuCategories.length);
@@ -263,7 +263,7 @@ class _ListMenuState extends State<ListMenu>
     menuCategories.forEach((menuCategory) {
       tabViews.add( menuCategory.id == 0 ?
         FutureBuilder(
-          future: futureApiFeaturedMenus(currentUser.token),
+          future: futureApiPromotionMenus(currentUser.token),
             builder: (context, snapshot){
               if(snapshot.connectionState == ConnectionState.done){
                 print(snapshot.data);
@@ -490,10 +490,27 @@ class _ListMenuState extends State<ListMenu>
                   ),
                   Container(
                     padding: EdgeInsets.only(left: 8),
-                    child: Text(
+                    child:
+                    menus[index].new_price == null ?
+                    Text(
                       formatCurrency(menus[index].price),
                       style: TextStyle(fontSize: 12,
                       fontWeight: FontWeight.bold),
+                    )
+                    :
+                    Column(
+                      children: [
+                        Text(
+                          formatCurrency(menus[index].price),
+                          style: TextStyle(fontSize: 12,
+                              decoration: TextDecoration.lineThrough),
+                        ),
+                        Text(
+                          formatCurrency(menus[index].new_price),
+                          style: TextStyle(fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
                     ),
                   ),
                   SizedBox(

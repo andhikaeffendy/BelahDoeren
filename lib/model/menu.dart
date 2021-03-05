@@ -3,6 +3,7 @@ class Menu{
   String name;
   String description;
   int price;
+  int new_price;
   int activeStatus;
   int featured;
   String imageUrl;
@@ -12,6 +13,7 @@ class Menu{
       this.name,
       this.description,
       this.price,
+      this.new_price,
       this.activeStatus,
       this.featured,
       this.imageUrl,
@@ -22,6 +24,7 @@ class Menu{
         name = json["name"],
         description = json["description"],
         price = json["price"],
+        new_price = json["new_price"],
         activeStatus = json["active_status"],
         featured = json["featured"],
         imageUrl = json["image_url"]
@@ -32,6 +35,7 @@ class Menu{
     "name": name,
     "description": description,
     "price": price,
+    "new_price" : new_price,
     "active_status": activeStatus,
     "featured": featured,
     "image_url": imageUrl,
