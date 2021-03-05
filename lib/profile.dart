@@ -8,8 +8,10 @@ import 'package:belah_duren/faq.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/history_penukaran_points.dart';
+import 'package:belah_duren/home.dart';
 import 'package:belah_duren/kontak_cs.dart';
 import 'package:belah_duren/login.dart';
+import 'package:belah_duren/main.dart';
 import 'package:belah_duren/my_order.dart';
 import 'package:belah_duren/status_point.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,9 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Container(
       child: SingleChildScrollView(
-        child: FutureBuilder(
+        child:
+        currentUser != null ?
+        FutureBuilder(
             future: futureApiEditProfile(currentUser.token),
             builder: (context, snapshot){
               if(snapshot.connectionState == ConnectionState.waiting){
@@ -320,7 +324,7 @@ class _ProfileState extends State<Profile> {
                           Navigator.of(context, rootNavigator: true).pop();
                           currentUser = null;
                           destroySession();
-                          startNewPage(context, Login());
+                          startNewPage(context, MyHomePage());
                         });
                       },
                       child: Row(
@@ -352,7 +356,208 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               );
-            }),
+            })
+        :
+        Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 16, right: 16, top: 44, bottom: 16),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.yellow[600],
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12)),
+                  border: Border.all(
+                      width: 1,
+                      color: Colors.yellow,
+                      style: BorderStyle.solid)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage:AssetImage("assets/images/logo.png"),
+                  ),
+                  SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hallo Belah Doeren",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: [
+                          Image.asset("assets/images/icon_poin.png", scale: 20,),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Text(
+                            "Member Uknown",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StatusPoint()),
+                );
+              },
+              child: Container(
+                  padding: EdgeInsets.all(12),
+                  margin: EdgeInsets.only(left: 16, right: 16),
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/box_poin.png"),
+                          fit: BoxFit.fill
+                      ),
+                      border: Border.all(
+                          width: 1,
+                          color: Colors.white60,
+                          style: BorderStyle.solid)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Point Reward",
+                        style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
+                      ),
+                      Spacer(),
+                      Image.asset("assets/images/icon_poin.png", scale: 30,),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "0",
+                        style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width*.10,
+                      ),
+                    ],
+                  )),
+            ),SizedBox(
+              height: 12,
+            ),Container(
+              margin: EdgeInsets.only(left: 16, right: 16),
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => About()),
+                  );
+                },
+                child:Row(
+                  children: [
+                    Icon(
+                      Icons.help_outline,
+                      color: Colors.brown,
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Bantuan",
+                      style: TextStyle(color: Colors.brown, fontSize: 16),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            SizedBox(
+              child: Container(
+                margin: EdgeInsets.only(left: 16, right: 16),
+                height: 1,
+                color: Colors.brown,
+              ),
+            ),SizedBox(
+              height: 12,
+            ),Container(
+              margin: EdgeInsets.only(left: 16, right: 16),
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FAQ()),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.help_center_outlined,
+                      color: Colors.brown,
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Ketentuan Layanan",
+                      style: TextStyle(color: Colors.brown, fontSize: 16),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            SizedBox(
+              child: Container(
+                margin: EdgeInsets.only(left: 16, right: 16),
+                height: 1,
+                color: Colors.brown,
+              ),
+            ),SizedBox(
+              height: 12,
+            ),Container(
+              margin: EdgeInsets.only(left: 16, right: 16),
+              child: GestureDetector(
+                onTap: () {
+                  nextPage(context, Login());
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.exit_to_app,
+                      color: Colors.brown,
+                    ),
+                    SizedBox(width: 16),
+                    Text(
+                      "Login",
+                      style: TextStyle(color: Colors.brown, fontSize: 16),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            SizedBox(
+              child: Container(
+                margin: EdgeInsets.only(left: 16, right: 16),
+                height: 1,
+                color: Colors.brown,
+              ),
+            ),SizedBox(
+              height: 12,
+            ),
+          ],
+        )
+        ,
       ),
     );
   }

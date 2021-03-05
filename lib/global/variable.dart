@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:belah_duren/api/cart.dart';
+import 'package:belah_duren/login.dart';
 import 'package:belah_duren/model/address.dart';
 import 'package:belah_duren/model/branch.dart';
 import 'package:belah_duren/model/cart.dart';
@@ -55,6 +56,50 @@ alertDialog(context, title, message) async {
         return AlertDialog(
           title: Text(title),
           content: Text(message),
+        );
+      }
+  );
+}
+
+alertDialogMustLogin(context, title, message) async {
+  return showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text(title),
+          content: Container(
+            height: 100,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(message),
+                SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(color: Colors.yellow[700])),
+                    color: Colors.yellow[700],
+                    textColor: Colors.black,
+                    onPressed: () {
+                      nextPage(context, Login());
+                    },
+                    child: Text(
+                      "Login Sekarang",
+                      style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         );
       }
   );
@@ -243,17 +288,22 @@ cartBottomSheet(context,Menu menu) {
                           price = menu.new_price;
                           print(price);
                         }
-                        showCircular(context);
-                        futureApiAddToCart(currentUser.token, menu.id,
-                            _counter, price, notes.text).then((value) async {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          if(value.isSuccess()){
-                            await alertDialog(context, "Keranjang", "Berhasil Memasukkan Menu Ke Keranjang");
-                            Navigator.pop(context);
-                          } else {
-                            alertDialog(context, "Keranjang", value.message);
-                          }
-                        });
+                        if(currentUser == null){
+                          alertDialogMustLogin(context, "Belum Login", "Anda harus login terlebih dahulu");
+                        }else{
+                          showCircular(context);
+                          futureApiAddToCart(currentUser.token, menu.id,
+                              _counter, price, notes.text).then((value) async {
+                            Navigator.of(context, rootNavigator: true).pop();
+                            if(value.isSuccess()){
+                              await alertDialog(context, "Keranjang", "Berhasil Memasukkan Menu Ke Keranjang");
+                              Navigator.pop(context);
+                            } else {
+                              alertDialog(context, "Keranjang", value.message);
+                            }
+                          });
+                        }
+
                       },
                       color: Colors.yellow[700],
                       textColor: Colors.black,
@@ -271,4 +321,49 @@ cartBottomSheet(context,Menu menu) {
           );
         });
       });
+}
+
+widgetMustLogin(BuildContext context){
+  return Container(
+    margin: EdgeInsets.all(16),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          "Kamu Belum Login",
+          style: TextStyle(
+              color: Colors.brown[500],
+              fontWeight: FontWeight.bold),
+        ),
+        Text(
+          "untuk mengakses menu ini kamu harus login",
+          style: TextStyle(
+              color: Colors.black38),
+        ),
+        SizedBox(
+          height: 16,
+        ),SizedBox(
+          width: double.infinity,
+          child: FlatButton(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+                side: BorderSide(color: Colors.yellow[700])),
+            color: Colors.yellow[700],
+            textColor: Colors.black,
+            onPressed: () {
+              nextPage(context, Login());
+            },
+            child: Text(
+              "Login Sekarang",
+              style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

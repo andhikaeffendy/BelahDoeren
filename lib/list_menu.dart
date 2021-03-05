@@ -28,46 +28,71 @@ class _ListMenuState extends State<ListMenu>
     // TODO: implement initState
     super.initState();
     _tabController = TabController(vsync: this, length: 1);
-    if (selectedBranch == null && !widget.addMenu){
-      futureApiBranches(currentUser.token).then((value){
-        if(value.isSuccess()){
-          setState(() {
-            if(value.data.length > 0) {
-              selectedBranch = value.data[0];
-              value.data.forEach((branch) {
-                if(branch.distance() < selectedBranch.distance())
-                  selectedBranch = branch;
-              });
-              storeBranchSession();
-            }
-          });
-        }
-      });
-    }
-    if (selectedAddress == null && !widget.addMenu){
-      futureApiAddress(currentUser.token, currentUser.id).then((value){
-        if(value.isSuccess()){
-          setState(() {
-            if(value.data.length > 0) {
-              selectedAddress = value.data[0];
-              storeAddressSession();
-            }
-          });
-        }
-      });
+    if(currentUser != null) {
+      if (selectedBranch == null && !widget.addMenu){
+        futureApiBranches(currentUser.token).then((value){
+          if(value.isSuccess()){
+            setState(() {
+              if(value.data.length > 0) {
+                selectedBranch = value.data[0];
+                value.data.forEach((branch) {
+                  if(branch.distance() < selectedBranch.distance())
+                    selectedBranch = branch;
+                });
+                storeBranchSession();
+              }
+            });
+          }
+        });
+      }
+      if (selectedAddress == null && !widget.addMenu){
+        futureApiAddress(currentUser.token, currentUser.id).then((value){
+          if(value.isSuccess()){
+            setState(() {
+              if(value.data.length > 0) {
+                selectedAddress = value.data[0];
+                storeAddressSession();
+              }
+            });
+          }
+        });
+      }
+    }else{
+      widgetMustLogin(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if(widget.addMenu) {
-      return Scaffold(
+    if(currentUser != null){
+      if(widget.addMenu) {
+        return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
             iconTheme: IconThemeData(color: Colors.brown),
             title: Text("Tambah Pesanan", style: TextStyle(color: Colors.brown)),
           ),
-        body: Container(
+          body: Container(
+            child: FutureBuilder(
+              future: futureApiMenuCategories(currentUser.token),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  print(snapshot.data);
+                  ApiMenuCategory apiData = snapshot.data;
+                  if (apiData.isSuccess()) {
+                    menuCategories = [new MenuCategory(0, "Promotion")];
+                    menuCategories.addAll(apiData.data);
+                    _tabController =
+                        TabController(vsync: this, length: menuCategories.length);
+                  }
+                }
+                return addMenuViews();
+              },
+            ),
+          ),
+        );
+      } else {
+        return Container(
           child: FutureBuilder(
             future: futureApiMenuCategories(currentUser.token),
             builder: (context, snapshot) {
@@ -81,30 +106,13 @@ class _ListMenuState extends State<ListMenu>
                       TabController(vsync: this, length: menuCategories.length);
                 }
               }
-              return addMenuViews();
+              return menuViews();
             },
           ),
-        ),
-      );
-    } else {
-      return Container(
-        child: FutureBuilder(
-          future: futureApiMenuCategories(currentUser.token),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              print(snapshot.data);
-              ApiMenuCategory apiData = snapshot.data;
-              if (apiData.isSuccess()) {
-                menuCategories = [new MenuCategory(0, "Promotion")];
-                menuCategories.addAll(apiData.data);
-                _tabController =
-                    TabController(vsync: this, length: menuCategories.length);
-              }
-            }
-            return menuViews();
-          },
-        ),
-      );
+        );
+      }
+    }else{
+      return widgetMustLogin(context);
     }
   }
 

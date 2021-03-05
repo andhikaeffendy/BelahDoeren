@@ -18,7 +18,7 @@ class _AboutState extends State<About> {
       body: Container(
         child: SingleChildScrollView(
           child: FutureBuilder(
-            future: futureApiGetAbout(currentUser.token),
+            future: futureApiGetAbout(""),
             builder: (context, snapshot){
               if(snapshot.connectionState == ConnectionState.waiting){
                 return Center(

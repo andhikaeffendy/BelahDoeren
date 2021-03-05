@@ -34,7 +34,9 @@ class _ListOrderState extends State<ListOrder> {
       ),
       body: Container(
         padding: EdgeInsets.all(16),
-        child: SingleChildScrollView(
+        child:
+        currentUser != null ?
+        SingleChildScrollView(
           child: Column(
             children: [
               Container(
@@ -233,7 +235,10 @@ class _ListOrderState extends State<ListOrder> {
                   })
             ],
           ),
-        ),
+        )
+        :
+        widgetMustLogin(context)
+        ,
       ),
     );
   }

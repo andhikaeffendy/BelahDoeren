@@ -29,7 +29,10 @@ class MyApp extends StatelessWidget {
   }
 
   Widget _getStartupScreen() {
-    return currentUser != null ? MyHomePage(title: 'Flutter Demo Home Page') : Login();
+    return //currentUser != null ?
+    MyHomePage(title: 'Flutter Demo Home Page')
+        //: Login()
+    ;
   }
 }
 
@@ -84,7 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         shape: BoxShape.circle,
                       ),
                       child: StatefulBuilder(
-
                         builder: (context, setState){
                           return Text(countCart.toString(),
                             style: TextStyle(color: Colors.brown, fontSize: 12),);
@@ -93,7 +95,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
           backgroundColor: Colors.white,
-          onPressed: () => nextPage(context, CartPickup()),
+          onPressed: (){
+            setState(() {
+              if(currentUser != null){
+                nextPage(context, CartPickup());
+              }else{
+                alertDialogMustLogin(context, "Belum Login", "Anda harus login terlebih dahulu");
+              }
+            });
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

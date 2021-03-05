@@ -17,7 +17,9 @@ class _StatusPointState extends State<StatusPoint> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: SingleChildScrollView(
+        child: 
+        currentUser != null ?
+        SingleChildScrollView(
           child: Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
@@ -585,7 +587,10 @@ class _StatusPointState extends State<StatusPoint> {
               ),
             ],
           ),
-        ),
+        )
+        :
+            widgetMustLogin(context)
+        ,
       ),
     );
   }
