@@ -28,6 +28,7 @@ Position currentPosition;
 int currentIdCarts;
 int countCart = 0;
 String selectedOrderType = "pickup";
+String orderId = "";
 
 
 bool isPickupOrder(){

@@ -1,8 +1,10 @@
 import 'package:belah_duren/api/cart.dart';
+import 'package:belah_duren/api/midtrans.dart';
 import 'package:belah_duren/api/voucher.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/list_menu.dart';
 import 'package:belah_duren/model/cart.dart';
+import 'package:belah_duren/payment.dart';
 import 'package:flutter/material.dart';
 
 class CartPickup extends StatefulWidget {
@@ -14,6 +16,8 @@ class _CartPickupState extends State<CartPickup> {
   List<Cart> carts = [];
   int discount = 0;
   String voucherCode = "";
+  int subTotal = 0;
+  int tax = 0;
   //List<TextEditingController> itemNotes = new List();
 
   @override
@@ -291,7 +295,7 @@ class _CartPickupState extends State<CartPickup> {
                         style: BorderStyle.solid),
                 color: Colors.yellow[400]),
                 child: GestureDetector(
-                  onTap: () => _showVoucherDialog(totalCart(carts)),
+                  onTap: () => _showVoucherDialog(subTotal),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -353,7 +357,7 @@ class _CartPickupState extends State<CartPickup> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              formatCurrency(totalCart(carts)),
+                              formatCurrency(subTotal),
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black26,
@@ -390,14 +394,14 @@ class _CartPickupState extends State<CartPickup> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Discount Member",
+                              "PPN 10%",
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.green[900],
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "0",
+                              formatCurrency(tax),
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.green[900],
@@ -450,7 +454,7 @@ class _CartPickupState extends State<CartPickup> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              formatCurrency(totalCart(carts) - discount),
+                              formatCurrency(subTotal + tax - discount),
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.brown[700],
@@ -477,38 +481,10 @@ class _CartPickupState extends State<CartPickup> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         side: BorderSide(color: Colors.yellow[600])),
-                    onPressed: () {
-                      showCircular(context);
-                      if(isPickupOrder()) {
-                        futureApiSubmitCart(
-                            currentUser.token, selectedBranch.id, orderTypeId(),
-                            carts, discount, voucherCode).then((value) {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          if (value.isSuccess()) {
-                            Navigator.of(context, rootNavigator: true).pop();
-                          } else
-                            alertDialog(
-                                context, "Kirim Pesanan Gagal", value.message);
-                        });
-                      } else {
-                        futureApiSubmitCart(
-                            currentUser.token, selectedBranch.id, orderTypeId(),
-                            carts, discount, voucherCode, selectedAddress.id)
-                            .then((value) async {
-                          Navigator.of(context, rootNavigator: true).pop();
-                          if (value.isSuccess()) {
-                            await alertDialog(
-                                context, "Kirim Pesanan Berhasil", "Pesanan Berhasil Dibuat");
-                            Navigator.of(context, rootNavigator: true).pop();
-                          } else
-                            alertDialog(
-                                context, "Kirim Pesanan Gagal", value.message);
-                        });
-                      }
-                    },
+                    onPressed: () => choosePayment() ,//doSubmit(),
                     color: Colors.yellow[600],
                     textColor: Colors.black,
-                    child: Text("Kirim Pesanan",
+                    child: Text("Pilih Pembayaran",
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
                   ),
                 ),
@@ -660,7 +636,7 @@ class _CartPickupState extends State<CartPickup> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            carts[index].note != "" ? carts[index].note : "Tambah Catatan untuk pesanan ini",
+                            carts[index].note != null ? carts[index].note : "Tambah Catatan untuk pesanan ini",
                             style: TextStyle(
                               fontSize: 14, color: Colors.brown,
                             ),
@@ -712,6 +688,8 @@ class _CartPickupState extends State<CartPickup> {
         setState(() {
           carts = value.data;
           countCart = carts.length;
+          subTotal = totalCart(carts);
+          tax = (0.1 * subTotal).toInt();
         });
       }
     });
@@ -905,6 +883,60 @@ class _CartPickupState extends State<CartPickup> {
     setState(() {
       voucherCode = getVoucher;
       discount = getDiscount;
+    });
+  }
+
+  doSubmit(){
+    showCircular(context);
+    if(isPickupOrder()) {
+      futureApiSubmitCart(
+          currentUser.token, orderId, selectedBranch.id, orderTypeId(),
+          carts, discount, voucherCode).then((value) async {
+        Navigator.of(context, rootNavigator: true).pop();
+        if (value.isSuccess()) {
+          await alertDialog(
+              context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
+          Navigator.of(context, rootNavigator: true).pop();
+        } else
+          alertDialog(
+              context, "Buat Pesanan Gagal", value.message);
+      });
+    } else {
+      futureApiSubmitCart(
+          currentUser.token, orderId, selectedBranch.id, orderTypeId(),
+          carts, discount, voucherCode, selectedAddress.id)
+          .then((value) async {
+        Navigator.of(context, rootNavigator: true).pop();
+        if (value.isSuccess()) {
+          await alertDialog(
+              context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
+          Navigator.of(context, rootNavigator: true).pop();
+        } else
+          alertDialog(
+              context, "Buat Pesanan Gagal", value.message);
+      });
+    }
+  }
+
+  choosePayment() {
+    showCircular(context);
+    futureApiGetMidtransToken(currentUser.token, carts, discount, voucherCode)
+        .then((value) async {
+      Navigator.of(context, rootNavigator: true).pop();
+      if(value.isSuccess()){
+        orderId = value.orderId;
+        await nextPage(context, SnapScreen(transactionToken: value.token,));
+        showCircular(context);
+        futureApiMidtransStatus(currentUser.token, orderId).then((value){
+          Navigator.of(context, rootNavigator: true).pop();
+          if(value.isSuccess()){
+            doSubmit();
+          }
+        });
+      } else {
+        alertDialog(
+            context, "Pilih Pembayaran Gagal", value.message);
+      }
     });
   }
 }
