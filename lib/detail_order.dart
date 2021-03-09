@@ -1,4 +1,5 @@
 import 'package:belah_duren/api/order.dart';
+import 'package:belah_duren/api/transactions.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/detail_transaction.dart';
 import 'package:belah_duren/model/order.dart';
@@ -495,13 +496,49 @@ class _DetailOrderState extends State<DetailOrder> {
                         ],
                       ),
                     ),
-                  )
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 16, right: 16),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(color: Colors.yellow[600])),
+                        onPressed: () => cancelOrder() ,//doSubmit(),
+                        color: Colors.yellow[600],
+                        textColor: Colors.black,
+                        child: Text("Cancel Order",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+                      ),
+                    ),
+                  ),SizedBox(
+                    height: 16,
+                  ),
                 ],
               );
             }
           }
 
         });
+  }
+
+  cancelOrder(){
+    showCircular(context);
+    futureApiCancelTransaction(currentUser.token, transactionMenu.id)
+        .then((value) async {
+        Navigator.of(context, rootNavigator: true).pop();
+        if(value.isSuccess()){
+          await alertDialog(
+              context, "Cancel Order Berhasil", "Order Berhasil Dicancel");
+          Navigator.of(context, rootNavigator: true).pop();
+        } else
+          alertDialog(
+              context, "Cancel Order Gagal", "Order Gagal dicancel");
+    });
   }
 
 }

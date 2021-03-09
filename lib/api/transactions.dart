@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/model/global_response.dart';
 import 'package:belah_duren/model/transaction.dart';
 import 'package:belah_duren/model/transaction_list.dart';
 import 'package:belah_duren/model/user.dart';
@@ -88,6 +89,18 @@ Future<ApiListTransaction> futureApiGetCanceledTransaction(String token) async{
   print(response.data);
 
   return ApiListTransaction.fromStringJson(response.toString());
+}
+
+Future<GlobalResponse> futureApiCancelTransaction(String token, int id) async{
+  var dio = Dio();
+  String url = api_url + "cancel_order/" + id.toString();
+  dio.options.headers[HttpHeaders.authorizationHeader] =
+      'Bearer ' + token;
+  Response response = await dio.post(url);
+  print("response : " + response.toString());
+  print(response.data);
+
+  return GlobalResponse.fromStringJson(response.toString());
 }
 
 class ApiTransaction {
