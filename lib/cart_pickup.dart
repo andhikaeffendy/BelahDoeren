@@ -680,7 +680,7 @@ class _CartPickupState extends State<CartPickup> {
       });
   }
 
-  updateCart(){
+  updateCart() {
     showCircular(context);
     futureApiCartList(currentUser.token).then((value){
       Navigator.of(context, rootNavigator: true).pop();

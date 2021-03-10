@@ -41,6 +41,19 @@ class _EditProfileState extends State<EditProfile> {
   DateTime _dateTime;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    futureApiEditProfile(currentUser.token).then((value) {
+      if(value.isSuccess()){
+        phoneNumberController.text = value.data.phone_number.toString();
+        birthDateController.text = value.data.birth_date;
+        addressController.text = value.data.address.toString();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -397,33 +410,38 @@ class _EditProfileState extends State<EditProfile> {
                       borderRadius: BorderRadius.circular(10.0),
                       side: BorderSide(color: Colors.yellow[600])),
                   onPressed: () {
-                    showCircular(context);
-                    //currentUser = User(null, email, name, token)
-                    int jk;
-                    if (dropdownValue == "Laki-laki") {
-                      jk = 1;
-                    } else {
-                      jk = 2;
+                    if(currentImage == null){
+                      alertDialog(context, "Photo", "Photo belum dipilih");
                     }
-                    futureApiUpdateProfile(
-                            currentUser.token,
-                            phoneNumberController.text,
-                            jk,
-                            birthDateController.text,
-                            addressController.text,
-                            selectedIndex,
-                            districtName,
-                            currentImage.path)
-                        .then((value) {
-                      print(value.message);
-                      if (value.isSuccess()) {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
+                    else{
+                      showCircular(context);
+                      //currentUser = User(null, email, name, token)
+                      int jk;
+                      if (dropdownValue == "Laki-laki") {
+                        jk = 1;
                       } else {
-                        print(value.message);
-                        print("gagal");
+                        jk = 2;
                       }
-                    });
+                      futureApiUpdateProfile(
+                          currentUser.token,
+                          phoneNumberController.text,
+                          jk,
+                          birthDateController.text,
+                          addressController.text,
+                          selectedIndex,
+                          districtName,
+                          currentImage.path)
+                          .then((value) {
+                        print(value.message);
+                        if (value.isSuccess()) {
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        } else {
+                          print(value.message);
+                          print("gagal");
+                        }
+                      });
+                    }
                   },
                   color: Colors.yellow[600],
                   textColor: Colors.black,

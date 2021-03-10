@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    countCart.toString();
     pages = [
       Home(gotoMenu),
       ListMenu(),
@@ -99,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
             setState(() {
               if(currentUser != null){
                 nextPage(context, CartPickup());
+                countCart.toString();
               }else{
                 alertDialogMustLogin(context, "Belum Login", "Anda harus login terlebih dahulu");
               }

@@ -5,11 +5,11 @@ import 'package:belah_duren/model/menu_category.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 
-Future<ApiMenuCategory> futureApiMenuCategories(String token) async{
+Future<ApiMenuCategory> futureApiMenuCategories() async{
   var dio = Dio();
   String url = api_url + "menu_categories_list";
-  dio.options.headers[HttpHeaders.authorizationHeader] =
-      'Bearer ' + token;
+  // dio.options.headers[HttpHeaders.authorizationHeader] =
+  //     'Bearer ' + token;
   Response response = await dio.get(url);
   print(response.data);
 
@@ -49,11 +49,11 @@ Future<ApiMenuDetail> futureApiMenu(String token, int menuId) async{
   return ApiMenuDetail.fromStringJson(response.toString());
 }
 
-Future<ApiMenu> futureApiPromotionMenus(String token) async{
+Future<ApiMenu> futureApiPromotionMenus() async{
   var dio = Dio();
   String url = api_url + "promotion_menus_list";
-  dio.options.headers[HttpHeaders.authorizationHeader] =
-      'Bearer ' + token;
+  // dio.options.headers[HttpHeaders.authorizationHeader] =
+  //     'Bearer ' + token;
   Response response = await dio.get(url);
   print(response.data);
 

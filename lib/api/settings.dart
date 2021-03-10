@@ -5,22 +5,22 @@ import 'package:belah_duren/model/about.dart';
 import 'package:belah_duren/model/faq_list.dart';
 import 'package:dio/dio.dart';
 
-Future<ApiAbout> futureApiGetAbout(String token) async{
+Future<ApiAbout> futureApiGetAbout() async{
   var dio = Dio();
   String url = api_url + "about";
-  dio.options.headers[HttpHeaders.authorizationHeader] =
-      'Bearer ' + token;
+  // dio.options.headers[HttpHeaders.authorizationHeader] =
+  //     'Bearer ' + token;
   Response response = await dio.get(url);
   print(response.data);
 
   return ApiAbout.fromStringJson(response.toString());
 }
 
-Future<ApiFaq> futureApiListFaq(String token) async{
+Future<ApiFaq> futureApiListFaq() async{
   var dio = Dio();
   String url = api_url + "faqs_list";
-  dio.options.headers[HttpHeaders.authorizationHeader] =
-      'Bearer ' + token;
+  // dio.options.headers[HttpHeaders.authorizationHeader] =
+  //     'Bearer ' + token;
   Response response = await dio.get(url);
   print(response.data);
 

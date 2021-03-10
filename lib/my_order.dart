@@ -77,41 +77,44 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             Expanded(child: TabBarView(
               controller: _tabController,
               children: [
-                _listActiveTransaction(),
-                _listPastTransaction(),
-                canceledTab.isNotEmpty ? _listCanceledTransaction() :
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset("assets/images/empty.png",
-                    fit: BoxFit.fill,),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      "Belum ada pesanan",
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.brown[700]),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Text(
-                      "Belanja produk pilihanmu sekarang\natau lihat semua produk di halaman menu",
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.black38),
-                      textAlign: TextAlign.center,
-                    )
-                  ],
-                )
+                activeTab.isNotEmpty ? _listActiveTransaction() : _listEmpty(),
+                pastTab.isNotEmpty ? _listPastTransaction() : _listEmpty(),
+                canceledTab.isNotEmpty ? _listCanceledTransaction() : _listEmpty()
               ],
             ))
           ],
         ),
       ),
+    );
+  }
+
+  Widget _listEmpty(){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset("assets/images/empty_history.png",
+          fit: BoxFit.fill,),
+        SizedBox(
+          height: 16,
+        ),
+        Text(
+          "Belum ada pesanan",
+          style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.brown[700]),
+        ),
+        SizedBox(
+          height: 16,
+        ),
+        Text(
+          "Belanja produk pilihanmu sekarang\natau lihat semua produk di halaman menu",
+          style: TextStyle(
+              fontSize: 14,
+              color: Colors.black38),
+          textAlign: TextAlign.center,
+        )
+      ],
     );
   }
 

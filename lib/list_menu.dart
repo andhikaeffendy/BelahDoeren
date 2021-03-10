@@ -74,7 +74,7 @@ class _ListMenuState extends State<ListMenu>
           ),
           body: Container(
             child: FutureBuilder(
-              future: futureApiMenuCategories(currentUser.token),
+              future: futureApiMenuCategories(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   print(snapshot.data);
@@ -94,7 +94,7 @@ class _ListMenuState extends State<ListMenu>
       } else {
         return Container(
           child: FutureBuilder(
-            future: futureApiMenuCategories(currentUser.token),
+            future: futureApiMenuCategories(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 print(snapshot.data);
@@ -271,7 +271,7 @@ class _ListMenuState extends State<ListMenu>
     menuCategories.forEach((menuCategory) {
       tabViews.add( menuCategory.id == 0 ?
         FutureBuilder(
-          future: futureApiPromotionMenus(currentUser.token),
+          future: futureApiPromotionMenus(),
             builder: (context, snapshot){
               if(snapshot.connectionState == ConnectionState.done){
                 print(snapshot.data);

@@ -65,7 +65,7 @@ class _FAQState extends State<FAQ> {
                 height: 24,
               ),
               FutureBuilder(
-                  future: futureApiListFaq(""),
+                  future: futureApiListFaq(),
                   builder: (context, snapshot){
                     if(snapshot.connectionState == ConnectionState.waiting){
                       return Center(

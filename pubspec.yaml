@@ -109,7 +109,7 @@ flutter:
     - assets/images/pickup_icon.jpg
     - assets/images/scan_qr.png
     - assets/images/user.png
-#    - assets/images/empty.png
+    - assets/images/empty_history.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

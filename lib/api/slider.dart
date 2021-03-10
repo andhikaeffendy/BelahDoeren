@@ -4,11 +4,11 @@ import 'package:belah_duren/model/slider.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 
-Future<ApiSlider> futureApiSliders(String token) async{
+Future<ApiSlider> futureApiSliders() async{
   var dio = Dio();
   String url = api_url + "sliders_list";
-  dio.options.headers[HttpHeaders.authorizationHeader] =
-      'Bearer ' + token;
+  // dio.options.headers[HttpHeaders.authorizationHeader] =
+  //     'Bearer ' + token;
   Response response = await dio.get(url);
   print(response.data);
 
