@@ -29,6 +29,7 @@ int currentIdCarts;
 int countCart = 0;
 String selectedOrderType = "pickup";
 String orderId = "";
+String userRegistrationToken;
 
 
 bool isPickupOrder(){

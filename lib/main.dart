@@ -1,3 +1,4 @@
+import 'package:belah_duren/api/fcm.dart';
 import 'package:belah_duren/cart_pickup.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
@@ -6,12 +7,44 @@ import 'package:belah_duren/login.dart';
 import 'package:belah_duren/list_order.dart';
 import 'package:belah_duren/list_menu.dart';
 import 'package:belah_duren/profile.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('Handling a background message ${message.messageId}');
+}
+
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'belah_doeren_channel', // id
+  'Belah Doeren', // title
+  'This channel is used for important notifications.', // description
+  importance: Importance.max,
+);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await loadSession();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
   runApp(MyApp());
 }
 
@@ -56,6 +89,23 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedItem = 0;
   List pages ;
 
+  saveToken(token){
+//    print(token);
+    if(currentUser == null ){
+      print("not login");
+    } else if (userRegistrationToken != token) {
+      futureApiSendRegistrationToken(currentUser.token, token).then((value){
+        if(value.isSuccess()) {
+          userRegistrationToken = token;
+          storeRegistrationTokenSession();
+        }
+      });
+    } else {
+      print("already sent token. not yet refreshed.");
+      //do nothing
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -67,6 +117,36 @@ class _MyHomePageState extends State<MyHomePage> {
       ListOrder(),
       Profile()
     ];
+
+    FirebaseMessaging.instance.requestPermission(
+        sound: true, badge: true, alert: true, provisional: false)
+        .then((value){
+          debugPrint('Settings registered: ${value.authorizationStatus}');
+    });
+
+    if(userRegistrationToken == null)
+      FirebaseMessaging.instance.getToken().then((token) => saveToken(token));
+    FirebaseMessaging.instance.onTokenRefresh.listen(saveToken);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channel.description,
+                icon: 'launch_background',
+              ),
+            ));
+      }
+    });
   }
 
   @override
