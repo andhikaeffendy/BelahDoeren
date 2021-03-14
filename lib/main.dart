@@ -18,6 +18,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
 }
 
+// Belah Doeren Notification
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'belah_doeren_channel', // id
   'Belah Doeren', // title
