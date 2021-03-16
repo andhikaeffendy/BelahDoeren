@@ -29,7 +29,7 @@ Future<ApiBranch> futureApiGetBranches(String token, int district_id) async{
 
 Future<ApiListBranch> futureApiListBranches(String token) async{
   var dio = Dio();
-  String url = api_url + "branch_districts_list";
+  String url = api_url + "districts_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
   Response response = await dio.get(url);
