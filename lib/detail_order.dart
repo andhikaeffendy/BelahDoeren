@@ -5,6 +5,7 @@ import 'package:belah_duren/model/detail_transaction.dart';
 import 'package:belah_duren/model/order.dart';
 import 'package:belah_duren/model/transaction.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class DetailOrder extends StatefulWidget {
   final Transaction transactionMenu;
@@ -496,6 +497,58 @@ class _DetailOrderState extends State<DetailOrder> {
                         ],
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      QrImage(
+                        data: '/store_api/v1/transaction_detail/'+transactionMenu.id.toString(),
+                        version: QrVersions.auto,
+                        size: MediaQuery. of(context).size.width * 0.5,
+                        gapless: false,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                            Text(
+                              "Tanggal Transaksi :",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown[700]),
+                            ),
+                            Text(
+                              transactionMenu.transaction_date,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown[700]),
+                            ),
+                            SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              "Status Pembayaran : ",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown[700]),
+                            ),
+                            Text(
+                              transactionMenu.transaction_status,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown[700]),
+                            ),
+                          ],
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 16,

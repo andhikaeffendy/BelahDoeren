@@ -6,9 +6,12 @@ class Transaction {
   String grand_total;
   String discount;
   String voucher_code;
+  String transaction_status;
+  String transaction_date;
 
   Transaction({this.id, this.transaction_number, this.total_price, this.tax,
-      this.grand_total, this.discount, this.voucher_code});
+      this.grand_total, this.discount, this.voucher_code,
+    this.transaction_status, this.transaction_date});
 
   Transaction.fromJson(Map<String, dynamic> json)
       : id = json["id"],
@@ -17,7 +20,9 @@ class Transaction {
         tax = json["tax"],
         grand_total = json["grand_total"],
         discount = json["discount"],
-        voucher_code = json["voucher_code"];
+        voucher_code = json["voucher_code"],
+        transaction_status = json["transaction_status_name"],
+        transaction_date = json["transaction_date_name"];
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -26,7 +31,9 @@ class Transaction {
     "tax" : tax,
     "grand_total" : grand_total,
     "discount" : discount,
-    "voucher_code" : voucher_code
+    "voucher_code" : voucher_code,
+    "transaction_status" : transaction_status,
+    "transaction_date" : transaction_date,
   };
 
 }
