@@ -182,7 +182,7 @@ class _HomeState extends State<Home> {
                           SizedBox(
                             width: 8,
                           ),
-                          currentPoints == null && currentUser != null ?
+                          currentPoints == null?
                           futureApiMemberLevel(currentUser.token).then((value){
                             if(value.isSuccess()){
                               currentPoints = value.data;
@@ -192,7 +192,7 @@ class _HomeState extends State<Home> {
                             );
                           }) :
                           Text(
-                            currentUser != null ?
+                            currentUser == null ?
                             currentPoints.points.toString() : "0",
                             style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
                           ),
@@ -347,6 +347,7 @@ class _HomeState extends State<Home> {
                                     Container(
                                         padding: EdgeInsets.only(left: 8),
                                         child: Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12,decoration: TextDecoration.lineThrough),)),
+                                    featuredMenus[index].new_price == null ? Container() :
                                     Container(
                                         padding: EdgeInsets.only(left: 8),
                                         child: Text(currency.format(featuredMenus[index].new_price), style: TextStyle(fontSize: 12,),)),

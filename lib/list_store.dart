@@ -41,7 +41,7 @@ class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
       ),
       body: Container(
         child: FutureBuilder(
-            future: futureApiListBranches(currentUser.token),
+            future: futureApiBranchDistrictList(currentUser.token),
             builder: (context, snapshot) {
               if(snapshot.connectionState == ConnectionState.waiting){
                 return Center(
@@ -50,10 +50,10 @@ class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
               }
               else if (snapshot.connectionState == ConnectionState.done) {
                 print(snapshot.data);
-                ApiListBranch apiListBranch = snapshot.data;
-                if (apiListBranch.isSuccess()) {
+                ApiBranchDistrictList apiBranchDistrictList = snapshot.data;
+                if (apiBranchDistrictList.isSuccess()) {
                   districtBranch = [];
-                  districtBranch.addAll(apiListBranch.data);
+                  districtBranch.addAll(apiBranchDistrictList.data);
                   _tabController =
                       TabController(length: districtBranch.length, vsync: this);
                 }

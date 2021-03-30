@@ -119,6 +119,10 @@ class _MyHomePageState extends State<MyHomePage> {
       Profile()
     ];
 
+    if(currentUser == null){
+      destroySession();
+    }
+
     FirebaseMessaging.instance.requestPermission(
         sound: true, badge: true, alert: true, provisional: false)
         .then((value){

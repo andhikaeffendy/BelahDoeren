@@ -12,6 +12,10 @@ Future<GlobalResponse> futureApiRegister(String email, String name,
     "password": password,
     "password_confirmation": password_confirmation,
   });
+  Options(
+    followRedirects: false,
+    validateStatus: (status) {return status <500;}
+  );
   Response response = await dio.post(url, data: formData);
   print(response.data);
 

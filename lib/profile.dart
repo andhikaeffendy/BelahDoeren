@@ -69,7 +69,7 @@ class _ProfileState extends State<Profile> {
                         CircleAvatar(
                           radius: 30,
                           backgroundImage:
-                              currentProfile != ""?
+                              currentProfile == ""?
                           NetworkImage(currentProfile.photo) : AssetImage("assets/images/smile.png"),
                         ),
                         SizedBox(width: 16),
@@ -135,7 +135,7 @@ class _ProfileState extends State<Profile> {
                               width: 8,
                             ),
                             Text(
-                              currentPoints != null ? currentPoints.points.toString() : "Null",
+                              currentPoints == null ? currentPoints.points.toString() : "0",
                               style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
                             ),
                             SizedBox(

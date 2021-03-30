@@ -38,6 +38,17 @@ Future<ApiListBranch> futureApiListBranches(String token) async{
   return ApiListBranch.fromStringJson(response.toString());
 }
 
+Future<ApiBranchDistrictList> futureApiBranchDistrictList(String token) async{
+  var dio = Dio();
+  String url = api_url + "branch_districts_list";
+  dio.options.headers[HttpHeaders.authorizationHeader] =
+      'Bearer ' + token;
+  Response response = await dio.get(url);
+  print(response.data);
+
+  return ApiBranchDistrictList.fromStringJson(response.toString());
+}
+
 class ApiBranch {
   String status;
   String message;
@@ -84,6 +95,35 @@ class ApiListBranch {
         data = List<DistrictBranch>.from(json["data"].map((x) => DistrictBranch.fromJson(x)));
 
   ApiListBranch.fromStringJson(String stringJson) :
+        this.fromJson(json.decode(stringJson));
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "message": message,
+    "data": List<dynamic>.from(data.map((x) => x.toJson())),
+  };
+
+  String toStringJson() => json.encode(this.toJson());
+
+  bool isSuccess() => status == "success";
+}
+
+class ApiBranchDistrictList {
+  String status;
+  String message;
+  List<DistrictBranch> data;
+
+  ApiBranchDistrictList({
+    this.status,
+    this.message,
+    this.data});
+
+  ApiBranchDistrictList.fromJson(Map<String, dynamic> json) :
+        status = json["status"],
+        message = json["message"],
+        data = List<DistrictBranch>.from(json["data"].map((x) => DistrictBranch.fromJson(x)));
+
+  ApiBranchDistrictList.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
 
   Map<String, dynamic> toJson() => {
