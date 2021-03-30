@@ -70,7 +70,7 @@ class _ProfileState extends State<Profile> {
                           radius: 30,
                           backgroundImage:
                               currentProfile == ""?
-                          NetworkImage(currentProfile.photo) : AssetImage("assets/images/smile.png"),
+                          AssetImage("assets/images/smile.png") : NetworkImage(currentProfile.photo),
                         ),
                         SizedBox(width: 16),
                         Column(

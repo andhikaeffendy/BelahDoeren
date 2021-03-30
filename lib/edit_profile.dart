@@ -49,6 +49,8 @@ class _EditProfileState extends State<EditProfile> {
         phoneNumberController.text = value.data.phone_number.toString();
         birthDateController.text = value.data.birth_date;
         addressController.text = value.data.address.toString();
+        districtIdController.text = value.data.district_id.toString();
+        addressController.text = value.data.address.toString();
       }
     });
   }

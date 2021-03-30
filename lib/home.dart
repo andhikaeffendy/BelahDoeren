@@ -17,6 +17,10 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'global/variable.dart';
+import 'global/variable.dart';
+import 'global/variable.dart';
+
 class Home extends StatefulWidget {
   final Function gotoMenu;
   Home(this.gotoMenu);
@@ -182,7 +186,7 @@ class _HomeState extends State<Home> {
                           SizedBox(
                             width: 8,
                           ),
-                          currentPoints == null?
+                          currentPoints == null && currentUser != null?
                           futureApiMemberLevel(currentUser.token).then((value){
                             if(value.isSuccess()){
                               currentPoints = value.data;
@@ -192,7 +196,7 @@ class _HomeState extends State<Home> {
                             );
                           }) :
                           Text(
-                            currentUser == null ?
+                            currentUser == null && currentPoints != null ?
                             currentPoints.points.toString() : "0",
                             style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
                           ),
