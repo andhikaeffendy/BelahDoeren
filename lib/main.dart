@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     new Timer.periodic(Duration(milliseconds: 500), (Timer t) => setState((){
       if(currentUser == null){
-        return true;
+        return countCart = 0;
       }else{
         Future.delayed(Duration.zero, (){
           futureApiCartList(currentUser.token).then((value) {
