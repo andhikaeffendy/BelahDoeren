@@ -60,6 +60,17 @@ Future<ApiMenu> futureApiPromotionMenus(int branch_id) async{
   return ApiMenu.fromStringJson(response.toString());
 }
 
+Future<ApiMenu> futureApiPromotionMenusNotLogin() async{
+  var dio = Dio();
+  String url = api_url + "promotion_menus_list";
+  // dio.options.headers[HttpHeaders.authorizationHeader] =
+  //     'Bearer ' + token;
+  Response response = await dio.get(url);
+  print(response.data);
+
+  return ApiMenu.fromStringJson(response.toString());
+}
+
 class ApiMenuDetail {
   String status;
   String message;

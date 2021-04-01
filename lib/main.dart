@@ -114,14 +114,18 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     super.initState();
     new Timer.periodic(Duration(milliseconds: 500), (Timer t) => setState((){
-      Future.delayed(Duration.zero, (){
-        futureApiCartList(currentUser.token).then((value) {
-          if(value.isSuccess()){
-            carts = value.data;
-            countCart = carts.length;
-          }
+      if(currentUser == null){
+        return true;
+      }else{
+        Future.delayed(Duration.zero, (){
+          futureApiCartList(currentUser.token).then((value) {
+            if(value.isSuccess()){
+              carts = value.data;
+              countCart = carts.length;
+            }
+          });
         });
-      });
+      }
     }));
     pages = [
       Home(gotoMenu),

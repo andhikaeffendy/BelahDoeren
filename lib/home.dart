@@ -39,24 +39,40 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Token : "+currentUser.token);
     determinePosition().then((value){
       setState(() {
         currentPosition = value;
       });
     });
-    futureApiPromotionMenus(selectedBranch.id).then((value){
-      if(value.isSuccess()){
-        setState(() {
-          featuredMenus = value.data;
-        });
-      }
-      // else if(value.message == "Token not valid/authorized"){
-      //   currentUser = null;
-      //   destroySession();
-      //   startNewPage(context, Login());
-      // }
-    });
+    if(currentUser == null){
+      futureApiPromotionMenusNotLogin().then((value){
+        if(value.isSuccess()){
+          setState(() {
+            featuredMenus = value.data;
+          });
+        }
+        // else if(value.message == "Token not valid/authorized"){
+        //   currentUser = null;
+        //   destroySession();
+        //   startNewPage(context, Login());
+        // }
+      });
+    }
+    else{
+      futureApiPromotionMenus(selectedBranch.id).then((value){
+        if(value.isSuccess()){
+          setState(() {
+            featuredMenus = value.data;
+          });
+        }
+        // else if(value.message == "Token not valid/authorized"){
+        //   currentUser = null;
+        //   destroySession();
+        //   startNewPage(context, Login());
+        // }
+      });
+    }
+
   }
 
   @override
