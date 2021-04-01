@@ -14,7 +14,9 @@ class CartPickup extends StatefulWidget {
 
 class _CartPickupState extends State<CartPickup> {
   int discount = 0;
+  int discountMember = 0;
   String voucherCode = "";
+  int subTotalReguler = 0;
   int subTotal = 0;
   int tax = 0;
   //List<TextEditingController> itemNotes = new List();
@@ -294,7 +296,7 @@ class _CartPickupState extends State<CartPickup> {
                         style: BorderStyle.solid),
                 color: Colors.yellow[400]),
                 child: GestureDetector(
-                  onTap: () => _showVoucherDialog(subTotal),
+                  onTap: () => _showVoucherDialog(subTotalReguler),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -408,30 +410,14 @@ class _CartPickupState extends State<CartPickup> {
                             ),
                           ],
                         ),
-                        discount == 0 && voucherCode == "" ? Container() :
+                        discount == 0 && voucherCode == "" && discountMember == 0 ? Container() :
                         SizedBox(
                           height: 12,
                         ),
-                        discount == 0 && voucherCode == "" ? Container() :
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Discount Voucher ($voucherCode)",
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.green[900],
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "-"+formatCurrency(discount),
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.green[900],
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
+                        discount > 0 && voucherCode != "" ?
+                          discountVoucherRow() :
+                            (discountMember > 0 ? discountMemberRow() : Container())
+                        ,
                         SizedBox(
                           height: 16,
                         ),
@@ -453,7 +439,7 @@ class _CartPickupState extends State<CartPickup> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              formatCurrency(subTotal + tax - discount),
+                              grandTotal(),
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.brown[700],
@@ -480,20 +466,7 @@ class _CartPickupState extends State<CartPickup> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         side: BorderSide(color: Colors.yellow[600])),
-                    onPressed: (){
-                      if(selectedBranch== null){
-                        alertDialog(context, "Gagal","Cabang Toko Belum Dipilih");
-                      }else{
-                        futureApiCartListCheckBranch(currentUser.token, selectedBranch.id).then((value) {
-                          if(value.isSuccess()){
-                            choosePayment();
-                          }else{
-                            alertDialog(context, "Perhatian", value.message);
-                            updateCart();
-                          }
-                        });
-                      }
-                    },//doSubmit(),
+                    onPressed: () => choosePayment() ,//doSubmit(),
                     color: Colors.yellow[600],
                     textColor: Colors.black,
                     child: Text("Pilih Pembayaran",
@@ -507,6 +480,50 @@ class _CartPickupState extends State<CartPickup> {
           ),
         ),
       ),
+    );
+  }
+
+  discountVoucherRow(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Discount Voucher ($voucherCode)",
+          style: TextStyle(
+              fontSize: 14,
+              color: Colors.green[900],
+              fontWeight: FontWeight.bold),
+        ),
+        Text(
+          "-"+formatCurrency(discount),
+          style: TextStyle(
+              fontSize: 14,
+              color: Colors.green[900],
+              fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  discountMemberRow(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Discount Member",
+          style: TextStyle(
+              fontSize: 14,
+              color: Colors.green[900],
+              fontWeight: FontWeight.bold),
+        ),
+        Text(
+          "-"+formatCurrency(discountMember),
+          style: TextStyle(
+              fontSize: 14,
+              color: Colors.green[900],
+              fontWeight: FontWeight.bold),
+        ),
+      ],
     );
   }
 
@@ -701,10 +718,32 @@ class _CartPickupState extends State<CartPickup> {
           carts = value.data;
           countCart = carts.length;
           subTotal = totalCart(carts);
+          subTotalReguler = totalCartReguler(carts);
+          discountMember = value.discountMember;
           tax = (0.1 * subTotal).toInt();
         });
-      }else{
+        updateVoucher();
+      } else {
         alertDialog(context, "Gagal", value.message);
+      }
+    });
+  }
+
+  updateVoucher() {
+    if(voucherCode == "") return;
+    showCircular(context);
+    futureApiRedeemVoucher(currentUser.token,
+        voucherCode, subTotalReguler).then((value){
+      Navigator.of(context, rootNavigator: true).pop();
+      if(value.isSuccess()){
+        setState(() {
+          discount = value.discount;
+        });
+      } else {
+        setState(() {
+          voucherCode = "";
+          discount = 0;
+        });
       }
     });
   }
@@ -902,10 +941,11 @@ class _CartPickupState extends State<CartPickup> {
 
   doSubmit(){
     showCircular(context);
+    int discountPayment = discount > 0 ? discount : (discountMember > 0 ? discountMember : 0 );
     if(isPickupOrder()) {
       futureApiSubmitCart(
           currentUser.token, orderId, selectedBranch.id, orderTypeId(),
-          carts, discount, voucherCode).then((value) async {
+          carts, discountPayment, voucherCode).then((value) async {
         Navigator.of(context, rootNavigator: true).pop();
         if (value.isSuccess()) {
           await alertDialog(
@@ -918,7 +958,7 @@ class _CartPickupState extends State<CartPickup> {
     } else {
       futureApiSubmitCart(
           currentUser.token, orderId, selectedBranch.id, orderTypeId(),
-          carts, discount, voucherCode, selectedAddress.id)
+          carts, discountPayment, voucherCode, selectedAddress.id)
           .then((value) async {
         Navigator.of(context, rootNavigator: true).pop();
         if (value.isSuccess()) {
@@ -934,7 +974,9 @@ class _CartPickupState extends State<CartPickup> {
 
   choosePayment() {
     showCircular(context);
-    futureApiGetMidtransToken(currentUser.token, carts, discount, voucherCode)
+    int discountPayment = discount > 0 ? discount : (discountMember > 0 ? discountMember : 0);
+    String discountNamePayment = discount > 0 ? voucherCode : (discountMember > 0 ? "Member" : "");
+    futureApiGetMidtransToken(currentUser.token, carts, discountPayment, discountNamePayment)
         .then((value) async {
       Navigator.of(context, rootNavigator: true).pop();
       if(value.isSuccess()){
@@ -953,12 +995,26 @@ class _CartPickupState extends State<CartPickup> {
       }
     });
   }
+
+  String grandTotal(){
+    if(discount > 0) return formatCurrency(subTotal + tax - discount);
+    return formatCurrency(subTotal + tax - discountMember);
+  }
 }
 
 int totalCart(List<Cart> carts){
   var total = 0;
   carts.forEach((cart) {
     total += cart.subTotal ;
+  });
+  return total;
+}
+
+int totalCartReguler(List<Cart> carts){
+  var total = 0;
+  carts.forEach((cart) {
+    if (cart.isPromotion == 0)
+      total += cart.subTotal ;
   });
   return total;
 }
