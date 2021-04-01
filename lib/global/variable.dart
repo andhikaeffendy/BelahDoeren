@@ -34,6 +34,7 @@ int countCart = 0;
 String selectedOrderType = "pickup";
 String orderId = "";
 String userRegistrationToken;
+List<Cart> carts = [];
 
 
 bool isPickupOrder(){
@@ -66,6 +67,7 @@ alertDialog(context, title, message) async {
       }
   );
 }
+
 
 alertDialogMustLogin(context, title, message) async {
   return showDialog(
@@ -157,6 +159,9 @@ cartBottomSheet(context,Menu menu) {
                   ),
                   SizedBox(
                     height: 8,
+                  ),
+                  Text(
+                    "Stok : "+menu.stock_status.toString()
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -280,7 +285,9 @@ cartBottomSheet(context,Menu menu) {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: RaisedButton(
+                    child:
+                    menu.stock_status != 0 ?
+                    RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: BorderSide(color: Colors.yellow[700])),
@@ -307,6 +314,14 @@ cartBottomSheet(context,Menu menu) {
                             } else {
                               alertDialog(context, "Keranjang", value.message);
                             }
+                            Future.delayed(Duration.zero, (){
+                              futureApiCartList(currentUser.token).then((value) {
+                                if(value.isSuccess()){
+                                  carts = value.data;
+                                  countCart = carts.length;
+                                }
+                              });
+                            });
                           });
                         }
 
@@ -319,7 +334,18 @@ cartBottomSheet(context,Menu menu) {
                           :
                           "Tambah Ke Keranjang - " + 'Rp. '+ formatCurrency(menu.new_price),
                           style: TextStyle(fontSize: 14)),
-                    ),
+                    )
+                    : RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(color: Colors.red[700])),
+                      color: Colors.red[700],
+                      textColor: Colors.white,
+                      child: Text(
+                          "Stok Habis",
+                          style: TextStyle(fontSize: 14)),
+                    )
+                    ,
                   )
                 ],
               ),
@@ -328,6 +354,7 @@ cartBottomSheet(context,Menu menu) {
         });
       });
 }
+
 
 widgetMustLogin(BuildContext context){
   return Container(

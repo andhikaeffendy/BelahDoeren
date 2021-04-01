@@ -31,6 +31,7 @@ class Profile{
   phone_number = json["phone_number"],
   gender = json["gender"],
   birth_date = json["birth_date"],
+  address = json["address"],
   district_id = json["district_id"],
   district_name = json["district_name"]
   ;
@@ -43,6 +44,7 @@ class Profile{
     "phone_number" : phone_number,
     "gender" : gender,
     "birth_date" : birth_date,
+    "address" : address,
     "district_id" : district_id,
     "district_name" : district_name
   };

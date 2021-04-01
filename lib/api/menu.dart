@@ -16,9 +16,9 @@ Future<ApiMenuCategory> futureApiMenuCategories() async{
   return ApiMenuCategory.fromStringJson(response.toString());
 }
 
-Future<ApiMenu> futureApiMenus(String token, int categoryId) async{
+Future<ApiMenu> futureApiMenus(String token, int categoryId, int branch_id) async{
   var dio = Dio();
-  String url = api_url + "menus_list?menu_category_id="+categoryId.toString();
+  String url = api_url + "menus_list?menu_category_id="+categoryId.toString() + "&branch_id=" + branch_id.toString() ;
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
   Response response = await dio.get(url);
@@ -27,9 +27,9 @@ Future<ApiMenu> futureApiMenus(String token, int categoryId) async{
   return ApiMenu.fromStringJson(response.toString());
 }
 
-Future<ApiMenu> futureApiFeaturedMenus(String token) async{
+Future<ApiMenu> futureApiFeaturedMenus(String token, int branch_id) async{
   var dio = Dio();
-  String url = api_url + "featured_menus_list";
+  String url = api_url + "featured_menus_list?branch_id=" + branch_id.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
   Response response = await dio.get(url);
@@ -49,9 +49,9 @@ Future<ApiMenuDetail> futureApiMenu(String token, int menuId) async{
   return ApiMenuDetail.fromStringJson(response.toString());
 }
 
-Future<ApiMenu> futureApiPromotionMenus() async{
+Future<ApiMenu> futureApiPromotionMenus(int branch_id) async{
   var dio = Dio();
-  String url = api_url + "promotion_menus_list";
+  String url = api_url + "promotion_menus_list?branch_id=" + branch_id.toString();
   // dio.options.headers[HttpHeaders.authorizationHeader] =
   //     'Bearer ' + token;
   Response response = await dio.get(url);

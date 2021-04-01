@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import 'api/profile.dart';
 import 'global/variable.dart';
 
 class EditProfile extends StatefulWidget {
@@ -50,7 +51,7 @@ class _EditProfileState extends State<EditProfile> {
         birthDateController.text = value.data.birth_date;
         addressController.text = value.data.address.toString();
         districtIdController.text = value.data.district_id.toString();
-        addressController.text = value.data.address.toString();
+        print(value.data.address);
       }
     });
   }
@@ -144,7 +145,7 @@ class _EditProfileState extends State<EditProfile> {
                     CircleAvatar(
                       radius: 50.0,
                       backgroundImage:
-                      currentImage == null ?
+                      currentImage == null || currentProfile.photo == null ?
                       AssetImage(
                           "assets/images/smile.png",):
                       FileImage(File(currentImage.path)),

@@ -7,6 +7,7 @@ class Menu{
   int activeStatus;
   int featured;
   String imageUrl;
+  int stock_status;
 
   Menu(
       this.id,
@@ -17,6 +18,7 @@ class Menu{
       this.activeStatus,
       this.featured,
       this.imageUrl,
+      this.stock_status
       );
 
   Menu.fromJson(Map<String, dynamic> json) :
@@ -27,7 +29,8 @@ class Menu{
         new_price = json["new_price"],
         activeStatus = json["active_status"],
         featured = json["featured"],
-        imageUrl = json["image_url"]
+        imageUrl = json["image_url"],
+        stock_status = json["stock_status"]
   ;
 
   Map<String, dynamic> toJson() => {
@@ -39,6 +42,7 @@ class Menu{
     "active_status": activeStatus,
     "featured": featured,
     "image_url": imageUrl,
+    "stock_status" : stock_status,
   };
 
 }

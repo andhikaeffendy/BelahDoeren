@@ -13,7 +13,6 @@ class CartPickup extends StatefulWidget {
 }
 
 class _CartPickupState extends State<CartPickup> {
-  List<Cart> carts = [];
   int discount = 0;
   String voucherCode = "";
   int subTotal = 0;

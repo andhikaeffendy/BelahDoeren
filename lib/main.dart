@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:belah_duren/api/fcm.dart';
 import 'package:belah_duren/cart_pickup.dart';
 import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/home.dart';
-import 'package:belah_duren/login.dart';
 import 'package:belah_duren/list_order.dart';
 import 'package:belah_duren/list_menu.dart';
 import 'package:belah_duren/profile.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '';
+import 'api/cart.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -111,7 +113,16 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    countCart.toString();
+    new Timer.periodic(Duration(milliseconds: 500), (Timer t) => setState((){
+      Future.delayed(Duration.zero, (){
+        futureApiCartList(currentUser.token).then((value) {
+          if(value.isSuccess()){
+            carts = value.data;
+            countCart = carts.length;
+          }
+        });
+      });
+    }));
     pages = [
       Home(gotoMenu),
       ListMenu(),
@@ -172,12 +183,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),
-                      child: StatefulBuilder(
-                        builder: (context, setState){
-                          return Text(countCart.toString(),
-                            style: TextStyle(color: Colors.brown, fontSize: 12),);
-                        },
-                      ))),
+                      child: Text(countCart.toString(),
+                        style: TextStyle(color: Colors.brown, fontSize: 12),
+                      )
+                  )
+              ),
             ],
           ),
           backgroundColor: Colors.white,
@@ -274,6 +284,18 @@ class _MyHomePageState extends State<MyHomePage> {
       body: pages[_selectedItem],
     );
   }
+
+  updateCountCart(BuildContext context){
+    showCircular(context);
+    futureApiCartList(currentUser.token).then((value){
+      Navigator.of(context, rootNavigator: true).pop();
+      if(value.isSuccess()){
+        carts = value.data;
+        countCart = carts.length;
+      }
+    });
+  }
+
 }
 
 class CustomBottomNavigationBar extends StatefulWidget {
