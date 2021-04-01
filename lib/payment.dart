@@ -122,7 +122,7 @@ class _SnapScreenState extends State<SnapScreen> {
         <script 
           type="text/javascript"
           src="https://app.sandbox.midtrans.com/snap/snap.js"
-          data-client-key="SB-Mid-client-Vte1E3n5e-1sisSy"
+          data-client-key="Mid-client-zzCJ3yDC_UNEzEAu"
         ></script>
       </head>
 
