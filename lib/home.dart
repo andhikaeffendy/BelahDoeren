@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
         currentPosition = value;
       });
     });
-    if(currentUser == null){
+    if(currentUser == null || selectedBranch == null){
       futureApiPromotionMenusNotLogin().then((value){
         if(value.isSuccess()){
           setState(() {
