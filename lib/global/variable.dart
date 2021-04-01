@@ -15,7 +15,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+// PRO
 String domain = "https://manage.belahdoeren.id";
+
+// DEV
+// String domain = "http://belahdoeren.wiradipa.com";
 String api_url = domain+"/api/v1/";
 
 User currentUser;

@@ -20,6 +20,14 @@ class _SnapScreenState extends State<SnapScreen> {
   WebViewController webViewController;
   bool _isLoading = false;
 
+  // PRO
+  var client_key = "Mid-client-zzCJ3yDC_UNEzEAu";
+  var snap_url = "https://app.midtrans.com/snap/snap.js";
+
+  // DEV/SANDBOX
+  // var client_key = "SB-Mid-client-Vte1E3n5e-1sisSy";
+  // var snap_url = "https://app.sandbox.midtrans.com/snap/snap.js";
+
   Future<bool> _onBackPressed() {
     return Future.value(true);
     return showDialog(
@@ -121,8 +129,8 @@ class _SnapScreenState extends State<SnapScreen> {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script 
           type="text/javascript"
-          src="https://app.sandbox.midtrans.com/snap/snap.js"
-          data-client-key="Mid-client-zzCJ3yDC_UNEzEAu"
+          src="${snap_url}"
+          data-client-key="${client_key}"
         ></script>
       </head>
 
