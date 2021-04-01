@@ -480,7 +480,20 @@ class _CartPickupState extends State<CartPickup> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         side: BorderSide(color: Colors.yellow[600])),
-                    onPressed: () => choosePayment() ,//doSubmit(),
+                    onPressed: (){
+                      if(selectedBranch== null){
+                        alertDialog(context, "Gagal","Cabang Toko Belum Dipilih");
+                      }else{
+                        futureApiCartListCheckBranch(currentUser.token, selectedBranch.id).then((value) {
+                          if(value.isSuccess()){
+                            choosePayment();
+                          }else{
+                            alertDialog(context, "Perhatian", value.message);
+                            updateCart();
+                          }
+                        });
+                      }
+                    },//doSubmit(),
                     color: Colors.yellow[600],
                     textColor: Colors.black,
                     child: Text("Pilih Pembayaran",
@@ -690,6 +703,8 @@ class _CartPickupState extends State<CartPickup> {
           subTotal = totalCart(carts);
           tax = (0.1 * subTotal).toInt();
         });
+      }else{
+        alertDialog(context, "Gagal", value.message);
       }
     });
   }

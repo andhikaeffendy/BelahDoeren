@@ -51,11 +51,6 @@ class _HomeState extends State<Home> {
             featuredMenus = value.data;
           });
         }
-        // else if(value.message == "Token not valid/authorized"){
-        //   currentUser = null;
-        //   destroySession();
-        //   startNewPage(context, Login());
-        // }
       });
     }
     else{

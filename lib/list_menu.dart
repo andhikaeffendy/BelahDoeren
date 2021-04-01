@@ -271,7 +271,11 @@ class _ListMenuState extends State<ListMenu>
     menuCategories.forEach((menuCategory) {
       tabViews.add( menuCategory.id == 0 ?
         FutureBuilder(
-          future: futureApiFeaturedMenus(currentUser.token, selectedBranch.id),
+          future:
+          currentUser != null ?
+          futureApiPromotionMenus(selectedBranch.id)
+          :
+          futureApiPromotionMenusNotLogin(),
             builder: (context, snapshot){
               if(snapshot.connectionState == ConnectionState.done){
                 print(snapshot.data);

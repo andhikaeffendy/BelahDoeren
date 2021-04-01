@@ -283,10 +283,9 @@ cartBottomSheet(context,Menu menu) {
                   SizedBox(
                     height: 16,
                   ),
-                  SizedBox(
+                  menu.stock_status != 0 ? SizedBox(
                     width: double.infinity,
                     child:
-                    menu.stock_status != 0 ?
                     RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -335,15 +334,20 @@ cartBottomSheet(context,Menu menu) {
                           "Tambah Ke Keranjang - " + 'Rp. '+ formatCurrency(menu.new_price),
                           style: TextStyle(fontSize: 14)),
                     )
-                    : RaisedButton(
+                    ,
+                  ) :
+                  SizedBox(
+                    width: double.infinity,
+                    child:
+                    RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                           side: BorderSide(color: Colors.red[700])),
-                      color: Colors.red[700],
+                      color: Colors.red,
                       textColor: Colors.white,
                       child: Text(
-                          "Stok Habis",
-                          style: TextStyle(fontSize: 14)),
+                          "Stok Kosong",
+                          style: TextStyle(fontSize: 14, color: Colors.white)),
                     )
                     ,
                   )

@@ -34,6 +34,17 @@ Future<ApiCart> futureApiCartList(String token) async{
   return ApiCart.fromStringJson(response.toString());
 }
 
+Future<ApiCart> futureApiCartListCheckBranch(String token, int branch_id) async{
+  var dio = Dio();
+  String url = api_url + "carts_list?branch_id=" + branch_id.toString();
+  dio.options.headers[HttpHeaders.authorizationHeader] =
+      'Bearer ' + token;
+  Response response = await dio.get(url);
+  print(response.data);
+
+  return ApiCart.fromStringJson(response.toString());
+}
+
 Future<GlobalResponse> futureApiChangeQuantityCart(String token, int cart_id,
     int quantity) async{
   var dio = Dio();
