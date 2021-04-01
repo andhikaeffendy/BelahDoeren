@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Token : "+currentUser.token);
+    //print("Token : "+currentUser.token);
     Future.delayed(Duration.zero, (){
       futureApiCartList(currentUser.token).then((value) {
         if(value.isSuccess()){

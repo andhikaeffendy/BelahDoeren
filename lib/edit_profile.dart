@@ -145,7 +145,7 @@ class _EditProfileState extends State<EditProfile> {
                     CircleAvatar(
                       radius: 50.0,
                       backgroundImage:
-                      currentImage == null || currentProfile.photo == null ?
+                      currentImage == null || currentProfile.photo == "" ?
                       AssetImage(
                           "assets/images/smile.png",):
                       FileImage(File(currentImage.path)),

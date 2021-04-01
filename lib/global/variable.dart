@@ -160,8 +160,15 @@ cartBottomSheet(context,Menu menu) {
                   SizedBox(
                     height: 8,
                   ),
-                  Text(
-                    "Stok : "+menu.stock_status.toString()
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                        "Stok : "+menu.stock_status.toString(), style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -345,6 +352,7 @@ cartBottomSheet(context,Menu menu) {
                           side: BorderSide(color: Colors.red[700])),
                       color: Colors.red,
                       textColor: Colors.white,
+                      onPressed: (){},
                       child: Text(
                           "Stok Kosong",
                           style: TextStyle(fontSize: 14, color: Colors.white)),
