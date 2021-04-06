@@ -77,9 +77,9 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             Expanded(child: TabBarView(
               controller: _tabController,
               children: [
-                activeTab.isNotEmpty ? _listActiveTransaction() : _listEmpty(),
-                pastTab.isNotEmpty ? _listPastTransaction() : _listEmpty(),
-                canceledTab.isNotEmpty ? _listCanceledTransaction() : _listEmpty()
+                activeTab.isNotEmpty ? _listEmpty() : _listActiveTransaction(),
+                pastTab.isNotEmpty ? _listEmpty() : _listPastTransaction(),
+                canceledTab.isNotEmpty ? _listEmpty() : _listCanceledTransaction(),
               ],
             ))
           ],
@@ -130,6 +130,9 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             ApiListTransaction apiListTransaction = snapshot.data;
             if(apiListTransaction.isSuccess()){
               activeTab = apiListTransaction.data;
+              if(activeTab.isEmpty){
+                return _listEmpty();
+              }
             }
             return ListView.builder(
               itemCount: activeTab.length,
@@ -297,6 +300,9 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             ApiListTransaction apiListTransaction = snapshot.data;
             if(apiListTransaction.isSuccess()){
               pastTab = apiListTransaction.data;
+              if(pastTab.isEmpty){
+                return _listEmpty();
+              }
             }
             return ListView.builder(
               itemCount: pastTab.length,
@@ -464,6 +470,9 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             ApiListTransaction apiListTransaction = snapshot.data;
             if(apiListTransaction.isSuccess()){
               canceledTab = apiListTransaction.data;
+              if(canceledTab.isEmpty){
+                return _listEmpty();
+              }
             }
             return ListView.builder(
               itemCount: canceledTab.length,
