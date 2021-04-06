@@ -7,6 +7,8 @@ import 'package:belah_duren/model/cart.dart';
 import 'package:belah_duren/payment.dart';
 import 'package:flutter/material.dart';
 
+import 'model/selected_payment.dart';
+
 class CartPickup extends StatefulWidget {
   @override
   _CartPickupState createState() => _CartPickupState();
@@ -19,6 +21,8 @@ class _CartPickupState extends State<CartPickup> {
   int subTotalReguler = 0;
   int subTotal = 0;
   int tax = 0;
+  List<SelectedPayment> selectedPayment;
+  SelectedPayment currentSelectedPayment;
   //List<TextEditingController> itemNotes = new List();
 
   @override
@@ -28,6 +32,34 @@ class _CartPickupState extends State<CartPickup> {
     Future.delayed(Duration.zero, () {
       updateCart();
     });
+    selectedPayment = SelectedPayment.getSelectedPayment();
+  }
+
+  setSelectedCurrentPayment(SelectedPayment payment) {
+    setState(() {
+      currentSelectedPayment = payment;
+    });
+  }
+
+  List<Widget> createChoosePayment(){
+    List<Widget> widgets = [];
+    for(SelectedPayment selectPayment in selectedPayment){
+      widgets.add(
+        RadioListTile(
+            value: selectPayment,
+            groupValue: currentSelectedPayment,
+            title: Text(selectPayment.title),
+            subtitle: Text(selectPayment.subscribe),
+            onChanged: (currentSelected){
+              print(currentSelected);
+              setState(() {
+                setSelectedCurrentPayment(currentSelected);
+              });
+            },
+            selected: currentSelectedPayment == selectPayment,
+        )
+      );
+    } return widgets;
   }
 
   @override
@@ -43,11 +75,16 @@ class _CartPickupState extends State<CartPickup> {
             Column(
               children: [
                 Text(
-                  selectedBranch == null ? "" : (isPickupOrder() ? "Pickup - " : "Delivery - ") + selectedBranch.distanceFromHere(),
+                  selectedBranch == null
+                      ? ""
+                      : (isPickupOrder() ? "Pickup - " : "Delivery - ") +
+                          selectedBranch.distanceFromHere(),
                   style: TextStyle(fontSize: 12, color: Colors.brown),
                 ),
                 Text(
-                  selectedBranch == null ? "belum dipilih" : selectedBranch.name,
+                  selectedBranch == null
+                      ? "belum dipilih"
+                      : selectedBranch.name,
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -80,7 +117,7 @@ class _CartPickupState extends State<CartPickup> {
                         setState(() {
                           selectedOrderType = "pickup";
                         });
-                        },
+                      },
                       child: Image.asset("assets/images/pickup.png",
                           width: MediaQuery.of(context).size.width / 2.2,
                           height: 100,
@@ -126,7 +163,11 @@ class _CartPickupState extends State<CartPickup> {
                       child: Row(
                         children: [
                           Icon(Icons.add, color: Colors.green[900], size: 20),
-                          Text("Tambah Pesanan", style: TextStyle(color: Colors.green[900], fontSize: 12),)
+                          Text(
+                            "Tambah Pesanan",
+                            style: TextStyle(
+                                color: Colors.green[900], fontSize: 12),
+                          )
                         ],
                       ),
                     ),
@@ -137,99 +178,112 @@ class _CartPickupState extends State<CartPickup> {
               SizedBox(
                 height: 32,
               ),
-              isPickupOrder() ? Container() :
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(left: 16,),
-                    child: Text(
-                      "Alamat Pengiriman",
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.brown[700]),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Row(
+              isPickupOrder()
+                  ? Container()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: EdgeInsets.only(right: 16),
+                          padding: EdgeInsets.only(
+                            left: 16,
+                          ),
                           child: Text(
-                            "Ubah",
-                            style:
-                            TextStyle(color: Colors.green[900], fontSize: 12),
+                            "Alamat Pengiriman",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.brown[700]),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {},
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(right: 16),
+                                child: Text(
+                                  "Ubah",
+                                  style: TextStyle(
+                                      color: Colors.green[900], fontSize: 12),
+                                ),
+                              )
+                            ],
                           ),
                         )
                       ],
                     ),
-                  )
-                ],
-              ),
-              isPickupOrder() ? Container() :
-              SizedBox(
-                height: 8,
-              ),
-              isPickupOrder() ? Container() :
-              Container(
-                margin: EdgeInsets.only(left: 16, right: 16),
-                height: 1,
-                color: Colors.brown[100],
-              ),
-              isPickupOrder() ? Container() :
-              SizedBox(
-                height: 16,
-              ),
-              isPickupOrder() ? Container() :
-              Container(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        size: 20,
-                        color: Colors.brown[700],
+              isPickupOrder()
+                  ? Container()
+                  : SizedBox(
+                      height: 8,
+                    ),
+              isPickupOrder()
+                  ? Container()
+                  : Container(
+                      margin: EdgeInsets.only(left: 16, right: 16),
+                      height: 1,
+                      color: Colors.brown[100],
+                    ),
+              isPickupOrder()
+                  ? Container()
+                  : SizedBox(
+                      height: 16,
+                    ),
+              isPickupOrder()
+                  ? Container()
+                  : Container(
+                      padding: EdgeInsets.only(left: 16, right: 16),
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              size: 20,
+                              color: Colors.brown[700],
+                            ),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  selectedAddress == null
+                                      ? "Belum Punya Alamat"
+                                      : selectedAddress.name,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.brown[700],
+                                      fontSize: 14),
+                                ),
+                                Text(
+                                  selectedAddress == null
+                                      ? "Silahkan Tambah Alamat"
+                                      : selectedAddress.address,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black26,
+                                      fontSize: 12),
+                                ),
+                              ],
+                            ),
+                            Spacer(),
+                            Icon(
+                              Icons.keyboard_arrow_right_rounded,
+                              color: Colors.brown[700],
+                              size: 30,
+                            )
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            selectedAddress == null ? "Belum Punya Alamat" : selectedAddress.name,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.brown[700],
-                                fontSize: 14),
-                          ),
-                          Text(
-                            selectedAddress == null ? "Silahkan Tambah Alamat" : selectedAddress.address,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black26,
-                                fontSize: 12),
-                          ),
-                        ],
-                      ),Spacer(),
-                      Icon(
-                        Icons.keyboard_arrow_right_rounded,
-                        color: Colors.brown[700],
-                        size: 30,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              isPickupOrder() ? Container() :
-              SizedBox(
-                height: 24,
-              ),
+                    ),
+              isPickupOrder()
+                  ? Container()
+                  : SizedBox(
+                      height: 24,
+                    ),
               Container(
                 padding: EdgeInsets.only(left: 16, right: 16),
                 child: Row(
@@ -243,10 +297,14 @@ class _CartPickupState extends State<CartPickup> {
                           color: Colors.brown[700]),
                     ),
                     GestureDetector(
-                      onTap: (){},
+                      onTap: () {},
                       child: Row(
                         children: [
-                          Text("Lihat Semua", style: TextStyle(color: Colors.green[900], fontSize: 12),)
+                          Text(
+                            "Lihat Semua",
+                            style: TextStyle(
+                                color: Colors.green[900], fontSize: 12),
+                          )
                         ],
                       ),
                     )
@@ -261,27 +319,40 @@ class _CartPickupState extends State<CartPickup> {
                 height: 1,
                 color: Colors.brown[100],
               ),
-              // SizedBox(
-              //   height: 16,
-              // ),
-              // Container(
-              //   padding: EdgeInsets.only(left: 16, right: 16),
-              //   child: GestureDetector(
-              //     onTap: (){
-              //
-              //     },
-              //     child: Row(
-              //       children: [
-              //         Icon(Icons.monetization_on_outlined, size: 20, color: Colors.brown[700],),
-              //         SizedBox(
-              //           width: 8,
-              //         ),Text("Cash", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[700], fontSize: 14),),
-              //         Spacer(),
-              //         Icon(Icons.keyboard_arrow_right_rounded, color: Colors.brown[700], size: 30,)
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: GestureDetector(
+                  onTap: () => _bottomSheetPayment(),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.monetization_on_outlined,
+                        size: 20,
+                        color: Colors.brown[700],
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text(
+                        "Cash",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.brown[700],
+                            fontSize: 14),
+                      ),
+                      Spacer(),
+                      Icon(
+                        Icons.keyboard_arrow_right_rounded,
+                        color: Colors.brown[700],
+                        size: 30,
+                      )
+                    ],
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 16,
               ),
@@ -294,25 +365,32 @@ class _CartPickupState extends State<CartPickup> {
                         width: 1,
                         color: Colors.white60,
                         style: BorderStyle.solid),
-                color: Colors.yellow[400]),
+                    color: Colors.yellow[400]),
                 child: GestureDetector(
                   onTap: () => _showVoucherDialog(subTotalReguler),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset("assets/images/event_code.png", scale: 30,),
+                      Image.asset(
+                        "assets/images/event_code.png",
+                        scale: 30,
+                      ),
                       SizedBox(
                         width: 8,
                       ),
-                      Text("Voucher Code",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.brown[700])),
+                      Text("Voucher Code",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.brown[700])),
                       SizedBox(
                         width: 24,
                       ),
                     ],
                   ),
                 ),
-              ),SizedBox(
+              ),
+              SizedBox(
                 height: 16,
               ),
               Container(
@@ -410,14 +488,18 @@ class _CartPickupState extends State<CartPickup> {
                             ),
                           ],
                         ),
-                        discount == 0 && voucherCode == "" && discountMember == 0 ? Container() :
-                        SizedBox(
-                          height: 12,
-                        ),
-                        discount > 0 && voucherCode != "" ?
-                          discountVoucherRow() :
-                            (discountMember > 0 ? discountMemberRow() : Container())
-                        ,
+                        discount == 0 &&
+                                voucherCode == "" &&
+                                discountMember == 0
+                            ? Container()
+                            : SizedBox(
+                                height: 12,
+                              ),
+                        discount > 0 && voucherCode != ""
+                            ? discountVoucherRow()
+                            : (discountMember > 0
+                                ? discountMemberRow()
+                                : Container()),
                         SizedBox(
                           height: 16,
                         ),
@@ -466,14 +548,18 @@ class _CartPickupState extends State<CartPickup> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         side: BorderSide(color: Colors.yellow[600])),
-                    onPressed: () => choosePayment() ,//doSubmit(),
+                    onPressed: () => choosePayment(), //doSubmit(),
                     color: Colors.yellow[600],
                     textColor: Colors.black,
                     child: Text("Pilih Pembayaran",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black)),
                   ),
                 ),
-              ),SizedBox(
+              ),
+              SizedBox(
                 height: 16,
               ),
             ],
@@ -483,7 +569,7 @@ class _CartPickupState extends State<CartPickup> {
     );
   }
 
-  discountVoucherRow(){
+  discountVoucherRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -495,7 +581,7 @@ class _CartPickupState extends State<CartPickup> {
               fontWeight: FontWeight.bold),
         ),
         Text(
-          "-"+formatCurrency(discount),
+          "-" + formatCurrency(discount),
           style: TextStyle(
               fontSize: 14,
               color: Colors.green[900],
@@ -505,7 +591,7 @@ class _CartPickupState extends State<CartPickup> {
     );
   }
 
-  discountMemberRow(){
+  discountMemberRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -517,7 +603,7 @@ class _CartPickupState extends State<CartPickup> {
               fontWeight: FontWeight.bold),
         ),
         Text(
-          "-"+formatCurrency(discountMember),
+          "-" + formatCurrency(discountMember),
           style: TextStyle(
               fontSize: 14,
               color: Colors.green[900],
@@ -527,7 +613,7 @@ class _CartPickupState extends State<CartPickup> {
     );
   }
 
-  _cart_lists(){
+  _cart_lists() {
     return Container(
       padding: EdgeInsets.only(left: 16, right: 16),
       child: Column(
@@ -557,8 +643,7 @@ class _CartPickupState extends State<CartPickup> {
                             borderRadius: BorderRadius.circular(8.0),
                             child: Image.network(
                               carts[index].imageUrl,
-                              width:
-                              MediaQuery.of(context).size.width / 5,
+                              width: MediaQuery.of(context).size.width / 5,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -594,20 +679,19 @@ class _CartPickupState extends State<CartPickup> {
                           ),
                           Spacer(),
                           Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Row(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   IconButton(
-                                      icon: Icon(
-                                        Icons.remove,
-                                        size: 30,
-                                        color: Colors.brown,
-                                      ),
-                                      onPressed: () => substractQuantity(carts[index]),
+                                    icon: Icon(
+                                      Icons.remove,
+                                      size: 30,
+                                      color: Colors.brown,
+                                    ),
+                                    onPressed: () =>
+                                        substractQuantity(carts[index]),
                                   ),
                                   Container(
                                     padding: EdgeInsets.symmetric(
@@ -620,22 +704,21 @@ class _CartPickupState extends State<CartPickup> {
                                     ),
                                   ),
                                   IconButton(
-                                      icon: Icon(
-                                        Icons.add,
-                                        size: 30,
-                                        color: Colors.brown,
-                                      ),
-                                      onPressed: () => addQuantity(carts[index]),
+                                    icon: Icon(
+                                      Icons.add,
+                                      size: 30,
+                                      color: Colors.brown,
+                                    ),
+                                    onPressed: () => addQuantity(carts[index]),
                                   ),
                                 ],
                               ),
                               GestureDetector(
-                                onTap: (){
+                                onTap: () {
                                   _showChangeNotes(index);
                                 },
                                 child: Row(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Icon(
                                       Icons.sticky_note_2_outlined,
@@ -665,9 +748,12 @@ class _CartPickupState extends State<CartPickup> {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            carts[index].note != null ? carts[index].note : "Tambah Catatan untuk pesanan ini",
+                            carts[index].note != null
+                                ? carts[index].note
+                                : "Tambah Catatan untuk pesanan ini",
                             style: TextStyle(
-                              fontSize: 14, color: Colors.brown,
+                              fontSize: 14,
+                              color: Colors.brown,
                             ),
                           ),
                         ),
@@ -681,39 +767,43 @@ class _CartPickupState extends State<CartPickup> {
     );
   }
 
-  addQuantity(Cart cart){
+  addQuantity(Cart cart) {
     showCircular(context);
-    futureApiChangeQuantityCart(currentUser.token, cart.id, cart.quantity+1).then((value) async {
+    futureApiChangeQuantityCart(currentUser.token, cart.id, cart.quantity + 1)
+        .then((value) async {
       Navigator.of(context, rootNavigator: true).pop();
-      if(value.isSuccess())
-        await alertDialog(context, "Keranjang", "Berhasil Menambah Jumlah Menu");
+      if (value.isSuccess())
+        await alertDialog(
+            context, "Keranjang", "Berhasil Menambah Jumlah Menu");
       updateCart();
     });
   }
 
-  substractQuantity(Cart cart){
+  substractQuantity(Cart cart) {
     showCircular(context);
-    if(cart.quantity == 1){
+    if (cart.quantity == 1) {
       futureApiRemoveCart(currentUser.token, cart.id).then((value) async {
         Navigator.of(context, rootNavigator: true).pop();
-        if(value.isSuccess())
+        if (value.isSuccess())
           await alertDialog(context, "Keranjang", "Berhasil Menghapus Menu");
         updateCart();
       });
     } else
-      futureApiChangeQuantityCart(currentUser.token, cart.id, cart.quantity-1).then((value) async {
+      futureApiChangeQuantityCart(currentUser.token, cart.id, cart.quantity - 1)
+          .then((value) async {
         Navigator.of(context, rootNavigator: true).pop();
-        if(value.isSuccess())
-          await alertDialog(context, "Keranjang", "Berhasil Mengurangi Jumlah Menu");
+        if (value.isSuccess())
+          await alertDialog(
+              context, "Keranjang", "Berhasil Mengurangi Jumlah Menu");
         updateCart();
       });
   }
 
   updateCart() {
     showCircular(context);
-    futureApiCartList(currentUser.token).then((value){
+    futureApiCartList(currentUser.token).then((value) {
       Navigator.of(context, rootNavigator: true).pop();
-      if(value.isSuccess()){
+      if (value.isSuccess()) {
         setState(() {
           carts = value.data;
           countCart = carts.length;
@@ -730,12 +820,12 @@ class _CartPickupState extends State<CartPickup> {
   }
 
   updateVoucher() {
-    if(voucherCode == "") return;
+    if (voucherCode == "") return;
     showCircular(context);
-    futureApiRedeemVoucher(currentUser.token,
-        voucherCode, subTotalReguler).then((value){
+    futureApiRedeemVoucher(currentUser.token, voucherCode, subTotalReguler)
+        .then((value) {
       Navigator.of(context, rootNavigator: true).pop();
-      if(value.isSuccess()){
+      if (value.isSuccess()) {
         setState(() {
           discount = value.discount;
         });
@@ -748,13 +838,12 @@ class _CartPickupState extends State<CartPickup> {
     });
   }
 
-
   _showChangeNotes(index) async {
     TextEditingController itemNotes = TextEditingController();
     itemNotes.text = carts[index].note;
     showModalBottomSheet(
         context: context,
-        builder: (context){
+        builder: (context) {
           return Container(
             margin: EdgeInsets.all(16),
             height: MediaQuery.of(context).size.height * .60,
@@ -763,7 +852,7 @@ class _CartPickupState extends State<CartPickup> {
                 children: [
                   Container(
                     decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(40)),
+                        BoxDecoration(borderRadius: BorderRadius.circular(40)),
                     child: Image.network(
                       carts[index].imageUrl,
                       fit: BoxFit.cover,
@@ -783,18 +872,18 @@ class _CartPickupState extends State<CartPickup> {
                       filled: true,
                       contentPadding: EdgeInsets.only(left: 16),
                       enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                          borderSide:
+                              BorderSide(color: Colors.grey[400], width: 3),
                           borderRadius: BorderRadius.circular(8.0)),
                       focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey[400], width: 3),
+                          borderSide:
+                              BorderSide(color: Colors.grey[400], width: 3),
                           borderRadius: BorderRadius.circular(8.0)),
                       hintText: "Tambah Catatan",
                       hintStyle: TextStyle(color: Colors.grey[400]),
                     ),
                   ),
-                  SizedBox(
-                      height: 16
-                  ),
+                  SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
                     child: RaisedButton(
@@ -803,10 +892,13 @@ class _CartPickupState extends State<CartPickup> {
                           side: BorderSide(color: Colors.yellow[700])),
                       onPressed: () {
                         showCircular(context);
-                        futureApiChangeNotesCart(currentUser.token, carts[index].id,itemNotes.text).then((value) async {
+                        futureApiChangeNotesCart(currentUser.token,
+                                carts[index].id, itemNotes.text)
+                            .then((value) async {
                           Navigator.of(context, rootNavigator: true).pop();
-                          if(value.isSuccess()){
-                            await alertDialog(context, "Keranjang", "Berhasil Update Catatan");
+                          if (value.isSuccess()) {
+                            await alertDialog(context, "Keranjang",
+                                "Berhasil Update Catatan");
                             Navigator.of(context, rootNavigator: true).pop();
                           }
                           updateCart();
@@ -825,6 +917,60 @@ class _CartPickupState extends State<CartPickup> {
         });
   }
 
+  _bottomSheetPayment() async {
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext bc) {
+          return StatefulBuilder(builder: (context, setState){
+            return Container(
+              padding: EdgeInsets.only(top: 16),
+              height: MediaQuery.of(context).size.height*0.4,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(
+                      "Metode Pembayaran",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.brown[700]),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Column(
+                      children: createChoosePayment(),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: ButtonTheme(
+                        padding: EdgeInsets.all(12),
+                        minWidth: 100,
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(color: Colors.yellow[600])),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          color: Colors.yellow[600],
+                          textColor: Colors.black,
+                          child: Text("Simpan".toUpperCase(),
+                              style: TextStyle(fontSize: 16)),
+                        ),),
+                    )
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
   _showVoucherDialog(total) async {
     final voucherController = TextEditingController();
     var errorMessage = "";
@@ -834,7 +980,7 @@ class _CartPickupState extends State<CartPickup> {
         isScrollControlled: true,
         context: context,
         builder: (BuildContext bc) {
-          return StatefulBuilder(builder: (context, setState){
+          return StatefulBuilder(builder: (context, setState) {
             return Container(
               margin: EdgeInsets.all(16),
               height: MediaQuery.of(context).size.height * .50,
@@ -850,22 +996,21 @@ class _CartPickupState extends State<CartPickup> {
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width - 140,
-                        child:
-                          TextFormField(
-                            controller: voucherController,
-                            autofocus: false,
-                            decoration: new InputDecoration(
-                              labelText: "Enter Voucher",
-                              fillColor: Colors.grey,
-                              border: new OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(10.0),
-                                borderSide: new BorderSide(),
-                              ),
-                            ),
-                            style: new TextStyle(
-                              fontFamily: "Poppins",
+                        child: TextFormField(
+                          controller: voucherController,
+                          autofocus: false,
+                          decoration: new InputDecoration(
+                            labelText: "Enter Voucher",
+                            fillColor: Colors.grey,
+                            border: new OutlineInputBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              borderSide: new BorderSide(),
                             ),
                           ),
+                          style: new TextStyle(
+                            fontFamily: "Poppins",
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 60,
@@ -877,9 +1022,10 @@ class _CartPickupState extends State<CartPickup> {
                           onPressed: () {
                             showCircular(context);
                             futureApiRedeemVoucher(currentUser.token,
-                                voucherController.text, total).then((value){
+                                    voucherController.text, total)
+                                .then((value) {
                               Navigator.of(context, rootNavigator: true).pop();
-                              if(value.isSuccess()){
+                              if (value.isSuccess()) {
                                 setState(() {
                                   getVoucher = value.name;
                                   getDiscount = value.discount;
@@ -908,7 +1054,7 @@ class _CartPickupState extends State<CartPickup> {
                   Text(
                     errorMessage,
                     style: TextStyle(
-                        color: getDiscount == 0 ? Colors.red : Colors.black ),
+                        color: getDiscount == 0 ? Colors.red : Colors.black),
                   ),
                   SizedBox(
                     height: 8,
@@ -939,26 +1085,13 @@ class _CartPickupState extends State<CartPickup> {
     });
   }
 
-  doSubmit(){
+  doSubmit() {
     showCircular(context);
-    int discountPayment = discount > 0 ? discount : (discountMember > 0 ? discountMember : 0 );
-    if(isPickupOrder()) {
-      futureApiSubmitCart(
-          currentUser.token, orderId, selectedBranch.id, orderTypeId(),
-          carts, discountPayment, voucherCode).then((value) async {
-        Navigator.of(context, rootNavigator: true).pop();
-        if (value.isSuccess()) {
-          await alertDialog(
-              context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
-          Navigator.of(context, rootNavigator: true).pop();
-        } else
-          alertDialog(
-              context, "Buat Pesanan Gagal", value.message);
-      });
-    } else {
-      futureApiSubmitCart(
-          currentUser.token, orderId, selectedBranch.id, orderTypeId(),
-          carts, discountPayment, voucherCode, selectedAddress.id)
+    int discountPayment =
+        discount > 0 ? discount : (discountMember > 0 ? discountMember : 0);
+    if (isPickupOrder()) {
+      futureApiSubmitCart(currentUser.token, orderId, selectedBranch.id,
+              orderTypeId(), carts, discountPayment, voucherCode)
           .then((value) async {
         Navigator.of(context, rootNavigator: true).pop();
         if (value.isSuccess()) {
@@ -966,55 +1099,78 @@ class _CartPickupState extends State<CartPickup> {
               context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
           Navigator.of(context, rootNavigator: true).pop();
         } else
-          alertDialog(
-              context, "Buat Pesanan Gagal", value.message);
+          alertDialog(context, "Buat Pesanan Gagal", value.message);
+      });
+    } else {
+      futureApiSubmitCart(
+              currentUser.token,
+              orderId,
+              selectedBranch.id,
+              orderTypeId(),
+              carts,
+              discountPayment,
+              voucherCode,
+              selectedAddress.id)
+          .then((value) async {
+        Navigator.of(context, rootNavigator: true).pop();
+        if (value.isSuccess()) {
+          await alertDialog(
+              context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
+          Navigator.of(context, rootNavigator: true).pop();
+        } else
+          alertDialog(context, "Buat Pesanan Gagal", value.message);
       });
     }
   }
 
   choosePayment() {
     showCircular(context);
-    int discountPayment = discount > 0 ? discount : (discountMember > 0 ? discountMember : 0);
-    String discountNamePayment = discount > 0 ? voucherCode : (discountMember > 0 ? "Member" : "");
-    futureApiGetMidtransToken(currentUser.token, carts, discountPayment, discountNamePayment)
+    int discountPayment =
+        discount > 0 ? discount : (discountMember > 0 ? discountMember : 0);
+    String discountNamePayment =
+        discount > 0 ? voucherCode : (discountMember > 0 ? "Member" : "");
+    futureApiGetMidtransToken(
+            currentUser.token, carts, discountPayment, discountNamePayment)
         .then((value) async {
       Navigator.of(context, rootNavigator: true).pop();
-      if(value.isSuccess()){
+      if (value.isSuccess()) {
         orderId = value.orderId;
-        await nextPage(context, SnapScreen(transactionToken: value.token,));
+        await nextPage(
+            context,
+            SnapScreen(
+              transactionToken: value.token,
+            ));
         showCircular(context);
-        futureApiMidtransStatus(currentUser.token, orderId).then((value){
+        futureApiMidtransStatus(currentUser.token, orderId).then((value) {
           Navigator.of(context, rootNavigator: true).pop();
-          if(value.isSuccess()){
+          if (value.isSuccess()) {
             doSubmit();
           }
         });
       } else {
-        alertDialog(
-            context, "Pilih Pembayaran Gagal", value.message);
+        alertDialog(context, "Pilih Pembayaran Gagal", value.message);
       }
     });
   }
 
-  String grandTotal(){
-    if(discount > 0) return formatCurrency(subTotal + tax - discount);
+  String grandTotal() {
+    if (discount > 0) return formatCurrency(subTotal + tax - discount);
     return formatCurrency(subTotal + tax - discountMember);
   }
 }
 
-int totalCart(List<Cart> carts){
+int totalCart(List<Cart> carts) {
   var total = 0;
   carts.forEach((cart) {
-    total += cart.subTotal ;
+    total += cart.subTotal;
   });
   return total;
 }
 
-int totalCartReguler(List<Cart> carts){
+int totalCartReguler(List<Cart> carts) {
   var total = 0;
   carts.forEach((cart) {
-    if (cart.isPromotion == 0)
-      total += cart.subTotal ;
+    if (cart.isPromotion == 0) total += cart.subTotal;
   });
   return total;
 }
