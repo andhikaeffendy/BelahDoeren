@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:belah_duren/global/variable.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class SnapScreen extends StatefulWidget {
@@ -114,6 +115,15 @@ class _SnapScreenState extends State<SnapScreen> {
                   setState(() {
                     _isLoading = false;
                   });
+                },
+                navigationDelegate: (NavigationRequest request) {
+                  print(request.url);
+                  if (request.url.contains("gojek:")) {
+                    launch(request.url);
+                    return NavigationDecision.prevent;
+                  } else {
+                    return NavigationDecision.navigate;
+                  }
                 },
               ),
             ],
