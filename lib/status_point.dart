@@ -30,7 +30,6 @@ class _StatusPointState extends State<StatusPoint> {
                       return Center(
                         child: new CircularProgressIndicator(),
                       );
-                      //print("Member "+apiMemberLevel.toStringJson());
                     }else if(snapshot.connectionState == ConnectionState.done){
                       ApiMemberLevel apiMemberLevel = snapshot.data;
                       if(apiMemberLevel.isSuccess()){

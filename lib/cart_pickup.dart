@@ -190,7 +190,7 @@ class _CartPickupState extends State<CartPickup> {
                   child: Row(
                     children: [
                       Icon(
-                        Icons.monetization_on_outlined,
+                        Icons.location_on,
                         size: 20,
                         color: Colors.brown[700],
                       ),
@@ -261,27 +261,27 @@ class _CartPickupState extends State<CartPickup> {
                 height: 1,
                 color: Colors.brown[100],
               ),
-              SizedBox(
-                height: 16,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                child: GestureDetector(
-                  onTap: (){
-
-                  },
-                  child: Row(
-                    children: [
-                      Icon(Icons.monetization_on_outlined, size: 20, color: Colors.brown[700],),
-                      SizedBox(
-                        width: 8,
-                      ),Text("Cash", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[700], fontSize: 14),),
-                      Spacer(),
-                      Icon(Icons.keyboard_arrow_right_rounded, color: Colors.brown[700], size: 30,)
-                    ],
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   height: 16,
+              // ),
+              // Container(
+              //   padding: EdgeInsets.only(left: 16, right: 16),
+              //   child: GestureDetector(
+              //     onTap: (){
+              //
+              //     },
+              //     child: Row(
+              //       children: [
+              //         Icon(Icons.monetization_on_outlined, size: 20, color: Colors.brown[700],),
+              //         SizedBox(
+              //           width: 8,
+              //         ),Text("Cash", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown[700], fontSize: 14),),
+              //         Spacer(),
+              //         Icon(Icons.keyboard_arrow_right_rounded, color: Colors.brown[700], size: 30,)
+              //       ],
+              //     ),
+              //   ),
+              // ),
               SizedBox(
                 height: 16,
               ),
