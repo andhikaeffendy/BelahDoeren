@@ -1,6 +1,7 @@
 import 'package:belah_duren/api/address.dart';
 import 'package:belah_duren/api/cart.dart';
 import 'package:belah_duren/api/midtrans.dart';
+import 'package:belah_duren/api/payment_method.dart';
 import 'package:belah_duren/api/voucher.dart';
 import 'package:belah_duren/form_alamat.dart';
 import 'package:belah_duren/global/session.dart';
@@ -9,10 +10,10 @@ import 'package:belah_duren/list_alamat.dart';
 import 'package:belah_duren/list_menu.dart';
 import 'package:belah_duren/model/address.dart';
 import 'package:belah_duren/model/cart.dart';
+import 'package:belah_duren/model/payment_method.dart';
 import 'package:belah_duren/payment.dart';
+import 'package:belah_duren/status_pembayaran.dart';
 import 'package:flutter/material.dart';
-
-import 'model/selected_payment.dart';
 
 class CartPickup extends StatefulWidget {
   @override
@@ -26,8 +27,7 @@ class _CartPickupState extends State<CartPickup> {
   int subTotalReguler = 0;
   int subTotal = 0;
   int tax = 0;
-  List<SelectedPayment> selectedPayment;
-  SelectedPayment currentSelectedPayment;
+  List<PaymentMethod> paymentMethods = [];
   //List<TextEditingController> itemNotes = new List();
 
   @override
@@ -37,31 +37,29 @@ class _CartPickupState extends State<CartPickup> {
     Future.delayed(Duration.zero, () {
       updateCart();
     });
-    selectedPayment = SelectedPayment.getSelectedPayment();
-  }
-
-  setSelectedCurrentPayment(SelectedPayment payment) {
-    setState(() {
-      currentSelectedPayment = payment;
+    futureApiPaymentMethods(currentUser.token).then((value){
+      if(value.isSuccess()){
+        paymentMethods = value.data;
+      }
     });
   }
 
-  List<Widget> createChoosePayment(){
+  List<Widget> createChoosePayment(setState){
     List<Widget> widgets = [];
-    for(SelectedPayment selectPayment in selectedPayment){
+    for(PaymentMethod paymentMethod in paymentMethods){
       widgets.add(
         RadioListTile(
-            value: selectPayment,
-            groupValue: currentSelectedPayment,
-            title: Text(selectPayment.title),
-            subtitle: Text(selectPayment.subscribe),
+            value: paymentMethod,
+            groupValue: selectedPaymentMethod,
+            title: Text(paymentMethod.name),
+            subtitle: Text(paymentMethod.description),
             onChanged: (currentSelected){
               print(currentSelected);
               setState(() {
-                setSelectedCurrentPayment(currentSelected);
+                selectedPaymentMethod = currentSelected;
               });
             },
-            selected: currentSelectedPayment == selectPayment,
+            selected: selectedPaymentMethod == paymentMethod,
         )
       );
     } return widgets;
@@ -312,7 +310,7 @@ class _CartPickupState extends State<CartPickup> {
                           color: Colors.brown[700]),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () => _bottomSheetPayment(),
                       child: Row(
                         children: [
                           Text(
@@ -352,7 +350,7 @@ class _CartPickupState extends State<CartPickup> {
                         width: 8,
                       ),
                       Text(
-                        "Cash",
+                        selectedPaymentMethod == null ? "Pilih Metode Pembayaran" : selectedPaymentMethod.name,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.brown[700],
@@ -955,7 +953,7 @@ class _CartPickupState extends State<CartPickup> {
                       height: 16,
                     ),
                     Column(
-                      children: createChoosePayment(),
+                      children: createChoosePayment(setState),
                     ),
                     SizedBox(
                       height: 16,
@@ -984,6 +982,9 @@ class _CartPickupState extends State<CartPickup> {
             );
           });
         });
+    setState(() {
+      selectedPaymentMethod = selectedPaymentMethod;
+    });
   }
 
   _showVoucherDialog(total) async {
@@ -1112,6 +1113,7 @@ class _CartPickupState extends State<CartPickup> {
         if (value.isSuccess()) {
           await alertDialog(
               context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
+          await nextPage(context, StatusPembayaran(value.transactionStatus, value.deadline,value.bankName(),value.vaNumber,value.billerCode,value.billKey));
           Navigator.of(context, rootNavigator: true).pop();
         } else
           alertDialog(context, "Buat Pesanan Gagal", value.message);
@@ -1131,6 +1133,7 @@ class _CartPickupState extends State<CartPickup> {
         if (value.isSuccess()) {
           await alertDialog(
               context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
+          await nextPage(context, StatusPembayaran(value.transactionStatus, value.deadline,value.bankName(),value.vaNumber,value.billerCode,value.billKey));
           Navigator.of(context, rootNavigator: true).pop();
         } else
           alertDialog(context, "Buat Pesanan Gagal", value.message);
@@ -1144,8 +1147,9 @@ class _CartPickupState extends State<CartPickup> {
         discount > 0 ? discount : (discountMember > 0 ? discountMember : 0);
     String discountNamePayment =
         discount > 0 ? voucherCode : (discountMember > 0 ? "Member" : "");
+    int paymentMethodId = selectedPaymentMethod == null ? 0 : selectedPaymentMethod.id;
     futureApiGetMidtransToken(
-            currentUser.token, carts, discountPayment, discountNamePayment)
+            currentUser.token, carts, paymentMethodId, discountPayment, discountNamePayment)
         .then((value) async {
       Navigator.of(context, rootNavigator: true).pop();
       if (value.isSuccess()) {

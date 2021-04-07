@@ -1,8 +1,19 @@
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/model/transaction.dart';
 import 'package:belah_duren/my_order.dart';
 import 'package:flutter/material.dart';
 
 class StatusPembayaran extends StatefulWidget {
+  final int paymentStatus;
+  final String deadline;
+  String vaNumber = "";
+  String vaBank = "";
+  String billerCode = "";
+  String billKey = "";
+  Transaction transaction;
+
+  StatusPembayaran(this.paymentStatus, this.deadline, [this.vaBank, this.vaNumber, this.billerCode, this.billKey]);
+
   @override
   _StatusPembayaranState createState() => _StatusPembayaranState();
 }
@@ -27,6 +38,8 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              widget.paymentStatus == 3 ?
+              _paymentSucces(context) :
               _pendingPayment(context),
             ],
           ),
@@ -92,7 +105,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
-              "Silahkan selesaikan pembayaran sebelum tanggal 06 Apr 2021 19.45 WIB untuk menghindari pembatalan transaksi"
+              "Silahkan selesaikan pembayaran sebelum tanggal "+ widget.deadline +" untuk menghindari pembatalan transaksi"
                   " secara otomatis",
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -143,7 +156,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
-              "Pembayaran via Transfer VA BCA",
+              "Pembayaran via Transfer "+widget.vaBank,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 14,
@@ -154,6 +167,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           SizedBox(
             height: 16,
           ),
+          widget.vaNumber == "" ? Container() :
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
@@ -165,12 +179,13 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                   fontWeight: FontWeight.bold),
             ),
           ),
+          widget.vaNumber == "" ? Container() :
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 child: Text(
-                  "7110608112222992",
+                  widget.vaNumber,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 14,
@@ -191,7 +206,92 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                 ),
               ),
             ],
-          ),SizedBox(
+          ),
+          widget.billerCode == "" ? Container() :
+          Container(
+            width: MediaQuery.of(context).size.width*0.7,
+            child: Text(
+              "Nomor Biller Code",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.brown[700],
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          widget.billerCode == "" ? Container() :
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Text(
+                  widget.billerCode,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.brown[700]),
+                ),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Container(
+                child: Text(
+                  "Salin",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.green[700],
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          widget.billKey == "" ? Container() :
+          SizedBox(
+            height: 16,
+          ),
+          widget.billKey == "" ? Container() :
+          Container(
+            width: MediaQuery.of(context).size.width*0.7,
+            child: Text(
+              "Nomor Bill Key",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.brown[700],
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          widget.billKey == "" ? Container() :
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Text(
+                  widget.billKey,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.brown[700]),
+                ),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Container(
+                child: Text(
+                  "Salin",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.green[700],
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
             height: 16,
           ),
           Padding(
@@ -204,8 +304,9 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                     side: BorderSide(color: Colors.yellow[700])),
                 color: Colors.yellow[600],
                 textColor: Colors.brown[700],
-                onPressed: () {
-                  nextPage(context, MyOrder());
+                onPressed: () async {
+                  await nextPage(context, MyOrder());
+                  Navigator.of(context, rootNavigator: true).pop();
                 },
                 child: Text("Lihat Pesanan",
                     style: TextStyle(
@@ -273,8 +374,9 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                     side: BorderSide(color: Colors.yellow[700])),
                 color: Colors.yellow[600],
                 textColor: Colors.brown[700],
-                onPressed: () {
-                  nextPage(context, MyOrder());
+                onPressed: () async {
+                  await nextPage(context, MyOrder());
+                  Navigator.of(context, rootNavigator: true).pop();
                 },
                 child: Text("Lihat Pesanan",
                     style: TextStyle(

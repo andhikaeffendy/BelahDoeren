@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/cart.dart';
 import 'package:belah_duren/model/global_response.dart';
+import 'package:belah_duren/model/transaction.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
 
@@ -85,7 +86,7 @@ Future<GlobalResponse> futureApiRemoveCart(String token, int cart_id) async{
   return GlobalResponse.fromStringJson(response.toString());
 }
 
-Future<GlobalResponse> futureApiSubmitCart(String token, String order_id, int branch_id,
+Future<ApiSubmit> futureApiSubmitCart(String token, String order_id, int branch_id,
     int order_type, List<Cart> carts, [int discount = 0,
       String voucher = "", int address_id = 0]) async{
   var dio = Dio();
@@ -105,7 +106,63 @@ Future<GlobalResponse> futureApiSubmitCart(String token, String order_id, int br
   Response response = await dio.post(url, data: formData);
   print(response.data);
 
-  return GlobalResponse.fromStringJson(response.toString());
+  return ApiSubmit.fromStringJson(response.toString());
+}
+
+class ApiSubmit {
+  String status;
+  String message;
+  int transactionStatus;
+  String deadline;
+  String vaBank;
+  String vaNumber;
+  String billerCode;
+  String billKey;
+
+  ApiSubmit({
+    this.status,
+    this.message,
+    this.transactionStatus,
+    this.deadline,
+    this.vaBank,
+    this.vaNumber,
+    this.billerCode,
+    this.billKey,
+  });
+
+  ApiSubmit.fromJson(Map<String, dynamic> json) :
+        status = json["status"],
+        message = json["message"],
+        transactionStatus = json.containsKey("transaction_status") ? json["transaction_status"] : 0,
+        deadline = json.containsKey("deadline") ? json["deadline"] : "",
+        vaNumber = json.containsKey("va_number") ? json["va_number"] : "",
+        vaBank = json.containsKey("va_bank") ? json["va_bank"] : "",
+        billerCode = json.containsKey("biller_code") ? json["biller_code"] : "",
+        billKey = json.containsKey("bill_key") ? json["bill_key"] : "";
+
+  ApiSubmit.fromStringJson(String stringJson) :
+        this.fromJson(json.decode(stringJson));
+
+  Map<String, dynamic> toJson() => {
+    "status": status,
+    "message": message,
+    "transaction_status": transactionStatus,
+    "deadline": deadline,
+    "va_bank": vaBank,
+    "va_number": vaNumber,
+    "biller_code": billerCode,
+    "bill_key": billKey,
+  };
+
+  String toStringJson() => json.encode(this.toJson());
+
+  String bankName(){
+    var splits = vaBank.split("_");
+    if(splits.length == 2) return splits[0]+ " "+splits[1];
+    return vaBank;
+  }
+
+  bool isSuccess() => status.toUpperCase() == "SUCCESS" ;
 }
 
 class ApiCart {

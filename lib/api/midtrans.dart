@@ -5,12 +5,13 @@ import 'package:dio/dio.dart';
 import 'dart:convert';
 
 Future<MidtransResponse> futureApiGetMidtransToken(String token, List<Cart> carts,
-    [int discount = 0, String voucher = ""]) async {
+    [int payment_method_id = 0, int discount = 0, String voucher = ""]) async {
   var dio = Dio();
   String url = api_url + "create_midtrans_token";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
   var data = {
+    "payment_method_id": payment_method_id,
     "discount": discount,
     "voucher_code": voucher,
     "carts": toStringJson(carts),
