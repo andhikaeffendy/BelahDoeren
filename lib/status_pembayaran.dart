@@ -24,10 +24,12 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
         ),
       ),
       body: Container(
-        child: Column(
-          children: [
-            _pendingPayment(context),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _pendingPayment(context),
+            ],
+          ),
         ),
       ),
     );
@@ -39,9 +41,6 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 16,
-          ),
           Container(
             margin: EdgeInsets.all(16),
             padding: EdgeInsets.all(12),
@@ -117,7 +116,83 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
             ),
           ),
           SizedBox(
-            height: 24,
+            height: 16,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: SizedBox(
+              width: double.infinity,
+              child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(color: Colors.yellow[700])),
+                color: Colors.yellow[600],
+                textColor: Colors.brown[700],
+                onPressed: () {
+                },
+                child: Text("Pilih Metode Pembayaran Lain",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.brown[700],
+                        fontWeight: FontWeight.bold)),
+              ),
+            ),
+          ), SizedBox(
+            height: 16,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width*0.7,
+            child: Text(
+              "Pembayaran via Transfer VA BCA",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.brown[700],
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width*0.7,
+            child: Text(
+              "Nomor Virtual Account",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.brown[700],
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                child: Text(
+                  "7110608112222992",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.brown[700]),
+                ),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Container(
+                child: Text(
+                  "Salin",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.green[700],
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),SizedBox(
+            height: 16,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16, right: 16),
@@ -134,7 +209,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                 },
                 child: Text("Lihat Pesanan",
                     style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         color: Colors.brown[700],
                         fontWeight: FontWeight.bold)),
               ),
