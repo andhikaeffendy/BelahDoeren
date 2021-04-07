@@ -498,9 +498,11 @@ class _DetailOrderState extends State<DetailOrder> {
                       ),
                     ),
                   ),
+                  !transactionMenu.isPaid() ? Container() :
                   SizedBox(
                     height: 16,
                   ),
+                  !transactionMenu.isPaid() ? Container() :
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

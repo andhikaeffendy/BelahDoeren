@@ -5,6 +5,10 @@ import 'package:belah_duren/form_alamat.dart';
 import 'package:flutter/material.dart';
 
 class ListAlamat extends StatefulWidget {
+  bool pickAddress = false;
+
+  ListAlamat([this.pickAddress]);
+
   @override
   _ListAlamatState createState() => _ListAlamatState();
 }
@@ -101,13 +105,18 @@ class _ListAlamatState extends State<ListAlamat> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: ()async{
-                            await nextPage(context, FormAlamat(true, listAddress[index]));
-                            updateAlamat();
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //     builder: (context) => FormAlamat(true, listAddress[index]),
-                            // ));
+                            if(widget.pickAddress){
+                              Navigator.of(context, rootNavigator: true).pop(listAddress[index]);
+                            } else {
+                              await nextPage(context,
+                                  FormAlamat(true, listAddress[index]));
+                              updateAlamat();
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //     builder: (context) => FormAlamat(true, listAddress[index]),
+                              // ));
+                            }
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 16),

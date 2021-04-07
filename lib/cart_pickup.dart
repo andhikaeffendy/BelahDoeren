@@ -1,8 +1,13 @@
+import 'package:belah_duren/api/address.dart';
 import 'package:belah_duren/api/cart.dart';
 import 'package:belah_duren/api/midtrans.dart';
 import 'package:belah_duren/api/voucher.dart';
+import 'package:belah_duren/form_alamat.dart';
+import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/list_alamat.dart';
 import 'package:belah_duren/list_menu.dart';
+import 'package:belah_duren/model/address.dart';
 import 'package:belah_duren/model/cart.dart';
 import 'package:belah_duren/payment.dart';
 import 'package:flutter/material.dart';
@@ -196,7 +201,12 @@ class _CartPickupState extends State<CartPickup> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            Address address = await nextPage(context, ListAlamat(true));
+                            if(address != null) setState(() {
+                              selectedAddress = address;
+                            });
+                          },
                           child: Row(
                             children: [
                               Container(
@@ -234,7 +244,12 @@ class _CartPickupState extends State<CartPickup> {
                   : Container(
                       padding: EdgeInsets.only(left: 16, right: 16),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () async {
+                          if(selectedAddress == null) {
+                            await nextPage(context, FormAlamat(false, null));
+                            updateAddress();
+                          }
+                        },
                         child: Row(
                           children: [
                             Icon(
@@ -1156,6 +1171,19 @@ class _CartPickupState extends State<CartPickup> {
   String grandTotal() {
     if (discount > 0) return formatCurrency(subTotal + tax - discount);
     return formatCurrency(subTotal + tax - discountMember);
+  }
+
+  updateAddress(){
+    futureApiAddress(currentUser.token, currentUser.id).then((value){
+      if(value.isSuccess()){
+        setState(() {
+          if(value.data.length == 1) {
+            selectedAddress = value.data[0];
+            storeAddressSession();
+          }
+        });
+      }
+    });
   }
 }
 

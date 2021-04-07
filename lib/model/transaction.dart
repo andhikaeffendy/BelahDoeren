@@ -36,4 +36,8 @@ class Transaction {
     "transaction_date" : transaction_date,
   };
 
+  bool isPaid(){
+    return this.transaction_status.toUpperCase() == "LUNAS";
+  }
+
 }
