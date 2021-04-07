@@ -3,7 +3,7 @@ import 'package:belah_duren/model/global_response.dart';
 import 'package:dio/dio.dart';
 
 Future<GlobalResponse> futureApiRegister(String email, String name,
-    String password, String password_confirmation) async{
+    String password, String password_confirmation, String phone_number) async{
   var dio = Dio();
   String url = api_url + "register";
   FormData formData = new FormData.fromMap({
@@ -11,6 +11,7 @@ Future<GlobalResponse> futureApiRegister(String email, String name,
     "name": name,
     "password": password,
     "password_confirmation": password_confirmation,
+    "phone_number" : phone_number
   });
   Options(
     followRedirects: false,

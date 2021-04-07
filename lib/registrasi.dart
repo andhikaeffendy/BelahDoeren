@@ -14,6 +14,7 @@ class _RegistrasiState extends State<Registrasi> {
   final passwordEditTextController = TextEditingController();
   final passwordConfirmationEditTextController = TextEditingController();
   final nameEditTextController = TextEditingController();
+  final phoneEditTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +163,25 @@ class _RegistrasiState extends State<Registrasi> {
                       SizedBox(
                         height: 16,
                       ),
+                      TextFormField(
+                        controller: phoneEditTextController,
+                        decoration: new InputDecoration(
+                          labelText: "Nomor Telepon",
+                          fillColor: Colors.grey,
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(10.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          //fillColor: Colors.green
+                        ),
+                        keyboardType: TextInputType.number,
+                        style: new TextStyle(
+                          fontFamily: "Poppins",
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
                       ButtonTheme(
                         padding: EdgeInsets.all(12),
                         minWidth: double.infinity,
@@ -173,7 +193,7 @@ class _RegistrasiState extends State<Registrasi> {
                             showCircular(context);
                             currentUser = User(null, emailEditTextController.text, nameEditTextController.text, null);
                             futureApiRegister(emailEditTextController.text, nameEditTextController.text,
-                                passwordEditTextController.text, passwordConfirmationEditTextController.text)
+                                passwordEditTextController.text, passwordConfirmationEditTextController.text, phoneEditTextController.text)
                                 .then((value) {
                               Navigator.of(context, rootNavigator: true).pop();
                               if(value.isSuccess()){

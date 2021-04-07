@@ -542,7 +542,7 @@ class _DetailOrderState extends State<DetailOrder> {
                                   color: Colors.brown[700]),
                             ),
                             Text(
-                              transactionMenu.transaction_status,
+                              transactionMenu.transaction_status_name,
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,

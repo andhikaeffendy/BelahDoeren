@@ -8,10 +8,11 @@ class Transaction {
   String voucher_code;
   String transaction_status;
   String transaction_date;
+  String transaction_status_name;
 
   Transaction({this.id, this.transaction_number, this.total_price, this.tax,
       this.grand_total, this.discount, this.voucher_code,
-    this.transaction_status, this.transaction_date});
+    this.transaction_status, this.transaction_date, this.transaction_status_name});
 
   Transaction.fromJson(Map<String, dynamic> json)
       : id = json["id"],
@@ -22,7 +23,8 @@ class Transaction {
         discount = json["discount"],
         voucher_code = json["voucher_code"],
         transaction_status = json["transaction_status_name"],
-        transaction_date = json["transaction_date_name"];
+        transaction_date = json["transaction_date_name"],
+        transaction_status_name = json["transaction_status_name"];
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -34,6 +36,7 @@ class Transaction {
     "voucher_code" : voucher_code,
     "transaction_status" : transaction_status,
     "transaction_date" : transaction_date,
+    "transaction_status_name" : transaction_status_name,
   };
 
   bool isPaid(){

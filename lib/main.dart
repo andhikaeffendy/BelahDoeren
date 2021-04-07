@@ -113,29 +113,31 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //print("Token : "+currentUser.token);
+    print("Token : "+currentUser.token);
     Future.delayed(Duration.zero, (){
-      futureApiCartList(currentUser.token).then((value) {
-        if(value.isSuccess()){
-          carts = value.data;
-          countCart = carts.length;
-          if(countCart == countCart++){
-            new Timer.periodic(Duration(seconds: 1), (Timer t) => setState((){
+      if(currentUser != null){
+        futureApiCartList(currentUser.token).then((value) {
+          if(value.isSuccess()){
+            carts = value.data;
+            countCart = carts.length;
+            if(countCart == countCart++){
+              new Timer.periodic(Duration(seconds: 1), (Timer t) => setState((){
+                if(currentUser == null){
+                  return countCart = 0;
+                }else{
+                  countCart = carts.length;
+                }
+              }));
+            }else if(countCart == countCart--){
               if(currentUser == null){
                 return countCart = 0;
               }else{
                 countCart = carts.length;
               }
-            }));
-          }else if(countCart == countCart--){
-            if(currentUser == null){
-              return countCart = 0;
-            }else{
-              countCart = carts.length;
             }
           }
-        }
-      });
+        });
+      }
     });
     pages = [
       Home(gotoMenu),
