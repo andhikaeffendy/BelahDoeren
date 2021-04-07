@@ -40,9 +40,7 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     determinePosition().then((value){
-      setState(() {
-        currentPosition = value;
-      });
+      currentPosition = value;
     });
     if(currentUser == null || selectedBranch == null){
       futureApiPromotionMenusNotLogin().then((value){
