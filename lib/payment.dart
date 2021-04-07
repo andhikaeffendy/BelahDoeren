@@ -8,9 +8,11 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class SnapScreen extends StatefulWidget {
   final String transactionToken;
+  final String gopayMode;
 
   SnapScreen({
     this.transactionToken,
+    this.gopayMode,
   });
 
   @override
@@ -162,7 +164,8 @@ class _SnapScreenState extends State<SnapScreen> {
                   },
                   onClose: function() {
                     Payment.postMessage('close');
-                  }
+                  },
+                  gopayMode: '${widget.gopayMode}'
                 });
             }
         </script>

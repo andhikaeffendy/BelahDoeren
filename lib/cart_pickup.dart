@@ -1154,10 +1154,12 @@ class _CartPickupState extends State<CartPickup> {
       Navigator.of(context, rootNavigator: true).pop();
       if (value.isSuccess()) {
         orderId = value.orderId;
+        String gopayMode = selectedPaymentMethod == null ? "auto" : (selectedPaymentMethod.name.toUpperCase() == "QRIS" ? "qr" : "auto" ) ;
         await nextPage(
             context,
             SnapScreen(
               transactionToken: value.token,
+              gopayMode: gopayMode,
             ));
         showCircular(context);
         futureApiMidtransStatus(currentUser.token, orderId).then((value) {
