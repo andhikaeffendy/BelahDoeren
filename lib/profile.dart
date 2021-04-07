@@ -13,7 +13,6 @@ import 'package:belah_duren/kontak_cs.dart';
 import 'package:belah_duren/login.dart';
 import 'package:belah_duren/main.dart';
 import 'package:belah_duren/my_order.dart';
-import 'package:belah_duren/status_pembayaran.dart';
 import 'package:belah_duren/status_point.dart';
 import 'package:flutter/material.dart';
 
@@ -106,7 +105,7 @@ class _ProfileState extends State<Profile> {
                     onTap: (){
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => StatusPembayaran()),
+                        MaterialPageRoute(builder: (context) => StatusPoint()),
                       );
                     },
                     child: Container(
