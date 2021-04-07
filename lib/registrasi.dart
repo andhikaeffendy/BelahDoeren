@@ -19,7 +19,7 @@ class _RegistrasiState extends State<Registrasi> {
   Widget build(BuildContext context) {
     return Scaffold(
       //resizeToAvoidBottomPadding: false,
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

@@ -5,6 +5,9 @@ import 'package:belah_duren/model/district_branch.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'api/address.dart';
+import 'global/session.dart';
+
 class ListStore extends StatefulWidget {
   @override
   _ListStoreState createState() => _ListStoreState();
@@ -99,24 +102,47 @@ class _ListStoreState extends State<ListStore> with TickerProviderStateMixin {
         SizedBox(
           height: 8,
         ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.location_on_outlined,
-              color: Colors.lightGreen[700],
-              size: 30,
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Text(
-              "Gunakan Lokasi Saat Ini",
-              style: TextStyle(color: Colors.lightGreen[700], fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-          ],
+        GestureDetector(
+          onTap: (){
+            setState(() {
+              futureApiBranches(currentUser.token).then((value){
+                if(value.isSuccess()){
+                  setState(() {
+                    if(value.data.length > 0) {
+                      selectedBranch = value.data[0];
+                      value.data.forEach((branch) {
+                        if(branch.distance() < selectedBranch.distance())
+                          selectedBranch = branch;
+                      });
+                      storeBranchSession();
+                    }
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    alertDialog(context, "Lokasi", "Store terdekat telah dipilih");
+                  });
+                }
+              });
+            });
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.location_on_outlined,
+                color: Colors.lightGreen[700],
+                size: 30,
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                "Gunakan Lokasi Saat Ini",
+                style: TextStyle(color: Colors.lightGreen[700], fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
         SizedBox(
           height: 12,

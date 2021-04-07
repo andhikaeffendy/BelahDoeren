@@ -150,11 +150,13 @@ cartBottomSheet(context,Menu menu) {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
+                    height: MediaQuery.of(context).size.height*0.3,
+                    width: double.infinity,
                     decoration:
                     BoxDecoration(borderRadius: BorderRadius.circular(40)),
                     child: Image.network(
                       menu.imageUrl,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                   SizedBox(

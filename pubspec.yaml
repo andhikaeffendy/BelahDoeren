@@ -120,6 +120,8 @@ flutter:
     - assets/images/scan_qr.png
     - assets/images/user.png
     - assets/images/empty_history.png
+    - assets/images/payment_berhasil.jpg
+    - assets/images/payment_pending.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
