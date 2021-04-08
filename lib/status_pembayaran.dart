@@ -2,6 +2,7 @@ import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/transaction.dart';
 import 'package:belah_duren/my_order.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class StatusPembayaran extends StatefulWidget {
   final int paymentStatus;
@@ -156,7 +157,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
-              "Pembayaran via Transfer "+widget.vaBank,
+              "Pembayaran via Transfer "+widget.vaBank.toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 14,
@@ -171,7 +172,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
-              "Nomor Virtual Account",
+              "Nomor Virtual Account "+widget.vaBank.toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 14,
@@ -195,14 +196,20 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
               SizedBox(
                 width: 8,
               ),
-              Container(
-                child: Text(
-                  "Salin",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.green[700],
-                      fontWeight: FontWeight.bold),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(new ClipboardData(text: widget.vaNumber));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Berhasil salin Nomor Virtual Account '+widget.vaBank.toUpperCase())));
+                  },
+                child: Container(
+                  child: Text(
+                    "Salin",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.green[700],
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
@@ -235,14 +242,20 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
               SizedBox(
                 width: 8,
               ),
-              Container(
-                child: Text(
-                  "Salin",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.green[700],
-                      fontWeight: FontWeight.bold),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(new ClipboardData(text: widget.billerCode));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Berhasil salin Nomor Biller Code')));
+                  },
+                child: Container(
+                  child: Text(
+                    "Salin",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.green[700],
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
@@ -279,14 +292,20 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
               SizedBox(
                 width: 8,
               ),
-              Container(
-                child: Text(
-                  "Salin",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.green[700],
-                      fontWeight: FontWeight.bold),
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(new ClipboardData(text: widget.billKey));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Berhasil salin Nomor Bill Key')));
+                  },
+                child: Container(
+                  child: Text(
+                    "Salin",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.green[700],
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
