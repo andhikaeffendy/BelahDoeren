@@ -99,7 +99,7 @@ class _ListMenuState extends State<ListMenu>
               if (snapshot.connectionState == ConnectionState.done) {
                 print(snapshot.data);
                 ApiMenuCategory apiData = snapshot.data;
-                if (apiData.isSuccess()) {
+                if (apiData != null && apiData.isSuccess()) {
                   menuCategories = [new MenuCategory(0, "Promotion")];
                   menuCategories.addAll(apiData.data);
                   _tabController =

@@ -1105,9 +1105,17 @@ class _CartPickupState extends State<CartPickup> {
     showCircular(context);
     int discountPayment =
         discount > 0 ? discount : (discountMember > 0 ? discountMember : 0);
+    int selectedPaymentMethodId = selectedPaymentMethod == null ? 0 : selectedPaymentMethod.id;
     if (isPickupOrder()) {
-      futureApiSubmitCart(currentUser.token, orderId, selectedBranch.id,
-              orderTypeId(), carts, discountPayment, voucherCode)
+      futureApiSubmitCart(
+          currentUser.token,
+          orderId,
+          selectedBranch.id,
+          orderTypeId(),
+          carts,
+          selectedPaymentMethodId,
+          discountPayment,
+          voucherCode)
           .then((value) async {
         Navigator.of(context, rootNavigator: true).pop();
         if (value.isSuccess()) {
@@ -1125,6 +1133,7 @@ class _CartPickupState extends State<CartPickup> {
               selectedBranch.id,
               orderTypeId(),
               carts,
+              selectedPaymentMethodId,
               discountPayment,
               voucherCode,
               selectedAddress.id)
@@ -1142,6 +1151,21 @@ class _CartPickupState extends State<CartPickup> {
   }
 
   choosePayment() {
+    if(selectedBranch == null) {
+      alertDialog(
+          context, "Pembelian", "Lokasi Outlet belum dipilih");
+      return;
+    }
+    if(selectedOrderType == "delivery" && selectedAddress == null){
+      alertDialog(
+          context, "Pembelian", "Alamat Pengiriman belum dipilih");
+      return;
+    }
+    if(selectedPaymentMethod == null) {
+      alertDialog(
+          context, "Pembelian", "Metode Pembayaran belum dipilih");
+      return;
+    }
     showCircular(context);
     int discountPayment =
         discount > 0 ? discount : (discountMember > 0 ? discountMember : 0);

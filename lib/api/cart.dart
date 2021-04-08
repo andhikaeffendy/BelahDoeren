@@ -87,7 +87,7 @@ Future<GlobalResponse> futureApiRemoveCart(String token, int cart_id) async{
 }
 
 Future<ApiSubmit> futureApiSubmitCart(String token, String order_id, int branch_id,
-    int order_type, List<Cart> carts, [int discount = 0,
+    int order_type, List<Cart> carts, int payment_method_id, [int discount = 0,
       String voucher = "", int address_id = 0]) async{
   var dio = Dio();
   String url = api_url + "submit_order_payment";
@@ -99,6 +99,7 @@ Future<ApiSubmit> futureApiSubmitCart(String token, String order_id, int branch_
     "transaction_type_id": order_type,
     "discount": discount,
     "voucher_code": voucher,
+    "payment_method_id": payment_method_id,
     "carts": toStringJson(carts),
   };
   if(address_id > 0) data["my_address_id"] = address_id;

@@ -64,7 +64,16 @@ class _HomeState extends State<Home> {
         //   startNewPage(context, Login());
         // }
       });
+
+      futureApiMemberLevel(currentUser.token).then((value){
+        if(value.isSuccess()){
+          setState(() {
+            currentPoints = value.data;
+          });
+        }
+      });
     }
+
   }
 
   @override
@@ -103,7 +112,7 @@ class _HomeState extends State<Home> {
                               } else if(snapshot.connectionState == ConnectionState.done){
                                 print(snapshot.data);
                                 ApiSlider apiSlider = snapshot.data;
-                                if(apiSlider.isSuccess()){
+                                if(apiSlider!= null && apiSlider.isSuccess()){
                                   listSlider = apiSlider.data;
                                   imageSlider = [];
                                   listSlider.forEach((slider) {
@@ -195,15 +204,10 @@ class _HomeState extends State<Home> {
                           SizedBox(
                             width: 8,
                           ),
-                          currentPoints == null && currentUser != null?
-                          futureApiMemberLevel(currentUser.token).then((value){
-                            if(value.isSuccess()){
-                              currentPoints = value.data;
-                            }
-                            return Center(
+                          currentPoints == null && currentUser != null ?
+                          Center(
                               child: CircularProgressIndicator(),
-                            );
-                          }) :
+                            ) :
                           Text(
                             currentUser == null && currentPoints != null ?
                             currentPoints.points.toString() : "0",
