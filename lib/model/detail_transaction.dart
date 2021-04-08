@@ -10,6 +10,9 @@ class DetailTransaction{
     String voucher_code;
     String branch_name;
     String my_address;
+    String payment_method;
+    String payment_method_image_url;
+    String transaction_type;
     List<Items> order = [];
 
     DetailTransaction(
@@ -21,7 +24,10 @@ class DetailTransaction{
       this.discount,
       this.voucher_code,
       this.branch_name,
-      this.my_address);
+      this.my_address,
+      this.payment_method,
+      this.payment_method_image_url,
+        this.transaction_type);
 
     DetailTransaction.fromJson(Map<String, dynamic> json) :
         id = json["id"],
@@ -32,7 +38,10 @@ class DetailTransaction{
         discount = json["discount"],
         voucher_code = json["voucher_code"],
         branch_name = json["branch_name"],
-        my_address = json["my_address"];
+        my_address = json["my_address"],
+        payment_method = json["payment_method"],
+        payment_method_image_url = json["payment_method_image_url"],
+    transaction_type = json["transaction_type"];
 
     Map<String, dynamic> toJson() => {
       "id" : id,
@@ -43,7 +52,10 @@ class DetailTransaction{
       "discount" : discount,
       "voucher_code" : voucher_code,
       "branch_name" : branch_name,
-      "my_address" : my_address
+      "my_address" : my_address,
+      "payment_method" : payment_method,
+      "payment_method_image_url" : payment_method_image_url,
+      "transaction_type" : transaction_type
     };
 
 }

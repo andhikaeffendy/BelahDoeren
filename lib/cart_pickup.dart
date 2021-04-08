@@ -53,10 +53,13 @@ class _CartPickupState extends State<CartPickup> {
             groupValue: selectedPaymentMethod,
             title: Text(paymentMethod.name),
             subtitle: Text(paymentMethod.description),
+            secondary: Image.network(paymentMethod.image_url.toString(), width: 30, height: 30, fit: BoxFit.contain,),
+            dense: true,
             onChanged: (currentSelected){
               print(currentSelected);
               setState(() {
                 selectedPaymentMethod = currentSelected;
+                Navigator.of(context).pop();
               });
             },
             selected: selectedPaymentMethod == paymentMethod,
@@ -564,7 +567,7 @@ class _CartPickupState extends State<CartPickup> {
                     onPressed: () => choosePayment(), //doSubmit(),
                     color: Colors.yellow[600],
                     textColor: Colors.black,
-                    child: Text("Pilih Pembayaran",
+                    child: Text("Bayar",
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -955,27 +958,27 @@ class _CartPickupState extends State<CartPickup> {
                     Column(
                       children: createChoosePayment(setState),
                     ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: ButtonTheme(
-                        padding: EdgeInsets.all(12),
-                        minWidth: 100,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              side: BorderSide(color: Colors.yellow[600])),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          color: Colors.yellow[600],
-                          textColor: Colors.black,
-                          child: Text("Simpan".toUpperCase(),
-                              style: TextStyle(fontSize: 16)),
-                        ),),
-                    )
+                    // SizedBox(
+                    //   height: 16,
+                    // ),
+                    // Align(
+                    //   alignment: Alignment.bottomCenter,
+                    //   child: ButtonTheme(
+                    //     padding: EdgeInsets.all(12),
+                    //     minWidth: 100,
+                    //     child: RaisedButton(
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(10.0),
+                    //           side: BorderSide(color: Colors.yellow[600])),
+                    //       onPressed: () {
+                    //         Navigator.of(context).pop();
+                    //       },
+                    //       color: Colors.yellow[600],
+                    //       textColor: Colors.black,
+                    //       child: Text("Simpan".toUpperCase(),
+                    //           style: TextStyle(fontSize: 16)),
+                    //     ),),
+                    // )
                   ],
                 ),
               ),

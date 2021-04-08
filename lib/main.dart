@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '';
 import 'api/cart.dart';
+import 'api/member_level.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -113,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Token : "+currentUser.token);
+    //print("user id : "+currentUser.id.toString());
     Future.delayed(Duration.zero, (){
       if(currentUser != null){
         futureApiCartList(currentUser.token).then((value) {
@@ -135,6 +136,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 countCart = carts.length;
               }
             }
+          }
+        });
+      }
+      if(currentUser!=null){
+        futureApiMemberLevel(currentUser.token).then((value){
+          if(value.isSuccess()){
+            currentPoints = value.data;
+            currentPoints.points.toString();
           }
         });
       }

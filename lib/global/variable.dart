@@ -164,16 +164,6 @@ cartBottomSheet(context,Menu menu) {
                   SizedBox(
                     height: 8,
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                        "Stok : "+menu.stock_status.toString(), style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16)
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,

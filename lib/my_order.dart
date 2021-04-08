@@ -157,126 +157,96 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
                       Container(
                           padding: EdgeInsets.only(top: 8, bottom: 8),
                           decoration: BoxDecoration(
-                              color: Colors.brown[300],
+                              color: Colors.brown[100],
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10))),
                           width: double.infinity,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              activeTab[index].tax.toString(),
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.brown[800]),
-                            ),
-                          )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  activeTab[index].transaction_number,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.brown[800]),
+                                ),
+                              ),Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  activeTab[index].transaction_date_name == null ? "":
+                                  activeTab[index].transaction_date_name.toString(),
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.brown[800]),
+                                ),
+                              )
+                            ],
+                          )
+                      ),
                       SizedBox(
                         height: 12,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment:
-                        MainAxisAlignment.spaceAround,
+                        MainAxisAlignment.start,
                         children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(16),
+                            ),
+                            margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                            child: Image.network(
+                              activeTab[index].image_url,
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
                           Column(
                             crossAxisAlignment:
                             CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Nomor Pesanan : " +
-                                    activeTab[index]
-                                        .transaction_number
-                                        .toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Color(int.parse(activeTab[index].transaction_status_color))
+                                ),
+                                child: Text(activeTab[index].transaction_status_name),
                               ),
                               SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(5),
-                                      color: Colors.brown,
-                                    ),
-                                    height: 50,
-                                    width: 50,
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Discount : " +
-                                            activeTab[index]
-                                                .discount
-                                                .toString() +
-                                            "%",
-                                        style: TextStyle(
-                                            color: Colors.brown[500]),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        activeTab[index]
-                                            .voucher_code ==
-                                            null
-                                            ? "0"
-                                            : activeTab[index]
-                                            .voucher_code,
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold,
-                                            color: Colors.brown[500]),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        activeTab[index]
-                                            .total_price
-                                            .toString(),
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold,
-                                            color: Colors.brown[500]),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                activeTab[index].grand_total.toString(),
-                                style: TextStyle(
-                                  color: Colors.brown[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),SizedBox(
                                 height: 8,
                               ),
                               Text(
-                                activeTab[index].transaction_type.toString(),
+                                activeTab[index].description,
                                 style: TextStyle(
-                                  color: Colors.brown[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
+                                    color: Colors.brown[500]),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                activeTab[index]
+                                    .total_price
+                                    .toString(),
+                                style: TextStyle(
+                                    fontWeight:
+                                    FontWeight.bold,
+                                    color: Colors.brown[500]),
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       )
                     ],
@@ -327,126 +297,96 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
                       Container(
                           padding: EdgeInsets.only(top: 8, bottom: 8),
                           decoration: BoxDecoration(
-                              color: Colors.brown[300],
+                              color: Colors.brown[100],
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10))),
                           width: double.infinity,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              pastTab[index].tax.toString(),
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.brown[800]),
-                            ),
-                          )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  pastTab[index].transaction_number,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.brown[800]),
+                                ),
+                              ),Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  pastTab[index].transaction_date_name == null ? "":
+                                  pastTab[index].transaction_date_name.toString(),
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.brown[800]),
+                                ),
+                              )
+                            ],
+                          )
+                      ),
                       SizedBox(
                         height: 12,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment:
-                        MainAxisAlignment.spaceAround,
+                        MainAxisAlignment.start,
                         children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(16),
+                            ),
+                            margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                            child: Image.network(
+                              pastTab[index].image_url,
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
                           Column(
                             crossAxisAlignment:
                             CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Nomor Pesanan : " +
-                                    pastTab[index]
-                                        .transaction_number
-                                        .toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Color(int.parse(pastTab[index].transaction_status_color))
+                                ),
+                                child: Text(pastTab[index].transaction_status_name),
                               ),
                               SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(5),
-                                      color: Colors.brown,
-                                    ),
-                                    height: 50,
-                                    width: 50,
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Discount : " +
-                                            pastTab[index]
-                                                .discount
-                                                .toString() +
-                                            "%",
-                                        style: TextStyle(
-                                            color: Colors.brown[500]),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        pastTab[index]
-                                            .voucher_code ==
-                                            null
-                                            ? "0"
-                                            : pastTab[index]
-                                            .voucher_code,
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold,
-                                            color: Colors.brown[500]),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        pastTab[index]
-                                            .total_price
-                                            .toString(),
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold,
-                                            color: Colors.brown[500]),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                pastTab[index].grand_total.toString(),
-                                style: TextStyle(
-                                  color: Colors.brown[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),SizedBox(
                                 height: 8,
                               ),
                               Text(
-                                pastTab[index].transaction_type.toString(),
+                                pastTab[index].description,
                                 style: TextStyle(
-                                  color: Colors.brown[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
+                                    color: Colors.brown[500]),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                pastTab[index]
+                                    .total_price
+                                    .toString(),
+                                style: TextStyle(
+                                    fontWeight:
+                                    FontWeight.bold,
+                                    color: Colors.brown[500]),
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       )
                     ],
@@ -497,126 +437,96 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
                       Container(
                           padding: EdgeInsets.only(top: 8, bottom: 8),
                           decoration: BoxDecoration(
-                              color: Colors.brown[300],
+                              color: Colors.brown[100],
                               borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(10),
                                   topRight: Radius.circular(10))),
                           width: double.infinity,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              canceledTab[index].tax.toString(),
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.brown[800]),
-                            ),
-                          )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  canceledTab[index].transaction_number,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.brown[800]),
+                                ),
+                              ),Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  canceledTab[index].transaction_date_name == null ? "":
+                                  canceledTab[index].transaction_date_name.toString(),
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.brown[800]),
+                                ),
+                              )
+                            ],
+                          )
+                      ),
                       SizedBox(
                         height: 12,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment:
-                        MainAxisAlignment.spaceAround,
+                        MainAxisAlignment.start,
                         children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(16),
+                            ),
+                            margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                            child: Image.network(
+                              canceledTab[index].image_url,
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
                           Column(
                             crossAxisAlignment:
                             CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Nomor Pesanan : " +
-                                    canceledTab[index]
-                                        .transaction_number
-                                        .toString(),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Color(int.parse(canceledTab[index].transaction_status_color))
+                                ),
+                                child: Text(canceledTab[index].transaction_status_name),
                               ),
                               SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                      BorderRadius.circular(5),
-                                      color: Colors.brown,
-                                    ),
-                                    height: 50,
-                                    width: 50,
-                                  ),
-                                  SizedBox(
-                                    width: 16,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Discount : " +
-                                            canceledTab[index]
-                                                .discount
-                                                .toString() +
-                                            "%",
-                                        style: TextStyle(
-                                            color: Colors.brown[500]),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        canceledTab[index]
-                                            .voucher_code ==
-                                            null
-                                            ? "0"
-                                            : canceledTab[index]
-                                            .voucher_code,
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold,
-                                            color: Colors.brown[500]),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text(
-                                        canceledTab[index]
-                                            .total_price
-                                            .toString(),
-                                        style: TextStyle(
-                                            fontWeight:
-                                            FontWeight.bold,
-                                            color: Colors.brown[500]),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                canceledTab[index].grand_total.toString(),
-                                style: TextStyle(
-                                  color: Colors.brown[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),SizedBox(
                                 height: 8,
                               ),
                               Text(
-                                canceledTab[index].transaction_type.toString(),
+                                canceledTab[index].description,
                                 style: TextStyle(
-                                  color: Colors.brown[800],
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )
+                                    color: Colors.brown[500]),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                canceledTab[index]
+                                    .total_price
+                                    .toString(),
+                                style: TextStyle(
+                                    fontWeight:
+                                    FontWeight.bold,
+                                    color: Colors.brown[500]),
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       )
                     ],

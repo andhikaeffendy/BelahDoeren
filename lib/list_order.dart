@@ -1,13 +1,6 @@
 import 'package:belah_duren/api/transactions.dart';
-import 'package:belah_duren/cart_alamat.dart';
-import 'package:belah_duren/cart_delivery.dart';
-import 'package:belah_duren/cart_pickup.dart';
 import 'package:belah_duren/detail_order.dart';
-import 'package:belah_duren/edit_profile.dart';
 import 'package:belah_duren/global/variable.dart';
-import 'package:belah_duren/list_alamat.dart';
-import 'package:belah_duren/list_store.dart';
-import 'package:belah_duren/model/order.dart';
 import 'package:belah_duren/model/transaction.dart';
 import 'package:flutter/material.dart';
 
@@ -78,15 +71,14 @@ class _ListOrderState extends State<ListOrder> {
                       return Center(
                         child: new CircularProgressIndicator(),
                       );
-                    } else if (snapshot.hasError) {
-                      print(snapshot.data);
                     } else if (snapshot.connectionState ==
                         ConnectionState.done) {
                       ApiTransaction apiTransaction = snapshot.data;
                       if (apiTransaction.isSuccess()) {
                         transaction = apiTransaction.data;
-                        print(transaction);
                         //transaction.addAll(apiTransaction.data);
+                      }else{
+                        print("error "+apiTransaction.message);
                       }
                     }
                     return ListView.builder(
@@ -119,111 +111,94 @@ class _ListOrderState extends State<ListOrder> {
                                 Container(
                                     padding: EdgeInsets.only(top: 8, bottom: 8),
                                     decoration: BoxDecoration(
-                                        color: Colors.brown[300],
+                                        color: Colors.brown[100],
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
                                             topRight: Radius.circular(10))),
                                     width: double.infinity,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        transaction[index].tax.toString(),
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.brown[800]),
-                                      ),
-                                    )),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            transaction[index].transaction_number,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.brown[800]),
+                                          ),
+                                        ),Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            transaction[index].transaction_date_name,
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.brown[800]),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                ),
                                 SizedBox(
                                   height: 12,
                                 ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.start,
                                   children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                        BorderRadius.circular(16),
+                                      ),
+                                      margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                                      child: Image.network(
+                                        transaction[index].image_url,
+                                        height: 100,
+                                        width: 100,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          "Nomor Pesanan : " +
-                                              transaction[index]
-                                                  .transaction_number
-                                                  .toString(),
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                        Container(
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(16),
+                                            color: Color(int.parse(transaction[index].transaction_status_color))
+                                          ),
+                                          child: Text(transaction[index].transaction_status_name),
                                         ),
                                         SizedBox(
-                                          height: 12,
+                                          height: 8,
                                         ),
-                                        Row(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: Colors.brown,
-                                              ),
-                                              height: 50,
-                                              width: 50,
-                                            ),
-                                            SizedBox(
-                                              width: 16,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Discount : " +
-                                                      transaction[index]
-                                                          .discount
-                                                          .toString() +
-                                                      "%",
-                                                  style: TextStyle(
-                                                      color: Colors.brown[500]),
-                                                ),
-                                                SizedBox(
-                                                  height: 4,
-                                                ),
-                                                Text(
-                                                  transaction[index]
-                                                              .voucher_code ==
-                                                          null
-                                                      ? "0"
-                                                      : transaction[index]
-                                                          .voucher_code,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.brown[500]),
-                                                ),
-                                                SizedBox(
-                                                  height: 4,
-                                                ),
-                                                Text(
-                                                  transaction[index]
-                                                      .total_price
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.brown[500]),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        )
+                                        Text(
+                                          transaction[index].description,
+                                          style: TextStyle(
+                                              color: Colors.brown[500]),
+                                        ),
+                                        SizedBox(
+                                          height: 16,
+                                        ),
+                                        Text(
+                                          transaction[index]
+                                              .total_price
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontWeight:
+                                              FontWeight.bold,
+                                              color: Colors.brown[500]),
+                                        ),
                                       ],
                                     ),
-                                    Text(
-                                      transaction[index].grand_total.toString(),
-                                      style: TextStyle(
-                                        color: Colors.brown[800],
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
                                   ],
                                 )
                               ],

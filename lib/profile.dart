@@ -29,6 +29,15 @@ class _ProfileState extends State<Profile> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    Future.delayed(Duration.zero, (){
+      if(currentUser != null){
+        futureApiEditProfile(currentUser.token).then((value) {
+          if(value.isSuccess()){
+            currentProfile = value.data;
+          }
+        });
+      }
+    });
   }
 
   @override
@@ -66,10 +75,18 @@ class _ProfileState extends State<Profile> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        currentProfile.photo == "" ?
+              CircleAvatar(
+              radius: 30,
+              backgroundImage:
+              currentProfile.photo == ""?
+              AssetImage("assets/images/smile.png") : NetworkImage(currentProfile.photo),
+              )
+                            :
                         CircleAvatar(
                           radius: 30,
                           backgroundImage:
-                              currentProfile == ""?
+                              currentProfile.photo == ""?
                           AssetImage("assets/images/smile.png") : NetworkImage(currentProfile.photo),
                         ),
                         SizedBox(width: 16),
@@ -135,7 +152,7 @@ class _ProfileState extends State<Profile> {
                               width: 8,
                             ),
                             Text(
-                              currentPoints == null ? currentPoints.points.toString() : "0",
+                              currentPoints.points.toString(),
                               style: TextStyle(color: Colors.brown[500], fontWeight: FontWeight.bold),
                             ),
                             SizedBox(

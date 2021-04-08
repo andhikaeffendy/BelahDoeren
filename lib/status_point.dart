@@ -1,6 +1,7 @@
 import 'package:belah_duren/api/member_level.dart';
 import 'package:belah_duren/daftar_hadiah.dart';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/model/get_reward.dart';
 import 'package:belah_duren/model/member_level.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +13,7 @@ class StatusPoint extends StatefulWidget {
 
 class _StatusPointState extends State<StatusPoint> {
   List<MemberLevel> memberLevel = [];
+  List<GetReward> reward = [];
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class _StatusPointState extends State<StatusPoint> {
         child: 
         currentUser != null ?
         SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           child: Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
@@ -244,7 +247,7 @@ class _StatusPointState extends State<StatusPoint> {
                               ),
                               Container(
                                 width: 1,
-                                height: MediaQuery.of(context).size.height/3,
+                                height: MediaQuery.of(context).size.height*0.2,
                                 color: Colors.brown,
                               ),
                               SizedBox(
@@ -291,7 +294,7 @@ class _StatusPointState extends State<StatusPoint> {
                               ),
                               Container(
                                 width: 1,
-                                height: MediaQuery.of(context).size.height/3,
+                                height: MediaQuery.of(context).size.height*0.2,
                                 color: Colors.brown,
                               ),
                               SizedBox(
@@ -338,7 +341,7 @@ class _StatusPointState extends State<StatusPoint> {
                               ),
                               Container(
                                 width: 1,
-                                height: MediaQuery.of(context).size.height/3,
+                                height: MediaQuery.of(context).size.height*0.2,
                                 color: Colors.brown,
                               ),
                               SizedBox(
@@ -399,167 +402,50 @@ class _StatusPointState extends State<StatusPoint> {
                           SizedBox(
                             height: 16,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  Image.asset(
-                                    "assets/images/scan_qr.png",
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(
-                                    height: 16,
-                                  ),
-                                  Text(
-                                    "Scan QR\ndi Outlet",
-                                    style: TextStyle(
-                                        color: Colors.brown,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),SizedBox(
-                                    height: 8,
-                                  ),ButtonTheme(
-                                    minWidth: 70,
-                                    child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                          side: BorderSide(color: Colors.yellow[600])),
-                                      onPressed: () {
-                                        //Navigator.of(context).pop();
-                                      },
-                                      color: Colors.yellow[600],
-                                      textColor: Colors.black,
-                                      child: Text("Pesan",
-                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                                    ),)
-                                ],
-                              ),
-                              SizedBox(
-                                width: 24,
-                              ),
-                              Column(
-                                children: [
-                                  Image.asset(
-                                    "assets/images/keranjang.png",
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(
-                                    height: 16,
-                                  ),
-                                  Text(
-                                    "Pesan Menu\napapun",
-                                    style: TextStyle(
-                                        color: Colors.brown,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),SizedBox(
-                                    height: 8,
-                                  ),ButtonTheme(
-                                    minWidth: 70,
-                                    child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                          side: BorderSide(color: Colors.yellow[600])),
-                                      onPressed: () {
-                                        //Navigator.of(context).pop();
-                                      },
-                                      color: Colors.yellow[600],
-                                      textColor: Colors.black,
-                                      child: Text("Pesan",
-                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                                    ),)
-                                ],
-                              ),
-                              SizedBox(
-                                width: 24,
-                              ),
-                              Column(
-                                children: [
-                                  Image.asset(
-                                    "assets/images/combo.png",
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(
-                                    height: 16,
-                                  ),
-                                  Text(
-                                    "Beli kombo\napapun",
-                                    style: TextStyle(
-                                        color: Colors.brown,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),SizedBox(
-                                    height: 8,
-                                  ),ButtonTheme(
-                                    minWidth: 70,
-                                    child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                          side: BorderSide(color: Colors.yellow[600])),
-                                      onPressed: () {
-                                        //Navigator.of(context).pop();
-                                      },
-                                      color: Colors.yellow[600],
-                                      textColor: Colors.black,
-                                      child: Text("Pesan",
-                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                                    ),)
-                                ],
-                              ),
-                              SizedBox(
-                                width: 24,
-                              ),
-                              Column(
-                                children: [
-                                  Image.asset(
-                                    "assets/images/user.png",
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  SizedBox(
-                                    height: 16,
-                                  ),
-                                  Text(
-                                    "Lengkapi\nProfilmu",
-                                    style: TextStyle(
-                                        color: Colors.brown,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),SizedBox(
-                                    height: 8,
-                                  ),ButtonTheme(
-                                    minWidth: 70,
-                                    child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                          side: BorderSide(color: Colors.yellow[600])),
-                                      onPressed: () {
-                                        //Navigator.of(context).pop();
-                                      },
-                                      color: Colors.yellow[600],
-                                      textColor: Colors.black,
-                                      child: Text("Pesan",
-                                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                                    ),)
-                                ],
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                            ],
+                          Container(
+                            child: FutureBuilder(
+                              future: futureApiGetReward(currentUser.token),
+                                builder: (context, snapshot){
+                                  if(snapshot.connectionState == ConnectionState.done){
+                                    ApiGetReward apiReward = snapshot.data;
+                                    if(apiReward.isSuccess()){
+                                      reward = apiReward.items;
+                                    }
+                                    return Container(
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: reward.length,
+                                          itemBuilder: (context, index){
+                                            return Column(
+                                              children: [
+                                                Image.network(
+                                                  reward[index].image_url,
+                                                  width: 40,
+                                                  height: 40,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                                SizedBox(
+                                                  height: 16,
+                                                ),
+                                                Container(
+                                                  width: MediaQuery.of(context).size.width/2,
+                                                  child: Text(
+                                                    reward[index].name,
+                                                    style: TextStyle(
+                                                        color: Colors.brown,
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.bold),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                )
+                                              ],
+                                            );
+                                          }),
+                                    );
+                                  }else if(snapshot.connectionState == ConnectionState.waiting){
+                                    return CircularProgressIndicator();
+                                  }
+                                }),
                           )
                         ],
                       );

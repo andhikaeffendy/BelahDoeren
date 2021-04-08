@@ -28,7 +28,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
         centerTitle: true,
         iconTheme: IconThemeData(color: Colors.brown),
         title: Text(
-          "Status Pembayaran",
+          "Pembayaran",
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
