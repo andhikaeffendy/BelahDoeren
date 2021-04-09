@@ -6,14 +6,14 @@ import 'package:flutter/services.dart';
 
 class StatusPembayaran extends StatefulWidget {
   final int paymentStatus;
+  final int transactionId;
   final String deadline;
   String vaNumber = "";
   String vaBank = "";
   String billerCode = "";
   String billKey = "";
-  Transaction transaction;
 
-  StatusPembayaran(this.paymentStatus, this.deadline, [this.vaBank, this.vaNumber, this.billerCode, this.billKey]);
+  StatusPembayaran(this.transactionId, this.paymentStatus, this.deadline, [this.vaBank, this.vaNumber, this.billerCode, this.billKey]);
 
   @override
   _StatusPembayaranState createState() => _StatusPembayaranState();

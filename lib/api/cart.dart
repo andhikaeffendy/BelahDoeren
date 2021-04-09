@@ -119,6 +119,7 @@ class ApiSubmit {
   String vaNumber;
   String billerCode;
   String billKey;
+  int id;
 
   ApiSubmit({
     this.status,
@@ -129,6 +130,7 @@ class ApiSubmit {
     this.vaNumber,
     this.billerCode,
     this.billKey,
+    this.id,
   });
 
   ApiSubmit.fromJson(Map<String, dynamic> json) :
@@ -139,7 +141,8 @@ class ApiSubmit {
         vaNumber = json.containsKey("va_number") ? json["va_number"] : "",
         vaBank = json.containsKey("va_bank") ? json["va_bank"] : "",
         billerCode = json.containsKey("biller_code") ? json["biller_code"] : "",
-        billKey = json.containsKey("bill_key") ? json["bill_key"] : "";
+        billKey = json.containsKey("bill_key") ? json["bill_key"] : "",
+        id = json.containsKey("id") ? json["id"] : 0;
 
   ApiSubmit.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -153,6 +156,7 @@ class ApiSubmit {
     "va_number": vaNumber,
     "biller_code": billerCode,
     "bill_key": billKey,
+    "id": id,
   };
 
   String toStringJson() => json.encode(this.toJson());
