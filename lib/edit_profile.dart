@@ -142,10 +142,20 @@ class _EditProfileState extends State<EditProfile> {
               Center(
                 child: Stack(
                   children: [
+                    currentProfile.photo != "" ?
                     CircleAvatar(
                       radius: 50.0,
                       backgroundImage:
-                      currentImage == null && currentProfile.photo == "" ?
+                      currentImage == null?
+                      NetworkImage(
+                        currentProfile.photo,):
+                      FileImage(File(currentImage.path)),
+                    )
+                    :
+                    CircleAvatar(
+                      radius: 50.0,
+                      backgroundImage:
+                      currentImage == null ?
                       AssetImage(
                           "assets/images/smile.png",):
                       FileImage(File(currentImage.path)),
@@ -382,27 +392,27 @@ class _EditProfileState extends State<EditProfile> {
                 height: 1,
                 color: Colors.brown[100],
               ),
-              SizedBox(
-                height: 16,
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.lock_outlined,
-                    color: Colors.red[800],
-                  ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    "Ganti PIN",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                        color: Colors.red[800]),
-                  )
-                ],
-              ),
+              // SizedBox(
+              //   height: 16,
+              // ),
+              // Row(
+              //   children: [
+              //     Icon(
+              //       Icons.lock_outlined,
+              //       color: Colors.red[800],
+              //     ),
+              //     SizedBox(
+              //       width: 8,
+              //     ),
+              //     Text(
+              //       "Ganti PIN",
+              //       style: TextStyle(
+              //           fontWeight: FontWeight.bold,
+              //           fontSize: 14,
+              //           color: Colors.red[800]),
+              //     )
+              //   ],
+              // ),
               SizedBox(
                 height: 16,
               ),

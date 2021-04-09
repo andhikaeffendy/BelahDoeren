@@ -22,7 +22,7 @@ class _StatusPointState extends State<StatusPoint> {
         child: 
         currentUser != null ?
         SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: AlwaysScrollableScrollPhysics(),
           child: Stack(
             alignment: AlignmentDirectional.topCenter,
             children: [
@@ -157,7 +157,7 @@ class _StatusPointState extends State<StatusPoint> {
                               Image.network(
                                 apiMemberLevel.items[0].image_url,
                                 fit: BoxFit.cover,
-                                width: 50,
+                                width: MediaQuery.of(context).size.width/8,
                                 height: 50,
                               ),
                               Container(
@@ -168,7 +168,7 @@ class _StatusPointState extends State<StatusPoint> {
                               Image.network(
                                 apiMemberLevel.items[1].image_url,
                                 fit: BoxFit.cover,
-                                width: 50,
+                                width: MediaQuery.of(context).size.width/8,
                                 height: 50,
                               ),
                               Container(
@@ -179,7 +179,7 @@ class _StatusPointState extends State<StatusPoint> {
                               Image.network(
                                 apiMemberLevel.items[2].image_url,
                                 fit: BoxFit.cover,
-                                width: 50,
+                                width: MediaQuery.of(context).size.width/8,
                                 height: 50,
                               ),
                               Container(
@@ -190,7 +190,7 @@ class _StatusPointState extends State<StatusPoint> {
                               Image.network(
                                 apiMemberLevel.items[3].image_url,
                                 fit: BoxFit.cover,
-                                width: 50,
+                                width: MediaQuery.of(context).size.width/8,
                                 height: 50,
                               ),
                             ],
@@ -222,7 +222,7 @@ class _StatusPointState extends State<StatusPoint> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.brown,
-                                          fontSize: 12,
+                                          fontSize: 10,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     SizedBox(
@@ -235,7 +235,7 @@ class _StatusPointState extends State<StatusPoint> {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.brown,
-                                            fontSize: 12,
+                                            fontSize: 10,
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ),
@@ -270,7 +270,7 @@ class _StatusPointState extends State<StatusPoint> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.brown,
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(
@@ -283,7 +283,7 @@ class _StatusPointState extends State<StatusPoint> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.brown,
-                                          fontSize: 12,
+                                          fontSize: 10,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -317,7 +317,7 @@ class _StatusPointState extends State<StatusPoint> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.brown,
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(
@@ -330,7 +330,7 @@ class _StatusPointState extends State<StatusPoint> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.brown,
-                                          fontSize: 12,
+                                          fontSize: 10,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -364,7 +364,7 @@ class _StatusPointState extends State<StatusPoint> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.brown,
-                                        fontSize: 12,
+                                        fontSize: 10,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(
@@ -377,7 +377,7 @@ class _StatusPointState extends State<StatusPoint> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: Colors.brown,
-                                          fontSize: 12,
+                                          fontSize: 10,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -446,7 +446,8 @@ class _StatusPointState extends State<StatusPoint> {
                                     return CircularProgressIndicator();
                                   }
                                 }),
-                          )
+                          ),
+
                         ],
                       );
                     }

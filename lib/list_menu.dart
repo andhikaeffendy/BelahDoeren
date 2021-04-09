@@ -312,8 +312,8 @@ class _ListMenuState extends State<ListMenu>
         builder: (context, setState){
       return AlertDialog(
         content: Container(
-          height: MediaQuery.of(context).size.height/3,
-          width: 400,
+          height: MediaQuery.of(context).size.height*0.35,
+          width: MediaQuery.of(context).size.width*0.8,
           // decoration: BoxDecoration(
           //     border: Border.all(),
           //     color: Colors.white,
@@ -389,15 +389,18 @@ class _ListMenuState extends State<ListMenu>
                         Padding(
                           padding: EdgeInsets.only(left: 16, bottom: 16),
                           child: Container(
-                            height: 100,
-                            width: 200,
+                            height: MediaQuery.of(context).size.height*0.1,
+                            width: MediaQuery.of(context).size.width/2.2,
                             child: SingleChildScrollView(
-                              child: Text(
-                                dialogBranch.address,
-                                style: TextStyle(
-                                    color: Colors.brown[500],
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  dialogBranch.address,
+                                  style: TextStyle(
+                                      color: Colors.brown[500],
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                           ),
@@ -407,10 +410,13 @@ class _ListMenuState extends State<ListMenu>
                     SizedBox(
                       width: 16,
                     ),
-                    Icon(
-                      Icons.arrow_forward_outlined,
-                      size: 30,
-                      color: Colors.grey[400],
+                    Container(
+                      width: 30,
+                      child: Icon(
+                        Icons.arrow_forward_outlined,
+                        size: 30,
+                        color: Colors.grey[400],
+                      ),
                     )
                   ],
                 ),

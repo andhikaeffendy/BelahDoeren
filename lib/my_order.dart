@@ -1,7 +1,10 @@
 import 'package:belah_duren/api/transactions.dart';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/model/transaction.dart';
 import 'package:belah_duren/model/transaction_list.dart';
 import 'package:flutter/material.dart';
+
+import 'detail_order.dart';
 
 class MyOrder extends StatefulWidget {
   @override
@@ -11,15 +14,30 @@ class MyOrder extends StatefulWidget {
 class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
 
   TabController _tabController;
-  List<TransactionList> activeTab = [];
-  List<TransactionList> pastTab = [];
-  List<TransactionList> canceledTab = [];
+  List<Transaction> activeTab = [];
+  List<Transaction> pastTab = [];
+  List<Transaction> canceledTab = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _tabController = TabController(vsync: this, length: 3);
+    futureApiActiveTransaction(currentUser.token, currentUser.id).then((value) {
+      if(value.isSuccess()){
+        activeTab = value.data;
+      }
+    });
+    futureApiPastTransaction(currentUser.token, currentUser.id).then((value) {
+      if(value.isSuccess()){
+        pastTab = value.data;
+      }
+    });
+    futureApiGetCanceledTransaction(currentUser.token).then((value) {
+      if(value.isSuccess()){
+        canceledTab = value.data;
+      }
+    });
   }
 
   @override
@@ -77,9 +95,9 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             Expanded(child: TabBarView(
               controller: _tabController,
               children: [
-                activeTab.isNotEmpty ? _listEmpty() : _listActiveTransaction(),
-                pastTab.isNotEmpty ? _listEmpty() : _listPastTransaction(),
-                canceledTab.isNotEmpty ? _listEmpty() : _listCanceledTransaction(),
+                _listActiveTransaction(),
+                _listPastTransaction(),
+                _listCanceledTransaction(),
               ],
             ))
           ],
@@ -137,119 +155,128 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             return ListView.builder(
               itemCount: activeTab.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(bottom: 16),
-                  padding: EdgeInsets.only(bottom: 24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 1.0), //(x,y)
-                        blurRadius: 6.0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(top: 8, bottom: 8),
-                          decoration: BoxDecoration(
-                              color: Colors.brown[100],
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10))),
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  activeTab[index].transaction_number,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[800]),
-                                ),
-                              ),Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  activeTab[index].transaction_date_name == null ? "":
-                                  activeTab[index].transaction_date_name.toString(),
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[800]),
-                                ),
-                              )
-                            ],
-                          )
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: [
-                          Container(
+                return GestureDetector(
+                  onTap: (){
+                    nextPage(context, DetailOrder(transactionMenu: activeTab[index],));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.only(bottom: 24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 1.0), //(x,y)
+                          blurRadius: 6.0,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(top: 8, bottom: 8),
                             decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(16),
+                                color: Colors.brown[100],
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10))),
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    activeTab[index].transaction_number,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.brown[800]),
+                                  ),
+                                ),Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    activeTab[index].transaction_date_name == null ? "":
+                                    activeTab[index].transaction_date_name.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.brown[800]),
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment:
+                          MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(16),
+                              ),
+                              margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                              child: Image.network(
+                                activeTab[index].image_url,
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                            margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
-                            child: Image.network(
-                              activeTab[index].image_url,
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.contain,
+                            SizedBox(
+                              width: 16,
                             ),
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Color(int.parse(activeTab[index].transaction_status_color))
+                            Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: Color(int.parse(activeTab[index].transaction_status_color))
+                                  ),
+                                  child: Text(activeTab[index].transaction_status_name),
                                 ),
-                                child: Text(activeTab[index].transaction_status_name),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                activeTab[index].description,
-                                style: TextStyle(
-                                    color: Colors.brown[500]),
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                activeTab[index]
-                                    .total_price
-                                    .toString(),
-                                style: TextStyle(
-                                    fontWeight:
-                                    FontWeight.bold,
-                                    color: Colors.brown[500]),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width/3,
+                                  child: Text(
+                                    activeTab[index].description,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                        color: Colors.brown[500]),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  activeTab[index]
+                                      .total_price
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.bold,
+                                      color: Colors.brown[500]),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 );
               },
@@ -277,119 +304,128 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             return ListView.builder(
               itemCount: pastTab.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(bottom: 16),
-                  padding: EdgeInsets.only(bottom: 24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 1.0), //(x,y)
-                        blurRadius: 6.0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(top: 8, bottom: 8),
-                          decoration: BoxDecoration(
-                              color: Colors.brown[100],
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10))),
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  pastTab[index].transaction_number,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[800]),
-                                ),
-                              ),Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  pastTab[index].transaction_date_name == null ? "":
-                                  pastTab[index].transaction_date_name.toString(),
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[800]),
-                                ),
-                              )
-                            ],
-                          )
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: [
-                          Container(
+                return GestureDetector(
+                  onTap: (){
+                    nextPage(context, DetailOrder(transactionMenu: pastTab[index],));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.only(bottom: 24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 1.0), //(x,y)
+                          blurRadius: 6.0,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(top: 8, bottom: 8),
                             decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(16),
+                                color: Colors.brown[100],
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10))),
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    pastTab[index].transaction_number,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.brown[800]),
+                                  ),
+                                ),Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    pastTab[index].transaction_date_name == null ? "":
+                                    pastTab[index].transaction_date_name.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.brown[800]),
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment:
+                          MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(16),
+                              ),
+                              margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                              child: Image.network(
+                                pastTab[index].image_url,
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                            margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
-                            child: Image.network(
-                              pastTab[index].image_url,
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.contain,
+                            SizedBox(
+                              width: 16,
                             ),
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Color(int.parse(pastTab[index].transaction_status_color))
+                            Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: Color(int.parse(pastTab[index].transaction_status_color))
+                                  ),
+                                  child: Text(pastTab[index].transaction_status_name),
                                 ),
-                                child: Text(pastTab[index].transaction_status_name),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                pastTab[index].description,
-                                style: TextStyle(
-                                    color: Colors.brown[500]),
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                pastTab[index]
-                                    .total_price
-                                    .toString(),
-                                style: TextStyle(
-                                    fontWeight:
-                                    FontWeight.bold,
-                                    color: Colors.brown[500]),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width/3,
+                                  child: Text(
+                                    pastTab[index].description,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                        color: Colors.brown[500]),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  pastTab[index]
+                                      .total_price
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.bold,
+                                      color: Colors.brown[500]),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 );
               },
@@ -417,119 +453,128 @@ class _MyOrderState extends State<MyOrder> with TickerProviderStateMixin{
             return ListView.builder(
               itemCount: canceledTab.length,
               itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(bottom: 16),
-                  padding: EdgeInsets.only(bottom: 24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 1.0), //(x,y)
-                        blurRadius: 6.0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(top: 8, bottom: 8),
-                          decoration: BoxDecoration(
-                              color: Colors.brown[100],
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10))),
-                          width: double.infinity,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  canceledTab[index].transaction_number,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[800]),
-                                ),
-                              ),Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  canceledTab[index].transaction_date_name == null ? "":
-                                  canceledTab[index].transaction_date_name.toString(),
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[800]),
-                                ),
-                              )
-                            ],
-                          )
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: [
-                          Container(
+                return GestureDetector(
+                  onTap: (){
+                    nextPage(context, DetailOrder(transactionMenu: canceledTab[index],));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.only(bottom: 24),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey,
+                          offset: Offset(0.0, 1.0), //(x,y)
+                          blurRadius: 6.0,
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(top: 8, bottom: 8),
                             decoration: BoxDecoration(
-                              borderRadius:
-                              BorderRadius.circular(16),
+                                color: Colors.brown[100],
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10))),
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    canceledTab[index].transaction_number,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.brown[800]),
+                                  ),
+                                ),Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    canceledTab[index].transaction_date_name == null ? "":
+                                    canceledTab[index].transaction_date_name.toString(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.brown[800]),
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment:
+                          MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(16),
+                              ),
+                              margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
+                              child: Image.network(
+                                canceledTab[index].image_url,
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.contain,
+                              ),
                             ),
-                            margin: EdgeInsets.only(left: 16, top: 8, bottom: 8),
-                            child: Image.network(
-                              canceledTab[index].image_url,
-                              height: 100,
-                              width: 100,
-                              fit: BoxFit.contain,
+                            SizedBox(
+                              width: 16,
                             ),
-                          ),
-                          SizedBox(
-                            width: 16,
-                          ),
-                          Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    color: Color(int.parse(canceledTab[index].transaction_status_color))
+                            Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: Color(int.parse(canceledTab[index].transaction_status_color))
+                                  ),
+                                  child: Text(canceledTab[index].transaction_status_name),
                                 ),
-                                child: Text(canceledTab[index].transaction_status_name),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                canceledTab[index].description,
-                                style: TextStyle(
-                                    color: Colors.brown[500]),
-                              ),
-                              SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                canceledTab[index]
-                                    .total_price
-                                    .toString(),
-                                style: TextStyle(
-                                    fontWeight:
-                                    FontWeight.bold,
-                                    color: Colors.brown[500]),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
-                    ],
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Container(
+                                  width: MediaQuery.of(context).size.width/3,
+                                  child: Text(
+                                    canceledTab[index].description,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                        color: Colors.brown[500]),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Text(
+                                  canceledTab[index]
+                                      .total_price
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontWeight:
+                                      FontWeight.bold,
+                                      color: Colors.brown[500]),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 );
               },

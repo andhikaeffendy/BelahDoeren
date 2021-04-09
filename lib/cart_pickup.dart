@@ -15,6 +15,9 @@ import 'package:belah_duren/payment.dart';
 import 'package:belah_duren/status_pembayaran.dart';
 import 'package:flutter/material.dart';
 
+import 'list_store.dart';
+import 'model/branch.dart';
+
 class CartPickup extends StatefulWidget {
   @override
   _CartPickupState createState() => _CartPickupState();
@@ -34,6 +37,10 @@ class _CartPickupState extends State<CartPickup> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(selectedBranch == null){
+      alertDialog(context, "Perhatian", "Anda belum memilih store, harap pilih terlebih dahulu");
+      nextPage(context, ListStore());
+    }
     Future.delayed(Duration.zero, () {
       updateCart();
     });
@@ -75,35 +82,51 @@ class _CartPickupState extends State<CartPickup> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.brown),
         centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Column(
-              children: [
-                Text(
-                  selectedBranch == null
-                      ? ""
-                      : (isPickupOrder() ? "Pickup - " : "Delivery - ") +
-                          selectedBranch.distanceFromHere(),
-                  style: TextStyle(fontSize: 12, color: Colors.brown),
-                ),
-                Text(
-                  selectedBranch == null
-                      ? "belum dipilih"
-                      : selectedBranch.name,
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown),
-                ),
-              ],
-            ),
-            Icon(
-              Icons.arrow_downward_sharp,
-              color: Colors.brown,
-              size: 30,
-            )
-          ],
+        title: GestureDetector(
+          onTap: () async {
+            var result = await
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return _alertDialog(context);
+                });
+            if(result != null) {
+              setState(() {
+                selectedBranch = result[0];
+                selectedOrderType = result[1];
+              });
+            }
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    selectedBranch == null
+                        ? ""
+                        : (isPickupOrder() ? "Pickup - " : "Delivery - ") +
+                            selectedBranch.distanceFromHere(),
+                    style: TextStyle(fontSize: 12, color: Colors.brown),
+                  ),
+                  Text(
+                    selectedBranch == null
+                        ? "belum dipilih"
+                        : selectedBranch.name,
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.brown),
+                  ),
+                ],
+              ),
+              Icon(
+                Icons.arrow_downward_sharp,
+                color: Colors.brown,
+                size: 30,
+              )
+            ],
+          ),
         ),
       ),
       body: Container(
@@ -988,6 +1011,146 @@ class _CartPickupState extends State<CartPickup> {
     setState(() {
       selectedPaymentMethod = selectedPaymentMethod;
     });
+  }
+
+  Widget _alertDialog(BuildContext context) {
+    String dialogType = selectedOrderType;
+    Items dialogBranch = selectedBranch;
+    return StatefulBuilder(
+        builder: (context, setState){
+          return AlertDialog(
+            content: Container(
+              height: MediaQuery.of(context).size.height*0.35,
+              width: MediaQuery.of(context).size.width*0.8,
+              // decoration: BoxDecoration(
+              //     border: Border.all(),
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(25)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            dialogType = "pickup";
+                          });
+                        },
+                        child: Image.asset("assets/images/pickup.png",
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width / 3,
+                            height: 100,
+                            fit: BoxFit.cover),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              dialogType = "delivery";
+                            });
+                          },
+                          child: Image.asset("assets/images/delivery.png",
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 3.2,
+                              height: 100,
+                              fit: BoxFit.fitWidth)
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  GestureDetector(
+                    onTap: () async {
+                      var result = await nextPage(context, ListStore());
+                      if (result != null)
+                        setState(() {
+                          dialogBranch = result[0];
+                          dialogType = result[1];
+                        });
+                    },
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 16),
+                              child: Text(
+                                (dialogType == "pickup"
+                                    ? "Ambil pesananmu, di"
+                                    : "Antar ke alamatmu, dari"),
+                                style: TextStyle(
+                                    color: Colors.brown[500],
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 16, bottom: 16),
+                              child: Container(
+                                height: MediaQuery.of(context).size.height*0.1,
+                                width: MediaQuery.of(context).size.width/2.2,
+                                child: SingleChildScrollView(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      dialogBranch.address,
+                                      style: TextStyle(
+                                          color: Colors.brown[500],
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Container(
+                          width: 30,
+                          child: Icon(
+                            Icons.arrow_forward_outlined,
+                            size: 30,
+                            color: Colors.grey[400],
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                  , Center(
+                    child: ButtonTheme(
+                      padding: EdgeInsets.all(12),
+                      minWidth: 100,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            side: BorderSide(color: Colors.yellow[600])),
+                        onPressed: () {
+                          Navigator.of(context).pop([dialogBranch, dialogType]);
+                        },
+                        color: Colors.yellow[600],
+                        textColor: Colors.black,
+                        child: Text("Simpan".toUpperCase(),
+                            style: TextStyle(fontSize: 16)),
+                      ),),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   _showVoucherDialog(total) async {

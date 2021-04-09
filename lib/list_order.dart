@@ -180,10 +180,17 @@ class _ListOrderState extends State<ListOrder> {
                                         SizedBox(
                                           height: 8,
                                         ),
-                                        Text(
-                                          transaction[index].description,
-                                          style: TextStyle(
-                                              color: Colors.brown[500]),
+                                        Container(
+                                          width: MediaQuery.of(context).size.width/3,
+                                          height: 50,
+                                          child: SingleChildScrollView(
+                                            child: Text(
+                                              transaction[index].description,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                  color: Colors.brown[500]),
+                                            ),
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 16,

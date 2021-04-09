@@ -218,7 +218,7 @@ class ApiTransactionDetail {
 class ApiListTransaction {
   String status;
   String message;
-  List<TransactionList> data;
+  List<Transaction> data;
 
   ApiListTransaction({
     this.status,
@@ -229,7 +229,7 @@ class ApiListTransaction {
   ApiListTransaction.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<TransactionList>.from(json["data"].map((x) => TransactionList.fromJson(x)));
+        data = List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x)));
 
   ApiListTransaction.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));

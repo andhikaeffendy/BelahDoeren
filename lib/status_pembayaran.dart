@@ -1,3 +1,4 @@
+import 'package:belah_duren/detail_order.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/transaction.dart';
 import 'package:belah_duren/my_order.dart';
@@ -324,7 +325,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                 color: Colors.yellow[600],
                 textColor: Colors.brown[700],
                 onPressed: () async {
-                  await nextPage(context, MyOrder());
+                  await nextPage(context, DetailOrder(transactionMenu: widget.transaction));
                   Navigator.of(context, rootNavigator: true).pop();
                 },
                 child: Text("Lihat Pesanan",

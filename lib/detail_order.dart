@@ -55,20 +55,21 @@ class _DetailOrderState extends State<DetailOrder> {
   }
 
   Widget _detailView(){
-    return FutureBuilder(
-        future: futureDetailOrder(currentUser.token, transactionMenu.id),
-        builder: (context, snapshot){
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }else if(snapshot.connectionState == ConnectionState.done){
-            ApiOrder data = snapshot.data;
-            if(data.isSuccess()){
-              return RefreshIndicator(
-                onRefresh: _refreshData,
-                child: SingleChildScrollView(
-                  child: Column(
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: FutureBuilder(
+            future: futureDetailOrder(currentUser.token, transactionMenu.id),
+            builder: (context, snapshot){
+              if(snapshot.connectionState == ConnectionState.waiting){
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }else if(snapshot.connectionState == ConnectionState.done){
+                ApiOrder data = snapshot.data;
+                if(data.isSuccess()){
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -97,89 +98,6 @@ class _DetailOrderState extends State<DetailOrder> {
                       SizedBox(
                         height: 16,
                       ),
-                      // Row(
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   children: [
-                      //     Container(
-                      //       width: MediaQuery.of(context).size.width / 3,
-                      //       child: Text(
-                      //         "Pembayaran",
-                      //         style: TextStyle(
-                      //             fontSize: 14,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.brown[700]),
-                      //       ),
-                      //     ),
-                      //     Icon(
-                      //       Icons.monetization_on_outlined,
-                      //       size: 20,
-                      //       color: Colors.brown[700],
-                      //     ),
-                      //     SizedBox(
-                      //       width: 4,
-                      //     ),
-                      //     Text(
-                      //       "Ovo",
-                      //       style: TextStyle(
-                      //           fontSize: 12,
-                      //           fontWeight: FontWeight.bold,
-                      //           color: Colors.brown[700]),
-                      //     )
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   height: 16,
-                      // ),
-                      // Row(
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   children: [
-                      //     Container(
-                      //       width: MediaQuery.of(context).size.width / 3,
-                      //       child: Text(
-                      //         "Nomor Pesanan",
-                      //         style: TextStyle(
-                      //             fontSize: 14,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.brown[700]),
-                      //       ),
-                      //     ),
-                      //     Text(
-                      //       "BD0019010221",
-                      //       style: TextStyle(
-                      //           fontSize: 12,
-                      //           fontWeight: FontWeight.bold,
-                      //           color: Colors.brown[700]),
-                      //     )
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   height: 16,
-                      // ),
-                      // Row(
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   children: [
-                      //     Container(
-                      //       width: MediaQuery.of(context).size.width / 3,
-                      //       child: Text(
-                      //         "Metode Pembelian",
-                      //         style: TextStyle(
-                      //             fontSize: 14,
-                      //             fontWeight: FontWeight.bold,
-                      //             color: Colors.brown[700]),
-                      //       ),
-                      //     ),
-                      //     Text(
-                      //       "Delivery",
-                      //       style: TextStyle(
-                      //           fontSize: 12,
-                      //           fontWeight: FontWeight.bold,
-                      //           color: Colors.brown[700]),
-                      //     )
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   height: 16,
-                      // ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -248,6 +166,62 @@ class _DetailOrderState extends State<DetailOrder> {
                           Container(
                             child: Text(
                               data.data.my_address,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown[700]),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: Text(
+                              "Status ",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown[700]),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Color(int.parse(data.data.transaction_status_color)),
+                            ),
+                            child: Text(
+                              data.data.transaction_status_name,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown[700]),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: Text(
+                              "Tanggal Transaksi ",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.brown[700]),
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              transactionMenu.transaction_date,
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -533,57 +507,21 @@ class _DetailOrderState extends State<DetailOrder> {
                           ),
                         ),
                       ),
-                      !transactionMenu.isPaid() ? Container() :
+                      !transactionMenu.isPaid() ?
+                      Container() :
                       SizedBox(
                         height: 16,
                       ),
                       !transactionMenu.isPaid() ? Container() :
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           QrImage(
                             data: '/store_api/v1/transaction_detail/'+transactionMenu.id.toString(),
                             version: QrVersions.auto,
                             size: MediaQuery. of(context).size.width * 0.5,
                             gapless: false,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                                Text(
-                                  "Tanggal Transaksi :",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[700]),
-                                ),
-                                Text(
-                                  transactionMenu.transaction_date,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[700]),
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                Text(
-                                  "Status Pembayaran : ",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[700]),
-                                ),
-                                Text(
-                                  transactionMenu.transaction_status_name,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.brown[700]),
-                                ),
-                              ],
                           ),
                         ],
                       ),
@@ -609,13 +547,12 @@ class _DetailOrderState extends State<DetailOrder> {
                         height: 16,
                       ),
                     ],
-                  ),
-                ),
-              );
-            }
-          }
-
-        });
+                  );
+                }
+              }
+            }),
+      ),
+    );
   }
 
   cancelOrder(){
