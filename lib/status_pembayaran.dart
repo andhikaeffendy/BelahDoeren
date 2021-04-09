@@ -108,7 +108,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
-              "Silahkan selesaikan pembayaran sebelum tanggal "+ widget.deadline +" untuk menghindari pembatalan transaksi"
+              "Silahkan selesaikan pembayaran sebelum tanggal "+ widget.deadline.toString() +" untuk menghindari pembatalan transaksi"
                   " secara otomatis",
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -188,7 +188,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
             children: [
               Container(
                 child: Text(
-                  widget.vaNumber,
+                  widget.vaNumber.toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 14,
@@ -234,7 +234,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
             children: [
               Container(
                 child: Text(
-                  widget.billerCode,
+                  widget.billerCode.toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 14,
@@ -284,7 +284,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
             children: [
               Container(
                 child: Text(
-                  widget.billKey,
+                  widget.billKey.toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 14,

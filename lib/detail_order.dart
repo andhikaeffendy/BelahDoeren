@@ -538,7 +538,11 @@ class _DetailOrderState extends State<DetailOrder> {
                           onPressed: (){
                             nextPage(context, StatusPembayaran(transactionMenu.id,
                                 transactionMenu.transaction_status,
-                                transactionMenu.payment_deadline.toString()));
+                                transactionMenu.payment_deadline,
+                                transactionMenu.payment_method,
+                                transactionMenu.account_number,
+                                transactionMenu.biller_code,
+                                transactionMenu.bill_key));
                           },//doSubmit(),
                           color: Colors.yellow[600],
                           textColor: Colors.black,
