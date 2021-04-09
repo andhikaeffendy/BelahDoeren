@@ -73,7 +73,7 @@ class Transaction {
   };
 
   bool isPaid(){
-    return this.transaction_status_name == "Lunas";
+    return this.transaction_status == 3;
   }
 
 }

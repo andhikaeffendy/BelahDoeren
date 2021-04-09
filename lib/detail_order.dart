@@ -4,6 +4,7 @@ import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/detail_transaction.dart';
 import 'package:belah_duren/model/order.dart';
 import 'package:belah_duren/model/transaction.dart';
+import 'package:belah_duren/status_pembayaran.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -19,6 +20,7 @@ class DetailOrder extends StatefulWidget {
 class _DetailOrderState extends State<DetailOrder> {
   final Transaction transactionMenu;
   _DetailOrderState(this.transactionMenu);
+  String deadline = "";
 
   List<Items> items = List<Items>.empty();
 
@@ -513,13 +515,37 @@ class _DetailOrderState extends State<DetailOrder> {
                         height: 16,
                       ),
                       !transactionMenu.isPaid() ? Container() :
-                      QrImage(
-                        data: '/store_api/v1/transaction_detail/'+transactionMenu.id.toString(),
-                        version: QrVersions.auto,
-                        size: MediaQuery. of(context).size.width * 0.5,
-                        gapless: false,
+                      Center(
+                        child: QrImage(
+                          data: '/store_api/v1/transaction_detail/'+transactionMenu.id.toString(),
+                          version: QrVersions.auto,
+                          size: MediaQuery. of(context).size.width * 0.5,
+                          gapless: false,
+                        ),
                       ),
                       SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: RaisedButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                side: BorderSide(color: Colors.yellow[600])),
+                            onPressed: (){
+                              nextPage(context, StatusPembayaran(transactionMenu.id,
+                                  transactionMenu.transaction_status,
+                                  deadline));
+                            },//doSubmit(),
+                            color: Colors.yellow[600],
+                            textColor: Colors.black,
+                            child: Text("Lihat Petunjuk Pembayaran",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+                          ),
+                        ),
+                      ),SizedBox(
                         height: 16,
                       ),
                       Container(
