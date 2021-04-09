@@ -15,6 +15,8 @@ class Transaction {
   String transaction_status_color;
   String transaction_date;
   String transaction_date_name;
+  String payment_deadline;
+  String account_number;
 
 
   Transaction({
@@ -33,7 +35,9 @@ class Transaction {
     this.transaction_status_name,
     this.transaction_status_color,
     this.transaction_date,
-    this.transaction_date_name});
+    this.transaction_date_name,
+    this.payment_deadline,
+    this.account_number});
 
   Transaction.fromJson(Map<String, dynamic> json)
       : id = json["id"],
@@ -51,7 +55,9 @@ class Transaction {
         transaction_status_name = json["transaction_status_name"],
         transaction_status_color = json["transaction_status_color"],
         transaction_date = json["transaction_date"],
-        transaction_date_name = json["transaction_date_name"];
+        transaction_date_name = json["transaction_date_name"],
+        payment_deadline = json["payment_deadline"],
+        account_number = json["account_number"];
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -70,6 +76,8 @@ class Transaction {
     "transaction_status_color" : transaction_status_color,
     "transaction_date" : transaction_date,
     "transaction_date_name" : transaction_date_name,
+    "payment_deadline" : payment_deadline,
+    "account_number" : account_number
   };
 
   bool isPaid(){

@@ -15,6 +15,8 @@ class DetailTransaction{
     String transaction_type;
     String transaction_status_name;
     String transaction_status_color;
+    String payment_deadline;
+    String account_number;
     List<Items> order = [];
 
     DetailTransaction(
@@ -31,7 +33,9 @@ class DetailTransaction{
       this.payment_method_image_url,
         this.transaction_type,
         this.transaction_status_name,
-        this.transaction_status_color);
+        this.transaction_status_color,
+        this.payment_deadline,
+        this.account_number);
 
     DetailTransaction.fromJson(Map<String, dynamic> json) :
         id = json["id"],
@@ -47,7 +51,9 @@ class DetailTransaction{
         payment_method_image_url = json["payment_method_image_url"],
     transaction_type = json["transaction_type"],
     transaction_status_name = json["transaction_status_name"],
-    transaction_status_color = json["transaction_status_color"];
+    transaction_status_color = json["transaction_status_color"],
+    payment_deadline = json["payment_deadline"],
+    account_number = json["account_number"];
 
     Map<String, dynamic> toJson() => {
       "id" : id,
@@ -63,7 +69,9 @@ class DetailTransaction{
       "payment_method_image_url" : payment_method_image_url,
       "transaction_type" : transaction_type,
       "transaction_status_name" : transaction_status_name,
-      "transaction_status_color" : transaction_status_color
+      "transaction_status_color" : transaction_status_color,
+      "payment_deadline" : payment_deadline,
+      "account_number" : account_number
     };
 
 }

@@ -37,10 +37,6 @@ class _CartPickupState extends State<CartPickup> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(selectedBranch == null){
-      alertDialog(context, "Perhatian", "Anda belum memilih store, harap pilih terlebih dahulu");
-      nextPage(context, ListStore());
-    }
     Future.delayed(Duration.zero, () {
       updateCart();
     });

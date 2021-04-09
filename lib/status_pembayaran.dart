@@ -159,7 +159,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
-              "Pembayaran via Transfer "+widget.vaBank.toUpperCase(),
+              "Pembayaran via Transfer " + widget.vaBank.toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 14,
@@ -396,7 +396,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                 color: Colors.yellow[600],
                 textColor: Colors.brown[700],
                 onPressed: () async {
-                  await nextPage(context, DetailOrder(transactionMenu: Transaction(id: widget.transactionId)));
+                  await nextPage(context, MyOrder());
                   Navigator.of(context, rootNavigator: true).pop();
                 },
                 child: Text("Lihat Pesanan",
