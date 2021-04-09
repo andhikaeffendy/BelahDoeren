@@ -221,7 +221,7 @@ class _DetailOrderState extends State<DetailOrder> {
                           ),
                           Container(
                             child: Text(
-                              transactionMenu.transaction_date,
+                              transactionMenu.transaction_date.toString(),
                               style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
@@ -513,17 +513,11 @@ class _DetailOrderState extends State<DetailOrder> {
                         height: 16,
                       ),
                       !transactionMenu.isPaid() ? Container() :
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          QrImage(
-                            data: '/store_api/v1/transaction_detail/'+transactionMenu.id.toString(),
-                            version: QrVersions.auto,
-                            size: MediaQuery. of(context).size.width * 0.5,
-                            gapless: false,
-                          ),
-                        ],
+                      QrImage(
+                        data: '/store_api/v1/transaction_detail/'+transactionMenu.id.toString(),
+                        version: QrVersions.auto,
+                        size: MediaQuery. of(context).size.width * 0.5,
+                        gapless: false,
                       ),
                       SizedBox(
                         height: 16,

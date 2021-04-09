@@ -348,6 +348,11 @@ class _HomeState extends State<Home> {
                                                 color: Colors.brown[600], fontWeight: FontWeight.bold),),
                                           ),
                                           SizedBox(height: 4,),
+                                          featuredMenus[index].new_price == null ?
+                                          Container(
+                                              padding: EdgeInsets.only(left: 8),
+                                              child: Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12,),))
+                                          :
                                           Container(
                                               padding: EdgeInsets.only(left: 8),
                                               child: Text(currency.format(featuredMenus[index].price), style: TextStyle(fontSize: 12,decoration: TextDecoration.lineThrough),)),
