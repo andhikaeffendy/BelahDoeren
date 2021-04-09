@@ -1287,7 +1287,9 @@ class _CartPickupState extends State<CartPickup> {
         if (value.isSuccess()) {
           await alertDialog(
               context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
-          await nextPage(context, StatusPembayaran(value.transactionStatus, value.deadline,value.bankName(),value.vaNumber,value.billerCode,value.billKey));
+          await nextPage(context, StatusPembayaran(value.id,
+              value.transactionStatus, value.deadline, value.bankName(),
+              value.vaNumber, value.billerCode, value.billKey));
           Navigator.of(context, rootNavigator: true).pop();
         } else
           alertDialog(context, "Buat Pesanan Gagal", value.message);
@@ -1308,7 +1310,9 @@ class _CartPickupState extends State<CartPickup> {
         if (value.isSuccess()) {
           await alertDialog(
               context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
-          await nextPage(context, StatusPembayaran(value.transactionStatus, value.deadline,value.bankName(),value.vaNumber,value.billerCode,value.billKey));
+          await nextPage(context, StatusPembayaran(value.id,
+              value.transactionStatus, value.deadline, value.bankName(),
+              value.vaNumber, value.billerCode, value.billKey));
           Navigator.of(context, rootNavigator: true).pop();
         } else
           alertDialog(context, "Buat Pesanan Gagal", value.message);

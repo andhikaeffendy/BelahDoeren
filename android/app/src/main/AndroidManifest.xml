@@ -43,8 +43,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:scheme="gopay_finish"
-                    android:host="belahdoeren" />
+                    android:scheme="belahdoeren"
+                    android:host="gopay_finish" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
