@@ -132,28 +132,28 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           SizedBox(
             height: 16,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: SizedBox(
-              width: double.infinity,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    side: BorderSide(color: Colors.yellow[700])),
-                color: Colors.yellow[600],
-                textColor: Colors.brown[700],
-                onPressed: () {
-                },
-                child: Text("Pilih Metode Pembayaran Lain",
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.brown[700],
-                        fontWeight: FontWeight.bold)),
-              ),
-            ),
-          ), SizedBox(
-            height: 16,
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 16, right: 16),
+          //   child: SizedBox(
+          //     width: double.infinity,
+          //     child: RaisedButton(
+          //       shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(10.0),
+          //           side: BorderSide(color: Colors.yellow[700])),
+          //       color: Colors.yellow[600],
+          //       textColor: Colors.brown[700],
+          //       onPressed: () {
+          //       },
+          //       child: Text("Pilih Metode Pembayaran Lain",
+          //           style: TextStyle(
+          //               fontSize: 16,
+          //               color: Colors.brown[700],
+          //               fontWeight: FontWeight.bold)),
+          //     ),
+          //   ),
+          // ), SizedBox(
+          //   height: 16,
+          // ),
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
