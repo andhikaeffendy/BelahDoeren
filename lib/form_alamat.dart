@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'package:belah_duren/api/address.dart';
 import 'package:belah_duren/global/variable.dart';
+import 'package:belah_duren/helpers/address_search.dart';
 import 'package:belah_duren/model/address.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class FormAlamat extends StatefulWidget {
   final bool editForm;
@@ -23,9 +25,13 @@ class _FormAlamatState extends State<FormAlamat> {
   Set<Marker> _markers = {};
   double mLat;
   double mLong;
+  final searchController = TextEditingController();
+  GoogleMapController googleMapController;
+  var focusNode = FocusNode();
 
   _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
+    googleMapController = controller;
   }
 
   @override
@@ -162,6 +168,72 @@ class _FormAlamatState extends State<FormAlamat> {
               SizedBox(
                 height: 16,
               ),
+              Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: TextField(
+                    controller: searchController,
+                    onTap: () async {
+                      // generate a new token here
+                      final sessionToken = Uuid().v4();
+                      final String address = await showSearch(
+                        context: context,
+                        delegate: AddressSearch(sessionToken),
+                      );
+                      focusNode.requestFocus();
+                      // This will change the text displayed in the TextField
+                      if (address != null) {
+                        LatLng location = await getLatlng(address);
+                        setState(() {
+                          mLat = location.latitude;
+                          mLong = location.longitude;
+                          googleMapController.animateCamera(CameraUpdate.newLatLng(location));
+                          tecAddress.text = address;
+                          _markers.clear();
+                          _markers.add(Marker(
+                              markerId: MarkerId('1'),
+                              position: LatLng(mLat, mLong),
+                              infoWindow:
+                              InfoWindow(title: 'Tahan dan geser untuk mengubah'),
+                              icon: BitmapDescriptor.defaultMarkerWithHue(
+                                BitmapDescriptor.hueRed,
+                              ),
+                              draggable: true,
+                              onDragEnd: ((newPosition) {
+                                print(newPosition.latitude);
+                                print(newPosition.longitude);
+                                mLat = newPosition.latitude;
+                                mLong = newPosition.longitude;
+                              })));
+                        });
+                        // List<Address> addresses = await Geocoder.local.findAddressesFromQuery(address);
+                        // currentLocation = new LatLng(addresses.first.coordinates.latitude, addresses.first.coordinates.longitude);
+                        // googleMapController.animateCamera(CameraUpdate.newLatLng(currentLocation));
+                        // searchController.text = address;
+                        // setLocation();
+                      }
+                    },
+                  style: TextStyle(fontSize: 14, color: Colors.brown[700]),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    hoverColor: Colors.white,
+                    filled: true,
+                    contentPadding: EdgeInsets.only(left: 16),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: Colors.grey[400], width: 3),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide:
+                        BorderSide(color: Colors.grey[400], width: 3),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    hintText: "Cari Alamat",
+                    hintStyle: TextStyle(color: Colors.grey[400]),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
@@ -181,6 +253,7 @@ class _FormAlamatState extends State<FormAlamat> {
               Container(
                 padding: EdgeInsets.only(left: 16, right: 16),
                 child: TextFormField(
+                  focusNode: focusNode,
                   controller: tecAddress,
                   style: TextStyle(fontSize: 14, color: Colors.brown[700]),
                   decoration: InputDecoration(
