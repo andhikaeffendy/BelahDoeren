@@ -15,6 +15,7 @@ import 'package:belah_duren/payment.dart';
 import 'package:belah_duren/status_pembayaran.dart';
 import 'package:flutter/material.dart';
 
+import 'api/branch.dart';
 import 'list_store.dart';
 import 'model/branch.dart';
 
@@ -45,6 +46,26 @@ class _CartPickupState extends State<CartPickup> {
         paymentMethods = value.data;
       }
     });
+
+    if(selectedBranch == null){
+      futureApiBranches(currentUser.token).then((value){
+        if(value.isSuccess()){
+          setState(() {
+            if(value.data.length > 0) {
+              selectedBranch = value.data[0];
+              value.data.forEach((branch) {
+                if(branch.distance() < selectedBranch.distance())
+                  selectedBranch = branch;
+              });
+              storeBranchSession();
+            }
+            Navigator.pop(context);
+            alertDialog(context, "Lokasi", "Store terdekat telah dipilih");
+          });
+        }
+      });
+    }
+
   }
 
   List<Widget> createChoosePayment(setState){

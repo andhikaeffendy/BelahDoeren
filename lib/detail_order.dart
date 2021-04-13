@@ -527,6 +527,7 @@ class _DetailOrderState extends State<DetailOrder> {
                     SizedBox(
                       height: 16,
                     ),
+                    transactionMenu.transaction_status == 0 ?
                     Container(
                       padding: EdgeInsets.only(left: 16, right: 16),
                       child: SizedBox(
@@ -550,7 +551,9 @@ class _DetailOrderState extends State<DetailOrder> {
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
                         ),
                       ),
-                    ),SizedBox(
+                    )
+                    : Container(),
+                    SizedBox(
                       height: 16,
                     ),
                     Container(

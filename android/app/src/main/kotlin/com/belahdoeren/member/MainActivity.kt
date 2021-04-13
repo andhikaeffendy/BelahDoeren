@@ -1,4 +1,4 @@
-package com.example.belah_duren
+package com.belahdoeren.member
 
 import io.flutter.embedding.android.FlutterActivity
 

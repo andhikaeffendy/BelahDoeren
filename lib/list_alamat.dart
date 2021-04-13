@@ -105,7 +105,7 @@ class _ListAlamatState extends State<ListAlamat> {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: ()async{
-                            if(widget.pickAddress){
+                            if(widget.pickAddress==true){
                               Navigator.of(context, rootNavigator: true).pop(listAddress[index]);
                             } else {
                               await nextPage(context,
