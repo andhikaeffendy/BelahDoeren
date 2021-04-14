@@ -272,7 +272,7 @@ class _ListMenuState extends State<ListMenu>
       tabViews.add( menuCategory.id == 0 ?
         FutureBuilder(
           future:
-          currentUser != null ?
+          currentUser != null && selectedBranch != null ?
           futureApiPromotionMenus(selectedBranch.id)
           :
           futureApiPromotionMenusNotLogin(),

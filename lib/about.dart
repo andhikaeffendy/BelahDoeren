@@ -1,6 +1,7 @@
 import 'package:belah_duren/api/settings.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:flutter/material.dart';
+import 'package:html/parser.dart';
 
 class About extends StatefulWidget {
   @override
@@ -56,7 +57,7 @@ class _AboutState extends State<About> {
                     ),Container(
                       margin: EdgeInsets.only(left: 16, right: 16),
                       child: Text(
-                        apiAbout.data.body,
+                        _parseHtmlString(apiAbout.data.body),
                         style: TextStyle(fontSize: 14, color: Colors.brown[700]),
                       ),
                     )
@@ -69,4 +70,11 @@ class _AboutState extends State<About> {
       ),
     );
   }
+}
+
+String _parseHtmlString(String htmlString) {
+  final document = parse(htmlString);
+  final String parsedString = parse(document.body.text).documentElement.text;
+
+  return parsedString;
 }
