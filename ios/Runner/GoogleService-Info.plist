@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>517083991973-ckbaiufk90s0bea4fqscfkvr9lfchlfe.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.517083991973-ckbaiufk90s0bea4fqscfkvr9lfchlfe</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBAcnLIFDxsfnpFQUtSnp4bXRtRw4dTJX8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>517083991973</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.belahDuren</string>
+	<key>PROJECT_ID</key>
+	<string>belah-doeren-c2a0a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>belah-doeren-c2a0a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:517083991973:ios:bacb35b9cc166aab8c224c</string>
+</dict>
+</plist>
