@@ -18,6 +18,7 @@ class _StatusPointState extends State<StatusPoint> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: Theme.of(context).platform == TargetPlatform.iOS ? appBarView() : null,
       body: Container(
         child: 
         currentUser != null ?
@@ -453,6 +454,7 @@ class _StatusPointState extends State<StatusPoint> {
                     }
                   }
                 ),
+              Theme.of(context).platform == TargetPlatform.iOS ? Container() :
               Stack(
                 alignment: AlignmentDirectional.topCenter,
                 children: [
@@ -480,4 +482,12 @@ class _StatusPointState extends State<StatusPoint> {
       ),
     );
   }
+}
+
+AppBar appBarView(){
+  return AppBar(
+    backgroundColor: Colors.white,
+    iconTheme: IconThemeData(color: Colors.brown),
+    title: Text("Membership", style: TextStyle(color: Colors.brown)),
+  );
 }

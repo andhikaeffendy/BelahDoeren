@@ -42,7 +42,7 @@ class _ListMenuState extends State<ListMenu>
                 storeBranchSession();
               }
             });
-          }
+          } else isValidToken(context, value.message);
         });
       }
       if (selectedAddress == null && !widget.addMenu){
@@ -54,7 +54,7 @@ class _ListMenuState extends State<ListMenu>
                 storeAddressSession();
               }
             });
-          }
+          } else isValidToken(context, value.message);
         });
       }
     }else{
@@ -286,19 +286,21 @@ class _ListMenuState extends State<ListMenu>
               }
               return _listViewMenu(context, menuCategory.menus);
             },
-        ) :
-        FutureBuilder(
-          future: futureApiMenus(currentUser.token, menuCategory.id, selectedBranch.id),
-          builder: (context, snapshot){
-            if(snapshot.connectionState == ConnectionState.done){
-              print(snapshot.data);
-              ApiMenu apiData = snapshot.data;
-              if(apiData.isSuccess()){
-                menuCategory.menus = apiData.data;
+        ) : (
+        selectedBranch == null ? Container() :
+          FutureBuilder(
+            future: futureApiMenus(currentUser.token, menuCategory.id, selectedBranch.id),
+            builder: (context, snapshot){
+              if(snapshot.connectionState == ConnectionState.done){
+                print(snapshot.data);
+                ApiMenu apiData = snapshot.data;
+                if(apiData.isSuccess()){
+                  menuCategory.menus = apiData.data;
+                } else isValidToken(context, apiData.message);
               }
-            }
-            return _listViewMenu(context, menuCategory.menus);
-          },
+              return _listViewMenu(context, menuCategory.menus);
+            },
+          )
         )
       );
     });

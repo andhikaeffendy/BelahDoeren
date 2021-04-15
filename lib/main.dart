@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if(value.isSuccess()) {
           userRegistrationToken = token;
           storeRegistrationTokenSession();
-        }
+        } else isValidToken(context, value.message);
       });
     } else {
       print("already sent token. not yet refreshed.");
@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 countCart = carts.length;
               }
             }
-          }
+          } else isValidToken(context, value.message);
         });
       }
       if(currentUser!=null){
@@ -145,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if(value.isSuccess()){
             currentPoints = value.data;
             currentPoints.points.toString();
-          }
+          } else isValidToken(context, value.message);
         });
       }
     });
@@ -321,7 +321,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if(value.isSuccess()){
         carts = value.data;
         countCart = carts.length;
-      }
+      } else isValidToken(context, value.message);
     });
   }
 

@@ -1,4 +1,5 @@
 import 'package:belah_duren/about.dart';
+import 'package:belah_duren/api/address.dart';
 import 'package:belah_duren/api/branch.dart';
 import 'package:belah_duren/api/member_level.dart';
 import 'package:belah_duren/api/menu.dart';
@@ -48,8 +49,36 @@ class _HomeState extends State<Home> {
           if(value.isSuccess()){
             currentPoints = value.data;
             currentPoints.points.toString();
-          }
+          } else isValidToken(context, value.message);
         });
+        if (selectedBranch == null){
+          futureApiBranches(currentUser.token).then((value){
+            if(value.isSuccess()){
+              setState(() {
+                if(value.data.length > 0) {
+                  selectedBranch = value.data[0];
+                  value.data.forEach((branch) {
+                    if(branch.distance() < selectedBranch.distance())
+                      selectedBranch = branch;
+                  });
+                  storeBranchSession();
+                }
+              });
+            } else isValidToken(context, value.message);
+          });
+        }
+        if (selectedAddress == null){
+          futureApiAddress(currentUser.token, currentUser.id).then((value){
+            if(value.isSuccess()){
+              setState(() {
+                if(value.data.length > 0) {
+                  selectedAddress = value.data[0];
+                  storeAddressSession();
+                }
+              });
+            } else isValidToken(context, value.message);
+          });
+        }
       }
     });
     if(currentUser == null || selectedBranch == null){
@@ -376,6 +405,11 @@ class _HomeState extends State<Home> {
             Stack(
               alignment: Alignment.topCenter,
               children: [
+                Container(
+                  width: double.infinity,
+                  height: 50,
+                  color: Colors.white,
+                ),
                 Image.asset("assets/images/header_home.png",
                   width: double.infinity,
                   fit: BoxFit.contain,
@@ -383,7 +417,7 @@ class _HomeState extends State<Home> {
                 Positioned(
                     top: -20,
                     child: Image.asset("assets/images/logo_home.png",
-                      width: 180, fit: BoxFit.cover,)),
+                      width: MediaQuery.of(context).size.width*.4, fit: BoxFit.cover,)),
                 Positioned(
                     right: 60,
                     top: 50,

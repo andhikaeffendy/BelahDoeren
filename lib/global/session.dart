@@ -1,3 +1,4 @@
+import 'package:belah_duren/login.dart';
 import 'package:belah_duren/model/address.dart';
 import 'package:belah_duren/model/member_poins.dart';
 import 'package:belah_duren/model/profile.dart';
@@ -77,4 +78,13 @@ Future loadSession() async {
 
 _get_data(SharedPreferences prefs, key){
   return prefs.containsKey(key) ? prefs.getString(key) : null;
+}
+
+isValidToken(context, message){
+  if (message.toLowerCase() == "token not valid/authorized") {
+    currentUser = null;
+    destroySession();
+    // alertDialog(context, "Session", "Session Expired");
+    // startNewPage(context, Login());
+  }
 }

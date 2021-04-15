@@ -1,5 +1,6 @@
 import 'package:belah_duren/api/transactions.dart';
 import 'package:belah_duren/detail_order.dart';
+import 'package:belah_duren/global/session.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/transaction.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +79,7 @@ class _ListOrderState extends State<ListOrder> {
                         transaction = apiTransaction.data;
                         //transaction.addAll(apiTransaction.data);
                       }else{
+                        isValidToken(context, apiTransaction.message);
                         print("error "+apiTransaction.message);
                       }
                     }
