@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/payment_method.dart';
 import 'package:dio/dio.dart';
@@ -9,10 +10,17 @@ Future<ApiPaymentMethod> futureApiPaymentMethods(String token) async{
   String url = api_url + "payment_methods_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiPaymentMethod.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiPaymentMethod.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiPaymentMethod(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiPaymentMethod(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiPaymentMethod {

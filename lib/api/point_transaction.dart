@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/global_response.dart';
 import 'package:belah_duren/model/point_transaction_list.dart';
@@ -11,10 +12,17 @@ Future<ApiPresentList> futureApiPresentList(String token) async{
   String url = api_url + "presents_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiPresentList.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiPresentList.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiPresentList(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiPresentList(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiPointTransaction> futureApiPointTransaction(String token) async{
@@ -22,10 +30,17 @@ Future<ApiPointTransaction> futureApiPointTransaction(String token) async{
   String url = api_url + "point_transactions_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiPointTransaction.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiPointTransaction.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiPointTransaction(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiPointTransaction(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<GlobalResponse> futureApiSubmitPointsTransaction(String token,
@@ -37,10 +52,17 @@ Future<GlobalResponse> futureApiSubmitPointsTransaction(String token,
   FormData formData = new FormData.fromMap({
     "present_id": present_id,
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return GlobalResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return GlobalResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiPresentList{
@@ -53,7 +75,7 @@ class ApiPresentList{
   ApiPresentList.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<PresentList>.from(json["data"].map((x) => PresentList.fromJson(x)));
+        data = json.containsKey("data") ? List<PresentList>.from(json["data"].map((x) => PresentList.fromJson(x))) : null;
 
   ApiPresentList.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -66,7 +88,7 @@ class ApiPresentList{
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }
 
 class ApiPointTransaction{
@@ -79,7 +101,7 @@ class ApiPointTransaction{
   ApiPointTransaction.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<PointTransactionList>.from(json["data"].map((x) => PointTransactionList.fromJson(x)));
+        data = json.containsKey("data") ? List<PointTransactionList>.from(json["data"].map((x) => PointTransactionList.fromJson(x))) : null;
 
   ApiPointTransaction.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -92,5 +114,5 @@ class ApiPointTransaction{
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }

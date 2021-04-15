@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/cart.dart';
 import 'package:belah_duren/model/global_response.dart';
@@ -18,10 +19,17 @@ Future<GlobalResponse> futureApiAddToCart(String token,
     "price": price,
     "note" : note
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return GlobalResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return GlobalResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiCart> futureApiCartList(String token) async{
@@ -29,10 +37,17 @@ Future<ApiCart> futureApiCartList(String token) async{
     String url = api_url + "carts_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiCart.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiCart.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiCart(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiCart(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiCart> futureApiCartListCheckBranch(String token, int branch_id) async{
@@ -40,10 +55,17 @@ Future<ApiCart> futureApiCartListCheckBranch(String token, int branch_id) async{
   String url = api_url + "carts_list?branch_id=" + branch_id.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiCart.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiCart.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiCart(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiCart(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<GlobalResponse> futureApiChangeQuantityCart(String token, int cart_id,
@@ -55,10 +77,17 @@ Future<GlobalResponse> futureApiChangeQuantityCart(String token, int cart_id,
   FormData formData = new FormData.fromMap({
     "quantity": quantity,
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return GlobalResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return GlobalResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<GlobalResponse> futureApiChangeNotesCart(String token,int cart_id, String note) async{
@@ -69,10 +98,17 @@ Future<GlobalResponse> futureApiChangeNotesCart(String token,int cart_id, String
   FormData formData = new FormData.fromMap({
     "note": note,
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return GlobalResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return GlobalResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<GlobalResponse> futureApiRemoveCart(String token, int cart_id) async{
@@ -80,10 +116,17 @@ Future<GlobalResponse> futureApiRemoveCart(String token, int cart_id) async{
   String url = api_url + "remove_from_cart/"+cart_id.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.delete(url);
-  print(response.data);
-
-  return GlobalResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.delete(url);
+    // print(response.data);
+    return GlobalResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiSubmit> futureApiSubmitCart(String token, String order_id, int branch_id,
@@ -104,10 +147,17 @@ Future<ApiSubmit> futureApiSubmitCart(String token, String order_id, int branch_
   };
   if(address_id > 0) data["my_address_id"] = address_id;
   FormData formData = new FormData.fromMap(data);
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return ApiSubmit.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return ApiSubmit.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiSubmit(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiSubmit(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiSubmit {
@@ -190,7 +240,7 @@ class ApiCart {
         message = json["message"],
         discountMember = json.containsKey("discount_member") ? json["discount_member"] : 0,
         discountMemberStr = json.containsKey("discount_member_str") ? json["discount_member_str"] : "0",
-        data = List<Cart>.from(json["data"].map((x) => Cart.fromJson(x)));
+        data = json.containsKey("data") ? List<Cart>.from(json["data"].map((x) => Cart.fromJson(x))) : null;
 
   ApiCart.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));

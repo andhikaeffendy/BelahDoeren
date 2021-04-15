@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/global_response.dart';
 import 'package:belah_duren/model/profile.dart';
@@ -11,10 +12,18 @@ Future<ApiProfile> futureApiProfile(String token) async{
   String url = api_url + "profile";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
+  try {
+    Response response = await dio.get(url);
+    print(response.data);
 
-  return ApiProfile.fromStringJson(response.toString());
+    return ApiProfile.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiProfile(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiProfile(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiProfile> futureApiUpdateProfile(String token, String phone_number, int gender,
@@ -32,10 +41,17 @@ Future<ApiProfile> futureApiUpdateProfile(String token, String phone_number, int
     "district_name" : district_name,
     "photo" : await MultipartFile.fromFile(currentImage.path)
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return ApiProfile.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return ApiProfile.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiProfile(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiProfile(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiEditProfile> futureApiEditProfile(String token) async{
@@ -43,10 +59,17 @@ Future<ApiEditProfile> futureApiEditProfile(String token) async{
   String url = api_url + "profile";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiEditProfile .fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiEditProfile .fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiEditProfile(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiEditProfile(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiProfile {
@@ -63,7 +86,7 @@ class ApiProfile {
   ApiProfile.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        user = User.fromJson(json);
+        user = json.containsKey("id") ? User.fromJson(json) : null;
 
   ApiProfile.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -79,7 +102,7 @@ class ApiProfile {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }
 
 class ApiEditProfile{
@@ -92,7 +115,7 @@ class ApiEditProfile{
   ApiEditProfile.fromJson(Map<String, dynamic> json ) :
         status = json["status"],
         message = json["message"],
-        data = Profile.fromJson(json);
+        data = json.containsKey("id") ? Profile.fromJson(json) : null;
 
   ApiEditProfile.fromStringJson(String stringJson) :
       this.fromJson(json.decode(stringJson));
@@ -105,5 +128,5 @@ class ApiEditProfile{
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }

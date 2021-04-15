@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/address.dart';
 import 'package:belah_duren/model/global_response.dart';
@@ -10,10 +11,17 @@ Future<ApiAddress> futureApiAddress(String token, int userId) async{
   String url = api_url + "my_addresses_list?user_id=" + userId.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiAddress.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiAddress.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiAddress(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiAddress(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<GlobalResponse> futureApiTambahAlamat(String token,
@@ -28,10 +36,17 @@ Future<GlobalResponse> futureApiTambahAlamat(String token,
     "lat" : lat,
     "long" : long
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return GlobalResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return GlobalResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<GlobalResponse> futureApiUpdateAlamat(String token, int id_alamat,
@@ -46,10 +61,17 @@ Future<GlobalResponse> futureApiUpdateAlamat(String token, int id_alamat,
     "lat" : lat,
     "long" : long
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return GlobalResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return GlobalResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiAddress {
@@ -62,7 +84,7 @@ class ApiAddress {
   ApiAddress.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<Address>.from(json["data"].map((x) => Address.fromJson(x)));
+        data = json.containsKey("data") ? List<Address>.from(json["data"].map((x) => Address.fromJson(x))) : null;
 
   ApiAddress.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -75,6 +97,6 @@ class ApiAddress {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 
 }

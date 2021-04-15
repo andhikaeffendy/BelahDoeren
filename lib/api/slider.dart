@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/slider.dart';
 import 'package:dio/dio.dart';
@@ -9,10 +10,17 @@ Future<ApiSlider> futureApiSliders() async{
   String url = api_url + "sliders_list";
   // dio.options.headers[HttpHeaders.authorizationHeader] =
   //     'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiSlider.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiSlider.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiSlider(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiSlider(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiSlider {
@@ -42,5 +50,5 @@ class ApiSlider {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }

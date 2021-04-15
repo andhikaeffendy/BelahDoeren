@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/detail_transaction.dart';
 import 'package:belah_duren/model/order.dart';
@@ -10,10 +11,17 @@ Future<ApiOrder> futureDetailOrder(String token, int id) async{
   String url = api_url + "transaction_detail/" + id.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiOrder.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiOrder.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiOrder(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiOrder(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiOrder{
@@ -32,8 +40,8 @@ class ApiOrder{
   ApiOrder.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = DetailTransaction.fromJson(json),
-        items = List<Items>.from(json["items"].map((x) => Items.fromJson(x)));
+        data = json.containsKey("id") ? DetailTransaction.fromJson(json) : null,
+        items = json.containsKey("items") ? List<Items>.from(json["items"].map((x) => Items.fromJson(x))) : null;
 
   ApiOrder.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -47,5 +55,5 @@ class ApiOrder{
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }

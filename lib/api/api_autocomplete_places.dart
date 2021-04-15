@@ -5,17 +5,25 @@ Future<ApiPlace> futureApiAutocompletePlace(String input, String sessionToken) a
   if(input.length < 3 ) return null;
   var dio = Dio();
   String url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-  Response response = await dio.get(url, queryParameters: {
-    "input" : input,
-    "language" : "id",
-    "region" : "id",
-    "types" : "address",
-    "key" : "AIzaSyDllOyM0HSlXy3UPYq02Z6I5CZ3dOivAxc",
-    "sessiontoken" : sessionToken,
-  });
-  print(response.data);
 
-  return ApiPlace.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url, queryParameters: {
+      "input" : input,
+      "language" : "id",
+      "region" : "id",
+      "types" : "address",
+      "key" : "AIzaSyDllOyM0HSlXy3UPYq02Z6I5CZ3dOivAxc",
+      "sessiontoken" : sessionToken,
+    });
+    print(response.data);
+    return ApiPlace.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiPlace(predictions: null);
+    } else {
+      return ApiPlace(predictions: null);
+    }
+  }
 }
 
 class ApiPlace {
@@ -26,7 +34,7 @@ class ApiPlace {
   });
 
   ApiPlace.fromJson(Map<String, dynamic> json) :
-        predictions = List<Prediction>.from(json["predictions"].map((x) => Prediction.fromJson(x)));
+        predictions = json.containsKey("predictions") ? List<Prediction>.from(json["predictions"].map((x) => Prediction.fromJson(x))) : null ;
 
   ApiPlace.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));

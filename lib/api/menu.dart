@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/menu.dart';
 import 'package:belah_duren/model/menu_category.dart';
@@ -10,10 +11,17 @@ Future<ApiMenuCategory> futureApiMenuCategories() async{
   String url = api_url + "menu_categories_list";
   // dio.options.headers[HttpHeaders.authorizationHeader] =
   //     'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiMenuCategory.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiMenuCategory.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiMenuCategory(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiMenuCategory(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiMenu> futureApiMenus(String token, int categoryId, int branch_id) async{
@@ -21,10 +29,17 @@ Future<ApiMenu> futureApiMenus(String token, int categoryId, int branch_id) asyn
   String url = api_url + "menus_list?menu_category_id="+categoryId.toString() + "&branch_id=" + branch_id.toString() ;
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiMenu.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiMenu.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiMenu(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiMenu(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiMenu> futureApiFeaturedMenus(String token, int branch_id) async{
@@ -32,10 +47,17 @@ Future<ApiMenu> futureApiFeaturedMenus(String token, int branch_id) async{
   String url = api_url + "featured_menus_list?branch_id=" + branch_id.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiMenu.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiMenu.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiMenu(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiMenu(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiMenuDetail> futureApiMenu(String token, int menuId) async{
@@ -43,10 +65,17 @@ Future<ApiMenuDetail> futureApiMenu(String token, int menuId) async{
   String url = api_url + "detail_menu?id="+menuId.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiMenuDetail.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiMenuDetail.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiMenuDetail(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiMenuDetail(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiMenu> futureApiPromotionMenus(int branch_id) async{
@@ -54,10 +83,17 @@ Future<ApiMenu> futureApiPromotionMenus(int branch_id) async{
   String url = api_url + "promotion_menus_list?branch_id=" + branch_id.toString();
   // dio.options.headers[HttpHeaders.authorizationHeader] =
   //     'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiMenu.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiMenu.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiMenu(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiMenu(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiMenu> futureApiPromotionMenusNotLogin() async{
@@ -65,10 +101,17 @@ Future<ApiMenu> futureApiPromotionMenusNotLogin() async{
   String url = api_url + "promotion_menus_list";
   // dio.options.headers[HttpHeaders.authorizationHeader] =
   //     'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiMenu.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiMenu.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiMenu(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiMenu(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiMenuDetail {
@@ -85,7 +128,7 @@ class ApiMenuDetail {
   ApiMenuDetail.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = Menu.fromJson(json);
+        data = json.containsKey("id") ? Menu.fromJson(json) : null;
 
   ApiMenuDetail.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -98,7 +141,7 @@ class ApiMenuDetail {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }
 
 class ApiMenuCategory {
@@ -115,7 +158,7 @@ class ApiMenuCategory {
   ApiMenuCategory.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<MenuCategory>.from(json["data"].map((x) => MenuCategory.fromJson(x)));
+        data = json.containsKey("data") ? List<MenuCategory>.from(json["data"].map((x) => MenuCategory.fromJson(x))) : null;
 
   ApiMenuCategory.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -128,7 +171,7 @@ class ApiMenuCategory {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }
 
 class ApiMenu {
@@ -158,5 +201,5 @@ class ApiMenu {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }

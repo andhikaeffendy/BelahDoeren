@@ -1,3 +1,4 @@
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/user.dart';
 import 'package:dio/dio.dart';
@@ -10,10 +11,17 @@ Future<ApiLogin> futureApiLogin(String email, String password) async{
     "email": email,
     "password": password,
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return ApiLogin.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return ApiLogin.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiLogin(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiLogin(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiLogin {
@@ -30,7 +38,7 @@ class ApiLogin {
   ApiLogin.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        user = User.fromJson(json);
+        user = json.containsKey("id") ? User.fromJson(json) : null;
 
   ApiLogin.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -46,5 +54,5 @@ class ApiLogin {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 }

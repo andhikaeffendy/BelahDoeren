@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -13,10 +14,17 @@ Future<ApiVoucher> futureApiRedeemVoucher(String token,
     "name": name,
     "total_price": total,
   });
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return ApiVoucher.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return ApiVoucher.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiVoucher(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiVoucher(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiVoucher {

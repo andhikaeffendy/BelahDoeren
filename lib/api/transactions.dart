@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/global_response.dart';
 import 'package:belah_duren/model/transaction.dart';
@@ -12,11 +13,17 @@ Future<ApiTransaction> futureApiTransaction(String token, int userId) async{
   String url = api_url + "transactions_list?user_id=" + userId.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  //print("response : " + response.toString());
-  print(response.data);
-
-  return ApiTransaction.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiTransaction.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiTransaction(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiTransaction(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiActiveTransaction> futureApiActiveTransaction(String token, int userId) async{
@@ -24,11 +31,17 @@ Future<ApiActiveTransaction> futureApiActiveTransaction(String token, int userId
   String url = api_url + "active_transactions_list?user_id=" + userId.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print("response : " + response.toString());
-  print(response.data);
-
-  return ApiActiveTransaction.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiActiveTransaction.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiActiveTransaction(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiActiveTransaction(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiPastTransaction> futureApiPastTransaction(String token, int userId) async{
@@ -36,11 +49,17 @@ Future<ApiPastTransaction> futureApiPastTransaction(String token, int userId) as
   String url = api_url + "past_transactions_list?user_id=" + userId.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print("response : " + response.toString());
-  print(response.data);
-
-  return ApiPastTransaction.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiPastTransaction.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiPastTransaction(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiPastTransaction(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiTransactionDetail> futureApiTransactionDetail(String token, int id) async{
@@ -48,11 +67,17 @@ Future<ApiTransactionDetail> futureApiTransactionDetail(String token, int id) as
   String url = api_url + "transaction_detail?id=" + id.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print("response : " + response.toString());
-  print(response.data);
-
-  return ApiTransactionDetail.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiTransactionDetail.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiTransactionDetail(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiTransactionDetail(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiListTransaction> futureApiGetActiveTransaction(String token) async{
@@ -60,11 +85,17 @@ Future<ApiListTransaction> futureApiGetActiveTransaction(String token) async{
   String url = api_url + "active_transactions_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print("response : " + response.toString());
-  print(response.data);
-
-  return ApiListTransaction.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiListTransaction.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiListTransaction(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiListTransaction(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiListTransaction> futureApiGetPastTransaction(String token) async{
@@ -72,11 +103,17 @@ Future<ApiListTransaction> futureApiGetPastTransaction(String token) async{
   String url = api_url + "past_transactions_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print("response : " + response.toString());
-  print(response.data);
-
-  return ApiListTransaction.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiListTransaction.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiListTransaction(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiListTransaction(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiListTransaction> futureApiGetCanceledTransaction(String token) async{
@@ -84,11 +121,17 @@ Future<ApiListTransaction> futureApiGetCanceledTransaction(String token) async{
   String url = api_url + "cancelled_transactions_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print("response : " + response.toString());
-  print(response.data);
-
-  return ApiListTransaction.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiListTransaction.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiListTransaction(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiListTransaction(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<GlobalResponse> futureApiCancelTransaction(String token, int id) async{
@@ -96,11 +139,17 @@ Future<GlobalResponse> futureApiCancelTransaction(String token, int id) async{
   String url = api_url + "cancel_order/" + id.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.post(url);
-  print("response : " + response.toString());
-  print(response.data);
-
-  return GlobalResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url);
+    // print(response.data);
+    return GlobalResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return GlobalResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiTransaction {
@@ -117,7 +166,7 @@ class ApiTransaction {
   ApiTransaction.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x)));
+        data = json.containsKey("data") ? List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x))) : null ;
 
   ApiTransaction.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -130,7 +179,7 @@ class ApiTransaction {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 
 }
 
@@ -144,7 +193,7 @@ class ApiActiveTransaction {
   ApiActiveTransaction.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x)));
+        data = json.containsKey("data") ? List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x))) : null ;
 
   ApiActiveTransaction.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -157,7 +206,7 @@ class ApiActiveTransaction {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 
 }
 
@@ -171,7 +220,7 @@ class ApiPastTransaction {
   ApiPastTransaction.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x)));
+        data = json.containsKey("data") ? List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x)))  : null ;
 
   ApiPastTransaction.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -184,7 +233,7 @@ class ApiPastTransaction {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 
 }
 
@@ -198,7 +247,7 @@ class ApiTransactionDetail {
   ApiTransactionDetail.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x)));
+        data = json.containsKey("data") ? List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x))) : null ;
 
   ApiTransactionDetail.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -211,7 +260,7 @@ class ApiTransactionDetail {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 
 }
 
@@ -229,7 +278,7 @@ class ApiListTransaction {
   ApiListTransaction.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x)));
+        data = json.containsKey("data") ? List<Transaction>.from(json["data"].map((x) => Transaction.fromJson(x))) : null ;
 
   ApiListTransaction.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -242,6 +291,6 @@ class ApiListTransaction {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 
 }

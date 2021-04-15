@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/cart.dart';
 import 'package:dio/dio.dart';
@@ -17,10 +18,17 @@ Future<MidtransResponse> futureApiGetMidtransToken(String token, List<Cart> cart
     "carts": toStringJson(carts),
   };
   FormData formData = new FormData.fromMap(data);
-  Response response = await dio.post(url, data: formData);
-  print(response.data);
-
-  return MidtransResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url, data: formData);
+    // print(response.data);
+    return MidtransResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return MidtransResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return MidtransResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<MidtransStatusResponse> futureApiMidtransStatus(String token, String orderId) async {
@@ -28,10 +36,17 @@ Future<MidtransStatusResponse> futureApiMidtransStatus(String token, String orde
   String url = api_url + "payment_status?order_id="+orderId;
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.post(url);
-  print(response.data);
-
-  return MidtransStatusResponse.fromStringJson(response.toString());
+  try {
+    Response response = await dio.post(url);
+    // print(response.data);
+    return MidtransStatusResponse.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return MidtransStatusResponse(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return MidtransStatusResponse(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class MidtransResponse {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:belah_duren/global/error_message.dart';
 import 'package:belah_duren/global/variable.dart';
 import 'package:belah_duren/model/get_reward.dart';
 import 'package:belah_duren/model/member_level.dart';
@@ -11,10 +12,17 @@ Future<ApiMemberLevel> futureApiMemberLevel(String token) async{
   String url = api_url + "member_levels_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiMemberLevel.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiMemberLevel.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiMemberLevel(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiMemberLevel(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 Future<ApiGetReward> futureApiGetReward(String token) async{
@@ -22,10 +30,17 @@ Future<ApiGetReward> futureApiGetReward(String token) async{
   String url = api_url + "how_to_get_rewards_list";
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
-  Response response = await dio.get(url);
-  print(response.data);
-
-  return ApiGetReward.fromStringJson(response.toString());
+  try {
+    Response response = await dio.get(url);
+    // print(response.data);
+    return ApiGetReward.fromStringJson(response.toString());
+  } on DioError catch (e) {
+    if (e.response != null ) {
+      return ApiGetReward(status: "fail", message: ErrorMessage.getMessage(e.response.statusCode));
+    } else {
+      return ApiGetReward(status: "fail", message: ErrorMessage.getMessage(0));
+    }
+  }
 }
 
 class ApiMemberLevel {
@@ -44,8 +59,8 @@ class ApiMemberLevel {
   ApiMemberLevel.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        data = MemberPoints.fromJson(json),
-        items = List<MemberLevel>.from(json["data"].map((x) => MemberLevel.fromJson(x)));
+        data = json.containsKey("points") ? MemberPoints.fromJson(json) : null,
+        items = json.containsKey("data") ? List<MemberLevel>.from(json["data"].map((x) => MemberLevel.fromJson(x))) : null;
 
   ApiMemberLevel.fromStringJson(String stringJson) :
       this.fromJson(json.decode(stringJson));
@@ -59,7 +74,7 @@ class ApiMemberLevel {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 
 }
 
@@ -77,7 +92,7 @@ class ApiGetReward {
   ApiGetReward.fromJson(Map<String, dynamic> json) :
         status = json["status"],
         message = json["message"],
-        items = List<GetReward>.from(json["data"].map((x) => GetReward.fromJson(x)));
+        items = json.containsKey("data") ? List<GetReward>.from(json["data"].map((x) => GetReward.fromJson(x))) : null;
 
   ApiGetReward.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -90,6 +105,6 @@ class ApiGetReward {
 
   String toStringJson() => json.encode(this.toJson());
 
-  bool isSuccess() => status == "success";
+  bool isSuccess() => status.toUpperCase() == "SUCCESS";
 
 }
