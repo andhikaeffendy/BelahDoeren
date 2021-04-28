@@ -19,7 +19,8 @@ class Transaction {
   String account_number;
   String biller_code;
   String bill_key;
-
+  String qr_code;
+  String deeplink;
 
   Transaction({
     this.id,
@@ -41,7 +42,10 @@ class Transaction {
     this.payment_deadline,
     this.account_number,
     this.biller_code,
-    this.bill_key});
+    this.bill_key,
+    this.qr_code,
+    this.deeplink,
+  });
 
   Transaction.fromJson(Map<String, dynamic> json)
       : id = json["id"],
@@ -63,7 +67,9 @@ class Transaction {
         payment_deadline = json["payment_deadline"],
         account_number = json["account_number"],
         biller_code = json["biller_code"],
-        bill_key = json["bill_key"];
+        bill_key = json["bill_key"],
+        qr_code = json.containsKey("qr_code") ? json["qr_code"] : "",
+        deeplink = json.containsKey("deeplink") ? json["deeplink"] : "";
 
   Map<String, dynamic> toJson() => {
     "id": id,

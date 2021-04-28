@@ -604,7 +604,7 @@ class _CartPickupState extends State<CartPickup> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                         side: BorderSide(color: Colors.yellow[600])),
-                    onPressed: () => choosePayment(), //doSubmit(),
+                    onPressed: () => doSubmit(), //choosePayment(), //doSubmit(),
                     color: Colors.yellow[600],
                     textColor: Colors.black,
                     child: Text("Bayar",
@@ -1285,10 +1285,26 @@ class _CartPickupState extends State<CartPickup> {
   }
 
   doSubmit() {
+    if(selectedBranch == null) {
+      alertDialog(
+          context, "Pembelian", "Lokasi Outlet belum dipilih");
+      return;
+    }
+    if(selectedOrderType == "delivery" && selectedAddress == null){
+      alertDialog(
+          context, "Pembelian", "Alamat Pengiriman belum dipilih");
+      return;
+    }
+    if(selectedPaymentMethod == null) {
+      alertDialog(
+          context, "Pembelian", "Metode Pembayaran belum dipilih");
+      return;
+    }
     showCircular(context);
     int discountPayment =
         discount > 0 ? discount : (discountMember > 0 ? discountMember : 0);
     int selectedPaymentMethodId = selectedPaymentMethod == null ? 0 : selectedPaymentMethod.id;
+    bool launchDeeplink = selectedPaymentMethod == null ? false : (selectedPaymentMethod.name.toUpperCase() == "GOPAY" ? true : false);
     if (isPickupOrder()) {
       futureApiSubmitCart(
           currentUser.token,
@@ -1306,7 +1322,8 @@ class _CartPickupState extends State<CartPickup> {
               context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
           await nextPage(context, StatusPembayaran(value.id,
               value.transactionStatus, value.deadline, value.bankName(),
-              value.vaNumber, value.billerCode, value.billKey));
+              value.vaNumber, value.billerCode, value.billKey, value.qrCode,
+              value.deeplink, launchDeeplink));
           Navigator.of(context, rootNavigator: true).pop();
         } else
           alertDialog(context, "Buat Pesanan Gagal", value.message);
@@ -1329,7 +1346,8 @@ class _CartPickupState extends State<CartPickup> {
               context, "Buat Pesanan Berhasil", "Pesanan Berhasil Dibuat");
           await nextPage(context, StatusPembayaran(value.id,
               value.transactionStatus, value.deadline, value.bankName(),
-              value.vaNumber, value.billerCode, value.billKey));
+              value.vaNumber, value.billerCode, value.billKey, value.qrCode,
+              value.deeplink, launchDeeplink));
           Navigator.of(context, rootNavigator: true).pop();
         } else
           alertDialog(context, "Buat Pesanan Gagal", value.message);

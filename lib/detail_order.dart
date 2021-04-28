@@ -541,9 +541,11 @@ class _DetailOrderState extends State<DetailOrder> {
                                 transactionMenu.transaction_status,
                                 transactionMenu.payment_deadline,
                                 transactionMenu.payment_method,
-                                transactionMenu.account_number,
-                                transactionMenu.biller_code,
-                                transactionMenu.bill_key));
+                                data.data.account_number,
+                                data.data.biller_code,
+                                data.data.bill_key,
+                                data.data.qr_code,
+                                data.data.deeplink));
                           },//doSubmit(),
                           color: Colors.yellow[600],
                           textColor: Colors.black,

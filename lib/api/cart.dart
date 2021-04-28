@@ -68,10 +68,10 @@ Future<ApiCart> futureApiCartListCheckBranch(String token, int branch_id) async{
   }
 }
 
-Future<GlobalResponse> futureApiChangeQuantityCart(String token, int cart_id,
+Future<GlobalResponse> futureApiChangeQuantityCart(String token, int cartId,
     int quantity) async{
   var dio = Dio();
-  String url = api_url + "change_quantity_to_cart/"+cart_id.toString();
+  String url = api_url + "change_quantity_to_cart/"+cartId.toString();
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
   FormData formData = new FormData.fromMap({
@@ -137,7 +137,7 @@ Future<ApiSubmit> futureApiSubmitCart(String token, String order_id, int branch_
   dio.options.headers[HttpHeaders.authorizationHeader] =
       'Bearer ' + token;
   var data = {
-    "order_id": order_id,
+    // "order_id": order_id,
     "branch_id": branch_id,
     "transaction_type_id": order_type,
     "discount": discount,
@@ -170,6 +170,8 @@ class ApiSubmit {
   String billerCode;
   String billKey;
   int id;
+  String qrCode;
+  String deeplink;
 
   ApiSubmit({
     this.status,
@@ -181,6 +183,8 @@ class ApiSubmit {
     this.billerCode,
     this.billKey,
     this.id,
+    this.qrCode,
+    this.deeplink,
   });
 
   ApiSubmit.fromJson(Map<String, dynamic> json) :
@@ -192,7 +196,9 @@ class ApiSubmit {
         vaBank = json.containsKey("va_bank") ? json["va_bank"] : "",
         billerCode = json.containsKey("biller_code") ? json["biller_code"] : "",
         billKey = json.containsKey("bill_key") ? json["bill_key"] : "",
-        id = json.containsKey("id") ? json["id"] : 0;
+        id = json.containsKey("id") ? json["id"] : 0,
+        qrCode = json.containsKey("qr_code") ? json["qr_code"] : "",
+        deeplink = json.containsKey("deeplink") ? json["deeplink"] : "";
 
   ApiSubmit.fromStringJson(String stringJson) :
         this.fromJson(json.decode(stringJson));
@@ -207,6 +213,8 @@ class ApiSubmit {
     "biller_code": billerCode,
     "bill_key": billKey,
     "id": id,
+    "qr_code": qrCode,
+    "deeplink": deeplink,
   };
 
   String toStringJson() => json.encode(this.toJson());

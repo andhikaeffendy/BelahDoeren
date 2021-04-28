@@ -1,3 +1,4 @@
+import 'package:belah_duren/api/order.dart';
 import 'package:belah_duren/api/transactions.dart';
 import 'package:belah_duren/detail_order.dart';
 import 'package:belah_duren/global/variable.dart';
@@ -5,23 +6,29 @@ import 'package:belah_duren/model/transaction.dart';
 import 'package:belah_duren/my_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class StatusPembayaran extends StatefulWidget {
-  final int paymentStatus;
+  int paymentStatus;
   final int transactionId;
   final String deadline;
   String vaNumber = "";
   String vaBank = "";
   String billerCode = "";
   String billKey = "";
+  String qrCode = "";
+  String deeplink = "";
+  bool launchDeeplink = false;
 
-  StatusPembayaran(this.transactionId, this.paymentStatus, this.deadline, [this.vaBank, this.vaNumber, this.billerCode, this.billKey]);
+  StatusPembayaran(this.transactionId, this.paymentStatus, this.deadline,
+      [this.vaBank = "", this.vaNumber = "", this.billerCode = "", this.billKey = "", this.qrCode = "",
+        this.deeplink = "", this.launchDeeplink = false]);
 
   @override
   _StatusPembayaranState createState() => _StatusPembayaranState();
 }
 
-class _StatusPembayaranState extends State<StatusPembayaran> {
+class _StatusPembayaranState extends State<StatusPembayaran> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +56,40 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+    if(widget.paymentStatus != 3 && widget.deeplink != "" && widget.launchDeeplink)
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => launch(widget.deeplink));
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(final AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if(widget.paymentStatus != 3)
+        showCircular(context);
+        futureDetailOrder(currentUser.token, widget.transactionId).then((value){
+          Navigator.of(context, rootNavigator: true).pop();
+          if(value.isSuccess()){
+            if(value.data.transaction_status == 3)
+              setState(() {
+                widget.paymentStatus = 3;
+              });
+          }
+        });
+    }
   }
 
   Widget _pendingPayment(BuildContext context) {
@@ -170,7 +211,9 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
           SizedBox(
             height: 16,
           ),
-          widget.vaNumber == "" ? Container() :
+          widget.qrCode == "" || widget.qrCode == null || widget.launchDeeplink ? Container() :
+              Image.network(widget.qrCode, height: MediaQuery. of(context).size.width * 0.5, width: MediaQuery. of(context).size.width * 0.5,),
+          widget.vaNumber == "" || widget.vaNumber == null ? Container() :
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
@@ -182,7 +225,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          widget.vaNumber == "" ? Container() :
+          widget.vaNumber == "" || widget.vaNumber == null ? Container() :
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -216,7 +259,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
               ),
             ],
           ),
-          widget.billerCode == "" ? Container() :
+          widget.billerCode == "" || widget.billerCode == null ? Container() :
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
@@ -228,7 +271,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          widget.billerCode == "" ? Container() :
+          widget.billerCode == "" || widget.billerCode == null ? Container() :
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -262,11 +305,11 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
               ),
             ],
           ),
-          widget.billKey == "" ? Container() :
+          widget.billKey == "" || widget.billKey == null ? Container() :
           SizedBox(
             height: 16,
           ),
-          widget.billKey == "" ? Container() :
+          widget.billKey == "" || widget.billKey == null ? Container() :
           Container(
             width: MediaQuery.of(context).size.width*0.7,
             child: Text(
@@ -278,7 +321,7 @@ class _StatusPembayaranState extends State<StatusPembayaran> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          widget.billKey == "" ? Container() :
+          widget.billKey == "" || widget.billKey == null ? Container() :
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

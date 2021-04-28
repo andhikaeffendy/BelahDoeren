@@ -13,12 +13,15 @@ class DetailTransaction{
     String payment_method;
     String payment_method_image_url;
     String transaction_type;
+    int transaction_status;
     String transaction_status_name;
     String transaction_status_color;
     String payment_deadline;
     String account_number;
     String biller_code;
     String bill_key;
+    String qr_code;
+    String deeplink;
     List<Items> order = [];
 
     DetailTransaction(
@@ -34,12 +37,16 @@ class DetailTransaction{
       this.payment_method,
       this.payment_method_image_url,
         this.transaction_type,
+        this.transaction_status,
         this.transaction_status_name,
         this.transaction_status_color,
         this.payment_deadline,
         this.account_number,
         this.biller_code,
-        this.bill_key);
+        this.bill_key,
+        this.qr_code,
+        this.deeplink,
+        );
 
     DetailTransaction.fromJson(Map<String, dynamic> json) :
         id = json["id"],
@@ -54,12 +61,15 @@ class DetailTransaction{
         payment_method = json["payment_method"],
         payment_method_image_url = json["payment_method_image_url"],
     transaction_type = json["transaction_type"],
+    transaction_status = json.containsKey("transaction_status") ? json["transaction_status"] : null,
     transaction_status_name = json["transaction_status_name"],
     transaction_status_color = json["transaction_status_color"],
     payment_deadline = json["payment_deadline"],
     account_number = json["account_number"],
     biller_code = json["biller_code"],
-    bill_key = json["bill_key"];
+    bill_key = json["bill_key"],
+    qr_code = json.containsKey("qr_code") ? json["qr_code"] : "",
+    deeplink = json.containsKey("deeplink") ? json["deeplink"] : "";
 
     Map<String, dynamic> toJson() => {
       "id" : id,
@@ -74,6 +84,7 @@ class DetailTransaction{
       "payment_method" : payment_method,
       "payment_method_image_url" : payment_method_image_url,
       "transaction_type" : transaction_type,
+      "transaction_status" : transaction_status,
       "transaction_status_name" : transaction_status_name,
       "transaction_status_color" : transaction_status_color,
       "payment_deadline" : payment_deadline,
