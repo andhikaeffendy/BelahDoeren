@@ -233,6 +233,7 @@ class ApiCart {
   String message;
   int discountMember;
   String discountMemberStr;
+  String suggestion;
   List<Cart> data;
 
   ApiCart({
@@ -240,6 +241,7 @@ class ApiCart {
     this.message,
     this.discountMember,
     this.discountMemberStr,
+    this.suggestion,
     this.data,
   });
 
@@ -248,6 +250,7 @@ class ApiCart {
         message = json["message"],
         discountMember = json.containsKey("discount_member") ? json["discount_member"] : 0,
         discountMemberStr = json.containsKey("discount_member_str") ? json["discount_member_str"] : "0",
+        suggestion = json["suggestion"],
         data = json.containsKey("data") ? List<Cart>.from(json["data"].map((x) => Cart.fromJson(x))) : null;
 
   ApiCart.fromStringJson(String stringJson) :
@@ -258,6 +261,7 @@ class ApiCart {
     "message": message,
     "discount_member": discountMember,
     "discount_member_str": discountMemberStr,
+    "suggestion" : suggestion,
     "data": List<dynamic>.from(data.map((x) => x.toJson())),
   };
 

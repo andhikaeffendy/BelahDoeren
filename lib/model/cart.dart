@@ -22,7 +22,7 @@ class Cart{
       this.priceText,
       this.subTotalText,
       this.note,
-      this.isPromotion
+      this.isPromotion,
       );
 
   Cart.fromJson(Map<String, dynamic> json) :

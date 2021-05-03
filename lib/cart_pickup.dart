@@ -31,6 +31,7 @@ class _CartPickupState extends State<CartPickup> {
   int subTotalReguler = 0;
   int subTotal = 0;
   int tax = 0;
+  String suggestion = "";
   List<PaymentMethod> paymentMethods = [];
   //List<TextEditingController> itemNotes = new List();
 
@@ -596,6 +597,7 @@ class _CartPickupState extends State<CartPickup> {
               SizedBox(
                 height: 16,
               ),
+              suggestionText(),
               Container(
                 padding: EdgeInsets.only(left: 16, right: 16),
                 child: SizedBox(
@@ -644,6 +646,28 @@ class _CartPickupState extends State<CartPickup> {
               fontWeight: FontWeight.bold),
         ),
       ],
+    );
+  }
+
+  suggestionText(){
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.only(left: 16, right: 16),
+      decoration: BoxDecoration(
+        color: Colors.green[900].withOpacity(0.5),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(8),
+          topLeft: Radius.circular(8)
+        )
+      ),
+      child: Text(
+        suggestion.toString(),
+        style: TextStyle(
+          fontSize: 14,
+          color: Colors.white
+        ),
+      ),
     );
   }
 
@@ -867,6 +891,7 @@ class _CartPickupState extends State<CartPickup> {
           subTotalReguler = totalCartReguler(carts);
           discountMember = value.discountMember;
           tax = (0.1 * subTotal).toInt();
+          suggestion = value.suggestion;
         });
         updateVoucher();
       } else {

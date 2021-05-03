@@ -1,4 +1,4 @@
-package com.belahdoeren.member
+package com.belahdoeren.app
 
 import io.flutter.app.FlutterApplication
 import io.flutter.plugin.common.PluginRegistry

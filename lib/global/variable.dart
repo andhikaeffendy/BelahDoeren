@@ -65,6 +65,20 @@ alertDialog(context, title, message) async {
         return AlertDialog(
           title: Text(title),
           content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                "Oke",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.yellow[700]
+                ),
+              ),
+            )
+          ],
         );
       }
   );
